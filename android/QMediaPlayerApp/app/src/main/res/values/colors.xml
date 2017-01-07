@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorBlue">#0000FF</color>
+
+    <color name="player_bg_transparent">#00000000</color>
+    <color name="player_bg_transparent_30">#30000000</color>
+    <color name="player_bg_transparent_80">#80000000</color>
+
+    <color name="grey50transparent">#dcfafafa</color>
+    <color name="grey400transparent">#80bdbdbd</color>
+    <color name="grey900transparent">#80212121</color>
+    <color name="orange500transparent">#b4ff8800</color>
+    
+    <color name="color_progress">#7c4dff</color>
+
+    <color name="blacktransparent">#b4000000</color>
+    <color name="whitetransparent">#dcffffff</color>
+    <color name="transparent">#00000000</color>
+</resources>
