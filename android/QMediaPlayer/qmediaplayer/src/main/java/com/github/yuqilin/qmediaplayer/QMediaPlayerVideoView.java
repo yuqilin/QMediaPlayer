@@ -358,7 +358,18 @@ public class QMediaPlayerVideoView extends FrameLayout implements IMediaControll
             new IMediaPlayer.OnVideoSizeChangedListener() {
                 @Override
                 public void onVideoSizeChanged(IMediaPlayer mp, int width, int height) {
-
+                    mVideoWidth = width;
+                    mVideoHeight = height;
+                    mVideoSarNum = mp.getVideoSarNum();
+                    mVideoSarDen = mp.getVideoSarDen();
+                    if (mVideoWidth != 0 && mVideoHeight != 0) {
+                        if (mRenderView != null) {
+                            mRenderView.setVideoSize(mVideoWidth, mVideoHeight);
+                            mRenderView.setVideoSampleAspectRatio(mVideoSarNum, mVideoSarDen);
+                        }
+                        // REMOVED: getHolder().setFixedSize(mVideoWidth, mVideoHeight);
+                        requestLayout();
+                    }
                 }
 
                 public void onVideoSizeChanged(IMediaPlayer mp, int width, int height, int sarNum, int sarDen) {
@@ -405,7 +416,7 @@ public class QMediaPlayerVideoView extends FrameLayout implements IMediaControll
                 if (mRenderView != null) {
                     mRenderView.setVideoSize(mVideoWidth, mVideoHeight);
                     mRenderView.setVideoSampleAspectRatio(mVideoSarNum, mVideoSarDen);
-                    if (!mRenderView.shouldWaitForResize() || mSurfaceWidth == mVideoWidth && mSurfaceHeight == mVideoHeight) {
+                    if (!mRenderView.shouldWaitForResize() || (mSurfaceWidth == mVideoWidth && mSurfaceHeight == mVideoHeight)) {
                         // We didn't actually change the size (it was already at the size
                         // we need), so we won't get a "surface changed" callback, so
                         // start the video here instead of in the callback.
@@ -638,6 +649,9 @@ public class QMediaPlayerVideoView extends FrameLayout implements IMediaControll
                     seekTo(mSeekWhenPrepared);
                 }
                 start();
+                if (mMediaController != null) {
+                    mMediaController.show();
+                }
             }
         }
 
@@ -751,11 +765,12 @@ public class QMediaPlayerVideoView extends FrameLayout implements IMediaControll
     }
 
     private void toggleMediaControlsVisiblity() {
-        if (mMediaController.isShowing()) {
-            mMediaController.hide();
-        } else {
-            mMediaController.show();
-        }
+//        if (mMediaController.isShowing()) {
+//            mMediaController.hide();
+//        } else {
+//            mMediaController.show();
+//        }
+        mMediaController.show();
     }
 
     @Override

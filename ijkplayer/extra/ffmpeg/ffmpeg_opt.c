@@ -181,11 +181,11 @@ static int show_hwaccels(void *optctx, const char *opt, const char *arg)
 {
     int i;
 
-    printf("Hardware acceleration methods:\n");
+    av_log(NULL, AV_LOG_INFO, "Hardware acceleration methods:\n");
     for (i = 0; i < FF_ARRAY_ELEMS(hwaccels) - 1; i++) {
-        printf("%s\n", hwaccels[i].name);
+        av_log(NULL, AV_LOG_INFO, "%s\n", hwaccels[i].name);
     }
-    printf("\n");
+    av_log(NULL, AV_LOG_INFO, "\n");
     return 0;
 }
 
@@ -856,7 +856,7 @@ static void assert_file_overwrite(const char *filename)
                     av_log(NULL, AV_LOG_FATAL, "Not overwriting - exiting\n");
                     exit_program(1);
                 }
-                term_init();
+               term_init();
             }
             else {
                 av_log(NULL, AV_LOG_FATAL, "File '%s' already exists. Exiting.\n", filename);
@@ -3043,7 +3043,8 @@ void show_help_default(const char *opt, const char *arg)
 
     show_usage();
 
-    printf("Getting help:\n"
+    av_log(NULL, AV_LOG_INFO,
+        "Getting help:\n"
            "    -h      -- print basic options\n"
            "    -h long -- print more options\n"
            "    -h full -- print all options (including all format and codec specific options, very long)\n"
@@ -3081,7 +3082,7 @@ void show_help_default(const char *opt, const char *arg)
                           OPT_EXPERT | OPT_AUDIO, OPT_VIDEO, 0);
     show_help_options(options, "Subtitle options:",
                       OPT_SUBTITLE, 0, 0);
-    printf("\n");
+    av_log(NULL, AV_LOG_INFO, "\n");
 
     if (show_avoptions) {
         int flags = AV_OPT_FLAG_DECODING_PARAM | AV_OPT_FLAG_ENCODING_PARAM;
@@ -3168,8 +3169,12 @@ int ffmpeg_parse_options(int argc, char **argv)
         goto fail;
     }
 
+    if (g_should_exit) {
+        return g_exit_code;
+    }
+
     /* configure terminal and setup signal handlers */
-    term_init();
+   term_init();
 
     /* open input files */
     ret = open_files(&octx.groups[GROUP_INFILE], "input", open_input_file);

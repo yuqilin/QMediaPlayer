@@ -326,10 +326,11 @@ sigterm_handler(int sig)
     received_nb_signals++;
     term_exit_sigsafe();
     if(received_nb_signals > 3) {
-        write(2/*STDERR_FILENO*/, "Received > 3 system signals, hard exiting\n",
-                           strlen("Received > 3 system signals, hard exiting\n"));
+        av_log(NULL, AV_LOG_ERROR, "Received > 3 system signals, hard exiting\n");
+        // write(2/*STDERR_FILENO*/, "Received > 3 system signals, hard exiting\n",
+                           // strlen("Received > 3 system signals, hard exiting\n"));
 
-        exit(123);
+        // exit(123);
     }
 }
 
@@ -556,6 +557,8 @@ static void ffmpeg_cleanup(int ret)
         av_frame_free(&ist->filter_frame);
         av_dict_free(&ist->decoder_opts);
         avsubtitle_free(&ist->prev_sub.subtitle);
+
+
         av_frame_free(&ist->sub2video.frame);
         av_freep(&ist->filters);
         av_freep(&ist->hwaccel_device);
@@ -2610,7 +2613,7 @@ static void print_sdp(void)
     av_sdp_create(avc, j, sdp, sizeof(sdp));
 
     if (!sdp_filename) {
-        printf("SDP:\n%s\n", sdp);
+        av_log(NULL, AV_LOG_INFO, "SDP:\n%s\n", sdp);
         fflush(stdout);
     } else {
         if (avio_open2(&sdp_pb, sdp_filename, AVIO_FLAG_WRITE, &int_cb, NULL) < 0) {
@@ -4545,7 +4548,7 @@ int main(int argc, char **argv)
 
     if(argc>1 && !strcmp(argv[1], "-d")){
         run_as_daemon=1;
-        av_log_set_callback(log_callback_null);
+        // av_log_set_callback(log_callback_null);
         argc--;
         argv++;
     }
@@ -4562,19 +4565,26 @@ int main(int argc, char **argv)
 
     /* parse options and open all input/output files */
     ret = ffmpeg_parse_options(argc, argv);
-    if (ret < 0)
+    if (ret < 0) {
         exit_program(1);
+    }
+
+    if (g_should_exit) {
+        return g_exit_code;
+    }
 
     if (nb_output_files <= 0 && nb_input_files == 0) {
         show_usage();
         av_log(NULL, AV_LOG_WARNING, "Use -h to get full help or, even better, run 'man %s'\n", program_name);
-        exit_program(1);
+//        exit_program(1);
+        return g_exit_code;
     }
 
     /* file converter / grab */
     if (nb_output_files <= 0) {
         av_log(NULL, AV_LOG_FATAL, "At least one output file must be specified\n");
-        exit_program(1);
+//        exit_program(1);
+        return g_exit_code;
     }
 
 //     if (nb_input_files == 0) {
@@ -4588,17 +4598,21 @@ int main(int argc, char **argv)
     }
 
     current_time = ti = getutime();
-    if (transcode() < 0)
-        exit_program(1);
+    if (transcode() < 0) {
+//        exit_program(1);
+        return g_exit_code;
+    }
     ti = getutime() - ti;
     if (do_benchmark) {
         av_log(NULL, AV_LOG_INFO, "bench: utime=%0.3fs\n", ti / 1000000.0);
     }
     av_log(NULL, AV_LOG_DEBUG, "%"PRIu64" frames successfully decoded, %"PRIu64" decoding errors\n",
            decode_error_stat[0], decode_error_stat[1]);
-    if ((decode_error_stat[0] + decode_error_stat[1]) * max_error_rate < decode_error_stat[1])
-        exit_program(69);
+    if ((decode_error_stat[0] + decode_error_stat[1]) * max_error_rate < decode_error_stat[1]) {
+//        exit_program(69);
+        return g_exit_code;
+    }
 
-    exit_program(received_nb_signals ? 255 : main_return_code);
+//    exit_program(received_nb_signals ? 255 : main_return_code);
     return main_return_code;
 }

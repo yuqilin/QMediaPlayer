@@ -3,6 +3,7 @@ package com.github.yuqilin.qmediaplayerapp;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.Date;
 
 /**
  * Created by yuqilin on 17/1/6.
@@ -55,5 +58,11 @@ public class PlayerTitleView extends FrameLayout {
         mTitleText.setText(title);
     }
 
+    public void updateBattery() {
+
+    }
+    public void updateSysTime() {
+        mSysTime.setText(DateFormat.getTimeFormat(getContext()).format(new Date(System.currentTimeMillis())));
+    }
 
 }

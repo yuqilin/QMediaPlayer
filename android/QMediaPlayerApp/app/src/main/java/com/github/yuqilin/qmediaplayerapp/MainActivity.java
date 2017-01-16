@@ -1,14 +1,14 @@
 package com.github.yuqilin.qmediaplayerapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private static final String TAG = "QMediaPlayer-MainActivity";
 
@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         mVideoPathEdit = (EditText) findViewById(R.id.video_path_edit);
         mPlayBtn = (Button) findViewById(R.id.play_btn);
 
-        mVideoPathEdit.setText("/sdcard/BigBuckBunny_320x180.mp4");
+        mVideoPathEdit.setText("/sdcard/tmpBigBuckBunny_320x180.mp4");
 
     }
 

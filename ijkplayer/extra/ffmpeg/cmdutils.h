@@ -51,6 +51,9 @@ extern AVDictionary *swr_opts;
 extern AVDictionary *format_opts, *codec_opts, *resample_opts;
 extern int hide_banner;
 
+extern int g_should_exit;
+extern int g_exit_code;
+
 /**
  * Register a program-specific cleanup routine.
  */
