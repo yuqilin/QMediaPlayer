@@ -2,12 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.github.yuqilin.qmediaplayerapp">
 
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
     <application
+        android:name=".QApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_player_logo"
+        android:icon="@drawable/group_2"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.Base">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,9 +20,16 @@
         </activity>
 
         <activity android:name=".VideoPlayerActivity"
+            android:theme="@style/AppThemeFullscreen"
             android:launchMode="singleTop"
             android:configChanges="orientation|screenSize"
             />
+
+        <service
+            android:name=".PlayBackService"
+            android:configChanges="orientation|screenSize"
+            android:enabled="true">
+        </service>
     </application>
 
 </manifest>

@@ -126,7 +126,7 @@
                 android:layout_height="28dp"
                 android:scaleType="center"
                 android:layout_marginLeft="16dp"
-                android:src="@drawable/ic_lock" />
+                android:src="@drawable/ic_lock_open" />
 
             <ImageView
                 android:id="@+id/view_player_float_screen"
@@ -239,6 +239,15 @@
             android:layout_marginTop="16dp"
             android:src="@drawable/ic_g_i_f"/>
     </LinearLayout>
+    
+    <ImageView
+        android:id="@+id/view_player_lock_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_lock_center"
+        android:visibility="gone"
+        />
 
 
 

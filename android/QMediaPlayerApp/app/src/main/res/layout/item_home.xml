@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="201dip"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:padding="1dp"
+    android:background="@drawable/item_home_background"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:id="@+id/home_item_image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dip"
+        android:layout_marginLeft="4dip"
+        android:layout_marginTop="16dip"
+        tools:src="@drawable/ic_movie" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dip"
+        android:layout_toRightOf="@id/home_item_image"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/home_item_main_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/text_black"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="Musics" />
+
+        <TextView
+            android:id="@+id/home_item_sub_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/text_black"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="0 songs" />
+    </LinearLayout>
+
+
+</RelativeLayout>

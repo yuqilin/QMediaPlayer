@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
+    <!--<color name="colorPrimary">#3F51B5</color>-->
+    <color name="colorPrimary">#673ab7</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorWhite">#FFFFFF</color>
@@ -22,4 +23,11 @@
     <color name="blacktransparent">#b4000000</color>
     <color name="whitetransparent">#dcffffff</color>
     <color name="transparent">#00000000</color>
+
+    <color name="text_enabled">#FFFFFFFF</color>
+    <color name="text_disabled">#4DFFFFFF</color>
+
+    <color name="text_black">#de000000</color>
+    <color name="text_gray">#8a000000</color>
+
 </resources>
