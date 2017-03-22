@@ -1,5 +1,6 @@
 package com.github.yuqilin.qmediaplayerapp.gui.video;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.View;
 import com.github.yuqilin.qmediaplayerapp.BaseFragment;
 import com.github.yuqilin.qmediaplayerapp.IEventsHandler;
 import com.github.yuqilin.qmediaplayerapp.R;
+import com.github.yuqilin.qmediaplayerapp.VideoPlayerActivity;
 import com.github.yuqilin.qmediaplayerapp.gui.view.AutoFitRecyclerView;
 import com.github.yuqilin.qmediaplayerapp.media.MediaWrapper;
 import com.github.yuqilin.qmediaplayerapp.media.VideoLoader;
@@ -64,13 +66,14 @@ public class VideoFragment extends BaseFragment implements IEventsHandler, Video
 
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
+        mVideoLoader = new VideoLoader(this);
+
         mGridView = (AutoFitRecyclerView) view.findViewById(R.id.video_grid);
 //        mGridView.setHasFixedSize(true);
 
         mVideoAdapter = new VideoListAdapter(this);
-        mGridView.setAdapter(mVideoAdapter);
 
-        mVideoLoader = new VideoLoader(this);
+        mGridView.setAdapter(mVideoAdapter);
 
         mHandler.sendEmptyMessage(SCAN_START);
     }
@@ -79,7 +82,7 @@ public class VideoFragment extends BaseFragment implements IEventsHandler, Video
     public void onStart() {
         super.onStart();
 //        mFabPlay.setImageResource(R.drawable.ic_fab_play);
-        registerForContextMenu(mGridView);
+//        registerForContextMenu(mGridView);
     }
 
     @Override
@@ -101,7 +104,7 @@ public class VideoFragment extends BaseFragment implements IEventsHandler, Video
     @Override
     public void onStop() {
         super.onStop();
-        unregisterForContextMenu(mGridView);
+//        unregisterForContextMenu(mGridView);
     }
 
     @Override
@@ -144,7 +147,7 @@ public class VideoFragment extends BaseFragment implements IEventsHandler, Video
 
     @Override
     public void onClick(View v, int position, MediaWrapper item) {
-
+        jumpToPlayerActivity(item.filePath);
     }
 
     @Override
@@ -160,6 +163,12 @@ public class VideoFragment extends BaseFragment implements IEventsHandler, Video
     @Override
     public void onUpdateFinished(RecyclerView.Adapter adapter) {
 
+    }
+
+    private void jumpToPlayerActivity(String videoPath) {
+        Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
+        intent.putExtra("videoPath", videoPath);
+        startActivity(intent);
     }
 
     private void updateViewMode() {
@@ -193,7 +202,7 @@ public class VideoFragment extends BaseFragment implements IEventsHandler, Video
 
     @Override
     public void onLoadItem(int position, MediaWrapper video) {
-        mHandler.sendMessage(Message.obtain(mHandler, SCAN_ADD_ITEM, position, 0, video));
+//        mHandler.sendMessage(Message.obtain(mHandler, SCAN_ADD_ITEM, position, 0, video));
     }
 
     @Override

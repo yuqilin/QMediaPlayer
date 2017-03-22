@@ -60,10 +60,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
 //    private VideoComparator mVideoComparator = new VideoComparator();
 //    private volatile SortedList<MediaWrapper> mVideos = new SortedList<>(MediaWrapper.class, mVideoComparator);
 //    private volatile ArrayList<MediaInfo> mVideos = new ArrayList<>();
-    private ImageView mThumbnail;
-    private TextView mDuration;
-    private TextView mFileName;
-    private TextView mFileSize;
+
 
     private int mGridCardWidth = 0;
 
@@ -78,13 +75,10 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Log.d(TAG, "onCreateViewHolder viewType " + viewType);
         LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(mListMode ? R.layout.item_video_list : R.layout.item_video_grid, parent, false);
 
-        mThumbnail = (ImageView) v.findViewById(R.id.item_video_list_thumbnail);
-        mFileName = (TextView) v.findViewById(R.id.item_video_list_filename);
-        mFileSize = (TextView) v.findViewById(R.id.item_video_list_filesize);
-        mDuration = (TextView) v.findViewById(R.id.item_video_list_duration);
 
         if (!mListMode) {
             GridLayoutManager.LayoutParams params = (GridLayoutManager.LayoutParams) v.getLayoutParams();
@@ -96,6 +90,14 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
         return new ViewHolder(v);
     }
 
+    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            MediaWrapper media = (MediaWrapper) view.getTag();
+            mEventsHandler.onClick(view, 0, media);
+        }
+    };
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder position " + position);
@@ -104,10 +106,12 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
             return;
         }
         Log.d(TAG, "position[" + position + "]: " + media.filePath);
-//        AsyncImageLoader.loadPicture(mThumbnail, media);
-        mFileName.setText(media.filePath.substring(media.filePath.lastIndexOf('/') + 1));
-        mFileSize.setText(media.fileSize);
-        mDuration.setText(media.duration);
+        AsyncImageLoader.loadPicture(holder.mThumbnail, media);
+        holder.mFileName.setText(media.filePath.substring(media.filePath.lastIndexOf('/') + 1));
+        holder.mFileSize.setText(media.fileSize);
+        holder.mDuration.setText(media.duration);
+        holder.mListItem.setTag(media);
+        holder.mListItem.setOnClickListener(mOnClickListener);
     }
 
     @Override
@@ -157,11 +161,19 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
 
     public void updateVideos(ArrayList<MediaWrapper> videos) {
         mVideos = videos;
+        notifyDataSetChanged();
     }
     public void addVideo(int position, MediaWrapper video) {
         Log.d(TAG, "addVideo position " + position);
         mVideos.add(position, video);
         notifyItemInserted(position);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        int type = super.getItemViewType(position);
+        Log.d(TAG, "getItemViewType position = " + position + ", type = " + type);
+        return 1;
     }
 
     @Override
@@ -171,7 +183,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
 
     @Override
     public int getItemCount() {
-//        Log.d(TAG, "getItemCount : " + mVideos.size());
+        Log.d(TAG, "getItemCount : " + mVideos.size());
         return mVideos.size();
     }
 
@@ -181,16 +193,21 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
         mOriginalData = null;
     }
 
-    private void fillView(ViewHolder holder, MediaWrapper media) {
-        mFileName.setText(media.filePath.substring(media.filePath.lastIndexOf('/') + 1));
-        mFileSize.setText(media.fileSize);
-        mDuration.setText(media.duration);
-    }
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnFocusChangeListener {
-        public ViewHolder(View itemView) {
-            super(itemView);
-            itemView.setOnFocusChangeListener(this);
+        private View mListItem;
+        private ImageView mThumbnail;
+        private TextView mDuration;
+        private TextView mFileName;
+        private TextView mFileSize;
+
+        public ViewHolder(View v) {
+            super(v);
+            v.setOnFocusChangeListener(this);
+            mListItem = v.findViewById(R.id.list_item_view);
+            mThumbnail = (ImageView) v.findViewById(R.id.item_video_list_thumbnail);
+            mFileName = (TextView) v.findViewById(R.id.item_video_list_filename);
+            mFileSize = (TextView) v.findViewById(R.id.item_video_list_filesize);
+            mDuration = (TextView) v.findViewById(R.id.item_video_list_duration);
         }
 
         public void onClick(View v) {

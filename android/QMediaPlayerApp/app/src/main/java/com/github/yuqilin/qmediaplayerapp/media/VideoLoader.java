@@ -46,7 +46,7 @@ public class VideoLoader {
         return mVideos;
     }
 
-    private void loadVideos() {
+    public void loadVideos() {
         String[] thumbColumns = new String[]{
                 MediaStore.Video.Thumbnails.DATA,
                 MediaStore.Video.Thumbnails.VIDEO_ID
