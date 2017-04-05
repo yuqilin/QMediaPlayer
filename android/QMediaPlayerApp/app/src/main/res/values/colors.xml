@@ -28,6 +28,6 @@
     <color name="text_disabled">#4DFFFFFF</color>
 
     <color name="text_black">#de000000</color>
-    <color name="text_gray">#8a000000</color>
+    <color name="text_gray">#757575</color>
 
 </resources>

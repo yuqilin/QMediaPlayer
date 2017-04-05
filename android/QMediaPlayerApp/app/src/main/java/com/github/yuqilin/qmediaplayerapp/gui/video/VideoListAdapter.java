@@ -106,7 +106,8 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
             return;
         }
         Log.d(TAG, "position[" + position + "]: " + media.filePath);
-        AsyncImageLoader.loadPicture(holder.mThumbnail, media);
+        holder.mThumbnail.setImageBitmap(AsyncImageLoader.DEFAULT_COVER_VIDEO);
+        AsyncImageLoader.loadPicture(holder.mThumbnail, media, position);
         holder.mFileName.setText(media.filePath.substring(media.filePath.lastIndexOf('/') + 1));
         holder.mFileSize.setText(media.fileSize);
         holder.mDuration.setText(media.duration);
@@ -141,10 +142,17 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
     }
 
     @Override
+    public void onViewDetachedFromWindow(ViewHolder holder) {
+        Log.d(TAG, "onViewDetachedFromWindow");
+        super.onViewDetachedFromWindow(holder);
+    }
+
+    @Override
     public void onViewRecycled(ViewHolder holder) {
         Log.d(TAG, "onViewRecycled");
         super.onViewRecycled(holder);
 //        holder.binding.setVariable(BR.cover, AsyncImageLoader.DEFAULT_COVER_VIDEO_DRAWABLE);
+        holder.mThumbnail.setTag(1001);
     }
 
     public void setListMode(boolean value) {
@@ -169,12 +177,12 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
         notifyItemInserted(position);
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        int type = super.getItemViewType(position);
-        Log.d(TAG, "getItemViewType position = " + position + ", type = " + type);
-        return 1;
-    }
+//    @Override
+//    public int getItemViewType(int position) {
+//        int type = super.getItemViewType(position);
+//        Log.d(TAG, "getItemViewType position = " + position + ", type = " + type);
+//        return 1;
+//    }
 
     @Override
     public long getItemId(int position) {
@@ -183,7 +191,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
 
     @Override
     public int getItemCount() {
-        Log.d(TAG, "getItemCount : " + mVideos.size());
+//        Log.d(TAG, "getItemCount : " + mVideos.size());
         return mVideos.size();
     }
 

@@ -1,8 +1,11 @@
 package com.github.yuqilin.qmediaplayerapp.util;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -90,9 +93,10 @@ public class BitmapUtil {
 //        }
 //        cache.addBitmapToMemCache(media.getLocation(), picture);
 
+        ContentResolver contentResolver = QApplication.getAppContext().getContentResolver();
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 1;
-        Bitmap picture = MediaStore.Video.Thumbnails.getThumbnail(QApplication.getAppContext().getContentResolver(),
+        Bitmap picture = MediaStore.Video.Thumbnails.getThumbnail(contentResolver,
                 media.videoId, MediaStore.Video.Thumbnails.MICRO_KIND, options);
 
         return picture;

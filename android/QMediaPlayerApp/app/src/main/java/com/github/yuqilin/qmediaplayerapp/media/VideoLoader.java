@@ -1,7 +1,7 @@
 package com.github.yuqilin.qmediaplayerapp.media;
 
+import android.content.ContentResolver;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.util.Log;
 
@@ -62,9 +62,10 @@ public class VideoLoader {
         };
 
         //首先检索SDcard上所有的video
-        Cursor cursor = QApplication.getAppContext().getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, mediaColumns, null, null, null);
+        ContentResolver contentResolver = QApplication.getAppContext().getContentResolver();
+        Cursor cursor = contentResolver.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, mediaColumns, null, null, null);
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             do{
                 MediaWrapper media = new MediaWrapper();
 
@@ -76,18 +77,22 @@ public class VideoLoader {
 
                 //获取当前Video对应的Id，然后根据该ID获取其Thumb
                 long id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID));
-                String selection = MediaStore.Video.Thumbnails.VIDEO_ID +"=?";
-                String[] selectionArgs = new String[]{
-                        id+""
-                };
-//                Cursor thumbCursor = getContentResolver().query(MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI, thumbColumns, selection, selectionArgs, null);
-//
-//                if(thumbCursor != null && thumbCursor.moveToFirst()){
-//                    info.thumbPath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Thumbnails.DATA));
-//                }
+//                String selection = MediaStore.Video.Thumbnails.VIDEO_ID +"=?";
+//                String[] selectionArgs = new String[]{
+//                        id+""
+//                };
+
+                String selection = MediaStore.Video.Thumbnails.VIDEO_ID + "=" + id;
+                String thumbPath = "";
+                Cursor thumbCursor = contentResolver.query(MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI, thumbColumns, selection, null, null);
+                if (thumbCursor != null && thumbCursor.moveToFirst()) {
+                    thumbPath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Thumbnails.DATA));
+                } else {
+                }
+
                 media.videoId = id;
 
-                Log.d(TAG, "====Scanned : [" + mVideos.size() + "] " + media.filePath + " " + media.title + " " + media.videoId);
+                Log.d(TAG, "====Scanned : [" + mVideos.size() + "] " + media.filePath + " " + media.title + " " + media.videoId + " " + thumbPath);
 
                 //然后将其加入到videoList
                 mVideos.add(media);

@@ -59,7 +59,7 @@ public class MainActivity extends BaseActivity {
 //        mPlayBtn = (Button) findViewById(R.id.play_btn);
 //        mVideoPathEdit.setText("/sdcard/tmp/BigBuckBunny_320x180.mp4");
 
-        mFragments.add(new HomeFragment());
+//        mFragments.add(new HomeFragment());
         mVideoFragment = new VideoFragment();
         mFragments.add(mVideoFragment);
 
