@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/miCompose"
-        android:icon="@drawable/ic_more_vert_24_px"
+        android:id="@+id/mi_switchmode"
+        android:icon="@drawable/ic_switchmode"
         app:showAsAction="ifRoom"
-        android:title="Compose">
+        android:title="SwitchMode">
     </item>
     <item
-        android:id="@+id/miProfile"
+        android:id="@+id/mi_more"
         android:icon="@drawable/ic_more_vert_24_px"
         app:showAsAction="ifRoom|withText"
-        android:title="Profile">
+        android:title="More">
     </item>
 </menu>

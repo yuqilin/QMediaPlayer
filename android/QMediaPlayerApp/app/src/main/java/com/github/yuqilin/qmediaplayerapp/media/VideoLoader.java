@@ -72,8 +72,8 @@ public class VideoLoader {
                 media.filePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
                 media.mimeType = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.MIME_TYPE));
                 media.title = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE));
-                media.duration = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION));
-                media.fileSize = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE));
+                media.duration = Long.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION)));
+                media.fileSize = Long.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE)));
 
                 //获取当前Video对应的Id，然后根据该ID获取其Thumb
                 long id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID));

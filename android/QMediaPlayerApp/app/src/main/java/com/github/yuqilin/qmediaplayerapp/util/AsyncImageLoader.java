@@ -22,8 +22,8 @@ import com.github.yuqilin.qmediaplayerapp.media.MediaWrapper;
 
 public class AsyncImageLoader {
     public interface Callbacks {
-        Bitmap getImage();
-        void updateImage(Bitmap bitmap, View target, int position);
+        Bitmap getImage(int kind);
+        void updateImage(Bitmap bitmap, View target);
     }
 
     public final static String TAG = "AsyncImageLoader";
@@ -32,16 +32,16 @@ public class AsyncImageLoader {
     public static final Bitmap DEFAULT_COVER_VIDEO = BitmapFactory.decodeResource(QApplication.getAppResources(), R.drawable.ic_play_arrow_24_px);
 //    public static final BitmapDrawable DEFAULT_COVER_VIDEO_DRAWABLE = new BitmapDrawable(QApplication.getAppResources(), BitmapCache.getFromResource(QApplication.getAppResources(), R.drawable.ic_play_arrow_24_px));
 
-    public static void loadPicture(View view, MediaWrapper media, int position) {
-        AsyncImageLoader.LoadImage(new MediaCoverFetcher(media), view, position);
+    public static void loadPicture(View view, MediaWrapper media, int kind) {
+        AsyncImageLoader.LoadImage(new MediaCoverFetcher(media), view, kind);
     }
 
-    public static void LoadImage(final Callbacks cbs, final View target, final int position) {
+    public static void LoadImage(final Callbacks cbs, final View target, final int kind) {
         QApplication.runBackground(new Runnable() {
             @Override
             public void run() {
-                final Bitmap bitmap = cbs.getImage();
-                cbs.updateImage(bitmap, target, position);
+                final Bitmap bitmap = cbs.getImage(kind);
+                cbs.updateImage(bitmap, target);
             }
         });
     }
@@ -49,14 +49,14 @@ public class AsyncImageLoader {
     public abstract static class CoverFetcher implements AsyncImageLoader.Callbacks {
 
         public void updateBindImage(final Bitmap bitmap) {}
-        public void updateImageView(final Bitmap bitmap, View target, int position) {}
+        public void updateImageView(final Bitmap bitmap, View target) {}
 
         @Override
-        public void updateImage(final Bitmap bitmap, final View target, final int position) {
+        public void updateImage(final Bitmap bitmap, final View target) {
             sHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    updateImageView(bitmap, target, position);
+                    updateImageView(bitmap, target);
                 }
             });
         }
@@ -70,17 +70,16 @@ public class AsyncImageLoader {
         }
 
         @Override
-        public Bitmap getImage() {
-            return BitmapUtil.fetchPicture(media);
+        public Bitmap getImage(int kind) {
+            return BitmapUtil.fetchPicture(media, kind);
         }
 
         @Override
-        public void updateImage(final Bitmap bitmap, final View target, final int position) {
+        public void updateImage(final Bitmap bitmap, final View target) {
             sHandler.post(new Runnable() {
                 @Override
                 public void run() {
                     if (target instanceof ImageView) {
-                        Log.d(TAG, "updateImage --- [" + position + "]");
 //                        setCover((ImageView) target, media.getType(), bitmap, binding);
                         ImageView iv = (ImageView) target;
 //                        CancelTag cancelTag = (CancelTag)iv.getTag();
@@ -90,12 +89,9 @@ public class AsyncImageLoader {
 //                                Log.d(TAG, "cancelTag set [" + position + "]");
 //                            }
 //                        }
-                        if ((long)iv.getTag() == 1001) {
-                            Log.d(TAG, "cancelTag set [" + position + "]");
+                        if (iv.getTag() == media) {
+                            iv.setImageBitmap(bitmap);
                         }
-                        iv.setVisibility(View.VISIBLE);
-                        iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                        iv.setImageBitmap(bitmap);
                     } else if (target instanceof TextView) {
 //                        if (bitmap != null && (bitmap.getWidth() != 1 && bitmap.getHeight() != 1)) {
 //                            if (binding != null) {

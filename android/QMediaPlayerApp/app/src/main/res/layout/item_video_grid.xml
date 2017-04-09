@@ -1,6 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:id="@+id/grid_item_view"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/item_video_grid_thumbnail"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_play_grid"
+        android:background="@color/colorBlack"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/item_video_grid_filename"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/text_black"
+            android:text="mdamfdafdomfodfopafodmfopamfomodf.mp4"
+            android:maxLines="1"
+            android:ellipsize="end"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/item_video_grid_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:textColor="@color/text_gray"
+                android:text="01:23:33" />
+
+            <TextView
+                android:id="@+id/item_video_grid_filesize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:textSize="10sp"
+                android:textColor="@color/text_gray"
+                android:text="800M" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!--<LinearLayout-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="1">-->
+
+        <!--<LinearLayout-->
+            <!--android:orientation="vertical"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent">-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/item_video_grid_filename"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textSize="12sp"-->
+                <!--android:textColor="@color/text_black"-->
+                <!--android:text="mdamfdafdomfodfopafodmfopamfomodf.mp4"-->
+                <!--android:maxLines="1"-->
+                <!--android:ellipsize="end"/>-->
+
+            <!--<LinearLayout-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0dp"-->
+                <!--android:layout_weight="1">-->
+                <!--<TextView-->
+                    <!--android:id="@+id/item_video_grid_duration"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textSize="10sp"-->
+                    <!--android:textColor="@color/text_gray"-->
+                    <!--android:text="01:23:33" />-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/item_video_grid_filesize"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="20dp"-->
+                    <!--android:textSize="10sp"-->
+                    <!--android:textColor="@color/text_gray"-->
+                    <!--android:text="800M" />-->
+            <!--</LinearLayout>-->
+
+        <!--</LinearLayout>-->
+
+        <!--<ImageView-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:layout_width="10dp"-->
+            <!--android:layout_height="10dp"-->
+            <!--android:scaleType="fitCenter"-->
+            <!--android:src="@drawable/icon_more" />-->
+
+    <!--</LinearLayout>-->
 
 </LinearLayout>

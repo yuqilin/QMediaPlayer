@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import com.github.yuqilin.qmediaplayer.FFmpegInvoke;
 import com.github.yuqilin.qmediaplayer.IMediaController;
+import com.github.yuqilin.qmediaplayer.IMediaPlayer;
 import com.github.yuqilin.qmediaplayer.QMediaPlayerVideoView;
 import com.github.yuqilin.qmediaplayerapp.util.AndroidDevices;
 import com.github.yuqilin.qmediaplayerapp.util.Permissions;
@@ -126,8 +127,9 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
 
-
         initView();
+
+        initPlayer();
 
         hideStatusBar();
 //        dimStatusBar(true);
@@ -145,6 +147,17 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
             Log.w(TAG, "File not exitsts or can not read");
         }
 
+    }
+
+    private void initPlayer() {
+        mVideoView.setMediaController(this);
+        mVideoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(IMediaPlayer mp) {
+                mSeekBar.setProgress(mSeekBar.getMax());
+            }
+        });
+        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
     }
 
     @Override
@@ -229,7 +242,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
         mTitleView = findViewById(R.id.player_title_view);
         mBack = (ImageView) findViewById(R.id.view_player_back);
         mTitle = (TextView) findViewById(R.id.view_player_title);
-        mBattery = (ImageView) findViewById(R.id.view_player_battery);
+//        mBattery = (ImageView) findViewById(R.id.view_player_battery);
         mSysTime = (TextView) findViewById(R.id.view_player_systime);
         mShowMore = (ImageView) findViewById(R.id.view_player_more);
 
@@ -269,10 +282,6 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
         mSeekBar.setThumbOffset(1);
         mSeekBar.setMax(1000);
         mSeekBar.setEnabled(!mDisableProgress);
-
-        mVideoView.setMediaController(this);
-
-        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         mHandler.sendEmptyMessage(UPDATE_SYSTIME);
     }
@@ -710,6 +719,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
         if (mSeekBar != null) {
             if (duration > 0) {
                 long pos = 1000L * position / duration;
+                Log.d(TAG, "seekbar setProgress " + pos);
                 mSeekBar.setProgress((int) pos);
             }
             int percent = mMediaPlayerControl.getBufferPercentage();

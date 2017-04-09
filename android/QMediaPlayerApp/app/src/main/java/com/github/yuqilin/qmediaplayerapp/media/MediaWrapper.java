@@ -10,7 +10,7 @@ public class MediaWrapper {
     public String mimeType;
 //    public String thumbPath;
     public String title;
-    public String duration;
-    public String fileSize;
+    public long duration;
+    public long fileSize;
 
 }

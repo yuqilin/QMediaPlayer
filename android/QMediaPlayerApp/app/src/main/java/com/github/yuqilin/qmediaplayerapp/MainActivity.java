@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.github.yuqilin.qmediaplayerapp.gui.home.HomeFragment;
@@ -32,20 +33,13 @@ public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
     private static String[] sPageTitles = {"HOME", "VIDEOS", "FOLDERS"};
 
-//    private EditText mVideoPathEdit;
-//    private Button mPlayBtn;
-
     private ViewPager mViewPager;
     private SmartTabLayout mViewPagerTab;
     private FragmentPagerAdapter mAdpter;
 
     private List<BaseFragment> mFragments = new ArrayList<>();
 
-    private ArrayList<MediaWrapper> mVideos = new ArrayList<>();
-
     private VideoFragment mVideoFragment;
-
-    private AsyncTask<String, Integer, String> mTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,8 +144,19 @@ public class MainActivity extends BaseActivity {
         return 0;
     }
 
-
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.mi_switchmode:
+                mVideoFragment.toggleMode();
+                break;
+            case R.id.mi_more:
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
 
 
 

@@ -38,6 +38,7 @@ public class VideoFragment extends BaseFragment implements IEventsHandler, Video
 
     protected AutoFitRecyclerView mGridView;
     private VideoListAdapter mVideoAdapter;
+    private boolean mListMode;
 
     private VideoLoader mVideoLoader;
     private Handler mHandler = new Handler() {
@@ -67,6 +68,11 @@ public class VideoFragment extends BaseFragment implements IEventsHandler, Video
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
         mVideoLoader = new VideoLoader(this);
+
+        Resources res = getResources();
+        mListMode = res.getBoolean(R.bool.list_mode);
+        mListMode |= res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT &&
+                PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("force_list_portrait", false);
 
         mGridView = (AutoFitRecyclerView) view.findViewById(R.id.video_grid);
 //        mGridView.setHasFixedSize(true);
@@ -177,26 +183,23 @@ public class VideoFragment extends BaseFragment implements IEventsHandler, Video
             return;
         }
         Resources res = getResources();
-        boolean listMode = res.getBoolean(R.bool.list_mode);
-        listMode |= res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT &&
-                PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("force_list_portrait", false);
         // Compute the left/right padding dynamically
         DisplayMetrics outMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
 
         // Select between grid or list
-        if (!listMode) {
+        if (!mListMode) {
             int thumbnailWidth = res.getDimensionPixelSize(R.dimen.grid_card_thumb_width);
             mGridView.setColumnWidth(mGridView.getPerfectColumnWidth(thumbnailWidth, res.getDimensionPixelSize(R.dimen.default_margin)));
             mVideoAdapter.setGridCardWidth(mGridView.getColumnWidth());
         }
-        mGridView.setNumColumns(listMode ? 1 : -1);
-        if (mVideoAdapter.isListMode() != listMode) {
+        mGridView.setNumColumns(mListMode ? 1 : 2);
+        if (mVideoAdapter.isListMode() != mListMode) {
 //            if (listMode)
 //                mGridView.addItemDecoration(mDividerItemDecoration);
 //            else
 //                mGridView.removeItemDecoration(mDividerItemDecoration);
-            mVideoAdapter.setListMode(listMode);
+            mVideoAdapter.setListMode(mListMode);
         }
     }
 
@@ -208,6 +211,16 @@ public class VideoFragment extends BaseFragment implements IEventsHandler, Video
     @Override
     public void onLoadCompleted(ArrayList<MediaWrapper> videos) {
         mHandler.sendEmptyMessage(SCAN_FINISH);
+    }
+
+    public void toggleMode() {
+        mListMode = !mListMode;
+        mVideoAdapter = new VideoListAdapter(this);
+        updateViewMode();
+        mGridView.setAdapter(mVideoAdapter);
+        mGridView.requestLayout();
+        mGridView.invalidate();
+        mVideoAdapter.updateVideos(mVideoLoader.getVideos());
     }
 
 }

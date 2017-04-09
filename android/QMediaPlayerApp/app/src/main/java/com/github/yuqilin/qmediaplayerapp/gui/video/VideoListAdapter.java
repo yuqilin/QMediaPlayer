@@ -22,6 +22,7 @@ package com.github.yuqilin.qmediaplayerapp.gui.video;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.provider.MediaStore;
 import android.support.annotation.MainThread;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
@@ -31,12 +32,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.yuqilin.qmediaplayerapp.IEventsHandler;
 import com.github.yuqilin.qmediaplayerapp.R;
 import com.github.yuqilin.qmediaplayerapp.media.MediaWrapper;
 import com.github.yuqilin.qmediaplayerapp.util.AsyncImageLoader;
+import com.github.yuqilin.qmediaplayerapp.util.Strings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +86,8 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
         if (!mListMode) {
             GridLayoutManager.LayoutParams params = (GridLayoutManager.LayoutParams) v.getLayoutParams();
             params.width = mGridCardWidth;
-            params.height = params.width * 10 / 16;
+            params.height = params.width * 13 / 16;
+            Log.d(TAG, "GridLayout width = " + params.width + ", height = " + params.height);
             v.setLayoutParams(params);
         }
 
@@ -105,12 +109,13 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
         if (media == null) {
             return;
         }
-        Log.d(TAG, "position[" + position + "]: " + media.filePath);
+        Log.d(TAG, "onBindViewHolder position[" + position + "] : " + media + " " + media.filePath);
         holder.mThumbnail.setImageBitmap(AsyncImageLoader.DEFAULT_COVER_VIDEO);
-        AsyncImageLoader.loadPicture(holder.mThumbnail, media, position);
+        holder.mThumbnail.setTag(media);
+        AsyncImageLoader.loadPicture(holder.mThumbnail, media, mListMode ? MediaStore.Video.Thumbnails.MICRO_KIND : MediaStore.Video.Thumbnails.MINI_KIND);
         holder.mFileName.setText(media.filePath.substring(media.filePath.lastIndexOf('/') + 1));
-        holder.mFileSize.setText(media.fileSize);
-        holder.mDuration.setText(media.duration);
+        holder.mFileSize.setText(Strings.readableSize(media.fileSize));
+        holder.mDuration.setText(Strings.millisToString(media.duration));
         holder.mListItem.setTag(media);
         holder.mListItem.setOnClickListener(mOnClickListener);
     }
@@ -142,6 +147,12 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
     }
 
     @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        Log.d(TAG, "onAttachedToRecyclerView");
+        super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    @Override
     public void onViewDetachedFromWindow(ViewHolder holder) {
         Log.d(TAG, "onViewDetachedFromWindow");
         super.onViewDetachedFromWindow(holder);
@@ -149,10 +160,10 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
 
     @Override
     public void onViewRecycled(ViewHolder holder) {
-        Log.d(TAG, "onViewRecycled");
+        Log.d(TAG, "onViewRecycled layoutPosition = " + holder.getLayoutPosition() + ", adapterPosition = " + holder.getAdapterPosition());
         super.onViewRecycled(holder);
 //        holder.binding.setVariable(BR.cover, AsyncImageLoader.DEFAULT_COVER_VIDEO_DRAWABLE);
-        holder.mThumbnail.setTag(1001);
+//        holder.mThumbnail.setTag(holder.getLayoutPosition());
     }
 
     public void setListMode(boolean value) {
@@ -211,11 +222,20 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
         public ViewHolder(View v) {
             super(v);
             v.setOnFocusChangeListener(this);
-            mListItem = v.findViewById(R.id.list_item_view);
-            mThumbnail = (ImageView) v.findViewById(R.id.item_video_list_thumbnail);
-            mFileName = (TextView) v.findViewById(R.id.item_video_list_filename);
-            mFileSize = (TextView) v.findViewById(R.id.item_video_list_filesize);
-            mDuration = (TextView) v.findViewById(R.id.item_video_list_duration);
+            if (mListMode) {
+                mListItem = v.findViewById(R.id.list_item_view);
+                mThumbnail = (ImageView) v.findViewById(R.id.item_video_list_thumbnail);
+                mFileName = (TextView) v.findViewById(R.id.item_video_list_filename);
+                mFileSize = (TextView) v.findViewById(R.id.item_video_list_filesize);
+                mDuration = (TextView) v.findViewById(R.id.item_video_list_duration);
+            } else {
+                mListItem = v.findViewById(R.id.grid_item_view);
+                mThumbnail = (ImageView) v.findViewById(R.id.item_video_grid_thumbnail);
+                mFileName = (TextView) v.findViewById(R.id.item_video_grid_filename);
+                mFileSize = (TextView) v.findViewById(R.id.item_video_grid_filesize);
+                mDuration = (TextView) v.findViewById(R.id.item_video_grid_duration);
+                mThumbnail.setLayoutParams(new LinearLayout.LayoutParams(mGridCardWidth, mGridCardWidth * 9 / 16));
+            }
         }
 
         public void onClick(View v) {

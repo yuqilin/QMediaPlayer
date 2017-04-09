@@ -4,22 +4,22 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="center_vertical"
     android:padding="16dp">
 
     <ImageView
         android:id="@+id/item_video_list_thumbnail"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:scaleType="centerInside"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_play_arrow_24_px"
-        android:background="@color/grey400transparent"/>
+        android:background="@color/colorBlack"/>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_gravity="center_vertical"
         android:layout_marginLeft="16dp">
 
         <TextView
@@ -56,12 +56,11 @@
     </LinearLayout>
 
 
-    <ImageView
-        android:id="@+id/item_video_list_more"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="16dp"
-        android:src="@drawable/icon_more"/>
+    <!--<ImageView-->
+        <!--android:id="@+id/item_video_list_more"-->
+        <!--android:layout_width="24dp"-->
+        <!--android:layout_height="24dp"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:src="@drawable/icon_more"/>-->
 
 </LinearLayout>

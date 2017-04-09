@@ -84,7 +84,7 @@ public class BitmapUtil {
         return null;
     }
 
-    public static Bitmap fetchPicture(MediaWrapper media) {
+    public static Bitmap fetchPicture(MediaWrapper media, int kind) {
 //        final BitmapCache cache = BitmapCache.getInstance();
 //
 //        Bitmap picture = readCoverBitmap(media.getArtworkURL());
@@ -97,18 +97,17 @@ public class BitmapUtil {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 1;
         Bitmap picture = MediaStore.Video.Thumbnails.getThumbnail(contentResolver,
-                media.videoId, MediaStore.Video.Thumbnails.MICRO_KIND, options);
-
+                media.videoId, kind, options);
         return picture;
     }
 
-    public static Bitmap getPicture(MediaWrapper media) {
-        final Bitmap picture = getPictureFromCache(media);
-        if (picture != null)
-            return picture;
-        else
-            return fetchPicture(media);
-    }
+//    public static Bitmap getPicture(MediaWrapper media) {
+//        final Bitmap picture = getPictureFromCache(media);
+//        if (picture != null)
+//            return picture;
+//        else
+//            return fetchPicture(media);
+//    }
 
     private static Bitmap readCoverBitmap(String path) {
         if (path == null)
