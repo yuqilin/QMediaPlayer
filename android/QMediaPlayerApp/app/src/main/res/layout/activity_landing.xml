@@ -7,17 +7,18 @@
     android:orientation="vertical"
     android:background="@color/colorPrimary"
     >
+        <ImageView
+            android:id="@+id/landing_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_landing"/>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_landing"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="24sp"
+            android:text="@string/landing_hint"
+            android:textColor="@android:color/white"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:gravity="center"
-        android:text="@string/landing_hint"
-        android:textColor="@android:color/white"/>
 </LinearLayout>

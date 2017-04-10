@@ -121,23 +121,32 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/view_player_lock_screen"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:padding="2dp"
-                android:scaleType="center"
-                android:layout_marginLeft="16dp"
-                android:src="@drawable/ic_lock_open" />
+            <!--<ImageView-->
+                <!--android:id="@+id/view_player_lock_screen"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:padding="2dp"-->
+                <!--android:scaleType="center"-->
+                <!--android:layout_marginLeft="16dp"-->
+                <!--android:src="@drawable/ic_lock_open" />-->
 
             <ImageView
-                android:id="@+id/view_player_float_screen"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:padding="2dp"
+                android:id="@+id/view_player_display_ratio"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:padding="4dp"
                 android:scaleType="center"
-                android:layout_marginLeft="12dp"
-                android:src="@drawable/ic_float" />
+                android:layout_marginLeft="16dp"
+                android:src="@drawable/ic_aspect_ratio" />
+
+            <!--<ImageView-->
+                <!--android:id="@+id/view_player_float_screen"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:padding="2dp"-->
+                <!--android:scaleType="center"-->
+                <!--android:layout_marginLeft="12dp"-->
+                <!--android:src="@drawable/ic_float" />-->
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -170,20 +179,20 @@
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/view_player_display_ratio"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:padding="2dp"
-                android:scaleType="center"
-                android:layout_marginRight="12dp"
-                android:src="@drawable/ic_aspect_ratio" />
+            <!--<ImageView-->
+                <!--android:id="@+id/view_player_display_ratio"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:padding="2dp"-->
+                <!--android:scaleType="center"-->
+                <!--android:layout_marginRight="12dp"-->
+                <!--android:src="@drawable/ic_aspect_ratio" />-->
 
             <ImageView
                 android:id="@+id/view_player_rotation"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:padding="2dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:padding="4dp"
                 android:scaleType="center"
                 android:layout_marginRight="16dp"
                 android:src="@drawable/ic_screen_rotation" />
@@ -230,20 +239,19 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerInParent="true"
-        android:visibility="gone"
         android:gravity="center_vertical">
         <ImageView
-            android:id="@+id/view_player_take_snapshot"
+            android:id="@+id/view_player_lock_screen"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@drawable/ic_screenshot"/>
+            android:src="@drawable/ic_lock_copy_2"/>
 
         <ImageView
-            android:id="@+id/view_player_take_gif"
+            android:id="@+id/view_player_play_speed"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginTop="16dp"
-            android:src="@drawable/ic_g_i_f"/>
+            android:src="@drawable/ic_speed"/>
     </LinearLayout>
     
     <ImageView

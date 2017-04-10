@@ -8,11 +8,17 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/main_toolbar"
         android:minHeight="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:titleTextColor="@android:color/white">
+        <Spinner
+            android:id="@+id/main_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+        </Spinner>
     </android.support.v7.widget.Toolbar>
 
     <!--<EditText-->
@@ -37,7 +43,7 @@
     <com.ogaclejapan.smarttablayout.SmartTabLayout
         android:id="@+id/main_viewpagertab"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="0dp"
         app:stl_distributeEvenly="true"
         app:stl_dividerColor="@null"
         app:stl_indicatorColor="@android:color/white"
@@ -50,6 +56,7 @@
         android:id="@+id/main_viewpager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:background="@android:color/white" />
 
 </LinearLayout>

@@ -81,11 +81,12 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
     ImageView mRewind;
     ImageView mDisplayRatio;
     ImageView mRotateScreen;
+    ImageView mPlaySpeed;
 
     // center tools view
     View mToolsView;
-    ImageView mSnapshot;
-    ImageView mTakeGif;
+//    ImageView mSnapshot;
+//    ImageView mTakeGif;
     ImageView mLockCenter;
 
     private AudioManager mAudioManager;
@@ -151,12 +152,12 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
 
     private void initPlayer() {
         mVideoView.setMediaController(this);
-        mVideoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(IMediaPlayer mp) {
-                mSeekBar.setProgress(mSeekBar.getMax());
-            }
-        });
+//        mVideoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
+//            @Override
+//            public void onCompletion(IMediaPlayer mp) {
+//                mSeekBar.setProgress(mSeekBar.getMax());
+//            }
+//        });
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
     }
 
@@ -252,7 +253,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
         mTotalTime = (TextView) findViewById(R.id.view_player_total_time);
         mSeekBar = (SeekBar) findViewById(R.id.view_player_seekbar);
         mLockScreen = (ImageView) findViewById(R.id.view_player_lock_screen);
-        mFloatScreen = (ImageView) findViewById(R.id.view_player_float_screen);
+//        mFloatScreen = (ImageView) findViewById(R.id.view_player_float_screen);
         mForward = (ImageView) findViewById(R.id.view_player_forward);
         mPlayPause = (ImageView) findViewById(R.id.view_player_play_pause);
         mRewind = (ImageView) findViewById(R.id.view_player_rewind);
@@ -261,24 +262,23 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
 
         // center tools view
         mToolsView = findViewById(R.id.player_tools_view);
-        mSnapshot = (ImageView) findViewById(R.id.view_player_take_snapshot);
-        mTakeGif = (ImageView) findViewById(R.id.view_player_take_gif);
+//        mSnapshot = (ImageView) findViewById(R.id.view_player_take_snapshot);
+//        mTakeGif = (ImageView) findViewById(R.id.view_player_take_gif);
         mLockCenter = (ImageView) findViewById(R.id.view_player_lock_center);
+        mPlaySpeed = (ImageView) findViewById(R.id.view_player_play_speed);
 
-        mBack.setOnClickListener(mBackListener);
-        mShowMore.setOnClickListener(mShowMoreListener);
-        mLockScreen.setOnClickListener(mLockScreenListener);
-        mFloatScreen.setOnClickListener(mFloatScreenListener);
-        mForward.setOnClickListener(mForwardListener);
-        mPlayPause.setOnClickListener(mPlayPauseListener);
-        mRewind.setOnClickListener(mRewindListener);
-        mDisplayRatio.setOnClickListener(mDisplayRatioListener);
-        mRotateScreen.setOnClickListener(mRotateScreenListener);
-        mSnapshot.setOnClickListener(mSnapshotListener);
-        mTakeGif.setOnClickListener(mTakeGifListener);
+        mBack.setOnClickListener(mOnClickListener);
+        mShowMore.setOnClickListener(mOnClickListener);
+        mLockScreen.setOnClickListener(mOnClickListener);
+        mForward.setOnClickListener(mOnClickListener);
+        mPlayPause.setOnClickListener(mOnClickListener);
+        mRewind.setOnClickListener(mOnClickListener);
+        mDisplayRatio.setOnClickListener(mOnClickListener);
+        mRotateScreen.setOnClickListener(mOnClickListener);
+        mLockCenter.setOnClickListener(mOnClickListener);
+        mPlaySpeed.setOnClickListener(mOnClickListener);
+
         mSeekBar.setOnSeekBarChangeListener(mSeekListener);
-        mLockCenter.setOnClickListener(mLockScreenListener);
-
         mSeekBar.setThumbOffset(1);
         mSeekBar.setMax(1000);
         mSeekBar.setEnabled(!mDisableProgress);
@@ -597,97 +597,91 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
         }
     };
 
-    private View.OnClickListener mRewindListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            long pos = mMediaPlayerControl.getCurrentPosition();
-            pos -= FAST_REWIND_STEP;
-            mMediaPlayerControl.seekTo(pos);
-            setProgress();
-
-            show(DEFAULT_TIMEOUT);
-        }
-    };
-
-    private View.OnClickListener mForwardListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            long pos = mMediaPlayerControl.getCurrentPosition();
-            pos += FAST_FORWARD_STEP;
-            mMediaPlayerControl.seekTo(pos);
-            setProgress();
-
-            show(DEFAULT_TIMEOUT);
-        }
-    };
-
-    private View.OnClickListener mPlayPauseListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            doPauseResume();
-            show(DEFAULT_TIMEOUT);
-        }
-    };
-
-    private View.OnClickListener mDisplayRatioListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            mVideoView.toggleAspectRatio();
-        }
-    };
-
-    private View.OnClickListener mRotateScreenListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            rotateScreen();
-        }
-    };
-
-    private View.OnClickListener mBackListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            goBack();
-        }
-    };
-
-    private View.OnClickListener mShowMoreListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            showMore();
-        }
-    };
-
-    private View.OnClickListener mLockScreenListener = new View.OnClickListener() {
+    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (mIsLocked) {
-                unlockScreen();
-            } else {
-                lockScreen();
+            switch (view.getId()) {
+                case R.id.view_player_rewind:
+                    onRewind();
+                    break;
+                case R.id.view_player_forward:
+                    onForward();
+                    break;
+                case R.id.view_player_play_pause:
+                    onPlayPause();
+                    break;
+                case R.id.view_player_display_ratio:
+                    onToggleDisplayRatio();
+                    break;
+                case R.id.view_player_rotation:
+                    onRotateScreen();
+                    break;
+                case R.id.view_player_back:
+                    onGoBack();
+                    break;
+                case R.id.view_player_lock_screen:
+                    onLockScreen();
+                    break;
             }
         }
     };
 
-    private View.OnClickListener mFloatScreenListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            floatScreen();
+    private void onRewind() {
+        long pos = mMediaPlayerControl.getCurrentPosition();
+        if (pos > 0) {
+            pos = Math.max(pos - FAST_REWIND_STEP, 0);
+            mMediaPlayerControl.seekTo(pos);
+            setProgress();
+            show(DEFAULT_TIMEOUT);
         }
-    };
+    }
 
-    private View.OnClickListener mSnapshotListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            takeSnapshot();
+    private void onForward() {
+        long pos = mMediaPlayerControl.getCurrentPosition();
+        long duration = mMediaPlayerControl.getDuration();
+        if (pos < duration) {
+            pos = Math.max(pos + FAST_FORWARD_STEP, duration);
+            mMediaPlayerControl.seekTo(pos);
+            setProgress();
+            show(DEFAULT_TIMEOUT);
         }
-    };
+    }
 
-    private View.OnClickListener mTakeGifListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            takeGif();
+    private void onPlayPause() {
+        doPauseResume();
+        show(DEFAULT_TIMEOUT);
+    }
+
+    private void onToggleDisplayRatio() {
+        mVideoView.toggleAspectRatio();
+    }
+
+    private void onRotateScreen() {
+        rotateScreen();
+    }
+
+    private void onGoBack() {
+        goBack();
+    }
+
+    private void onShowMore() {
+        showMore();
+    }
+
+    private void onLockScreen() {
+        if (mIsLocked) {
+            unlockScreen();
+        } else {
+            lockScreen();
         }
-    };
+    }
+
+//    private View.OnClickListener mFloatScreenListener = new View.OnClickListener() {
+//        @Override
+//        public void onClick(View view) {
+//            floatScreen();
+//        }
+//    };
 
     private void updatePlayPause() {
         if (mPlayPause == null)
@@ -718,7 +712,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
         long duration = mMediaPlayerControl.getDuration();
         if (mSeekBar != null) {
             if (duration > 0) {
-                long pos = 1000L * position / duration;
+                long pos = 1000L * (position + 500) / duration;
                 Log.d(TAG, "seekbar setProgress " + pos);
                 mSeekBar.setProgress((int) pos);
             }
@@ -789,13 +783,13 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
         show();
     }
 
-    private void floatScreen() {
-        Intent mIntent = new Intent();
-        mIntent.putExtra("playUrl", mVideoPath);
-        mIntent.setClass(VideoPlayerActivity.this, PlayBackService.class);
-        VideoPlayerActivity.this.startService(mIntent);
-        VideoPlayerActivity.this.finish();
-    }
+//    private void floatScreen() {
+//        Intent mIntent = new Intent();
+//        mIntent.putExtra("playUrl", mVideoPath);
+//        mIntent.setClass(VideoPlayerActivity.this, PlayBackService.class);
+//        VideoPlayerActivity.this.startService(mIntent);
+//        VideoPlayerActivity.this.finish();
+//    }
 
     private void takeSnapshot() {
         FFmpegInvoke.help();

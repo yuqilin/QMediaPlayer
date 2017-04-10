@@ -20,5 +20,5 @@
     <!--<string name="fragment_page_home">HOME</string>-->
     <!--<string name="fragment_page_videos">VIDEOS</string>-->
     <!--<string name="fragment_page_folders">FOLDERS</string>-->
-    <string name="landing_hint">Video Player</string>
+    <string name="landing_hint">Video Player HD</string>
 </resources>

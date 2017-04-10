@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Spinner;
 
 import com.github.yuqilin.qmediaplayerapp.gui.home.HomeFragment;
 import com.github.yuqilin.qmediaplayerapp.gui.video.VideoFragment;
@@ -37,6 +38,8 @@ public class MainActivity extends BaseActivity {
     private SmartTabLayout mViewPagerTab;
     private FragmentPagerAdapter mAdpter;
 
+    private Spinner mSpinner;
+
     private List<BaseFragment> mFragments = new ArrayList<>();
 
     private VideoFragment mVideoFragment;
@@ -46,12 +49,13 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-//        mVideoPathEdit = (EditText) findViewById(R.id.video_path_edit);
-//        mPlayBtn = (Button) findViewById(R.id.play_btn);
-//        mVideoPathEdit.setText("/sdcard/tmp/BigBuckBunny_320x180.mp4");
+        // TODO: 17/4/11 spinner add adapter
+        mSpinner = (Spinner) findViewById(R.id.main_spinner);
+
 
 //        mFragments.add(new HomeFragment());
         mVideoFragment = new VideoFragment();
@@ -79,7 +83,7 @@ public class MainActivity extends BaseActivity {
         mViewPager.setAdapter(mAdpter);
 
         mViewPagerTab = (SmartTabLayout) findViewById(R.id.main_viewpagertab);
-        mViewPagerTab.setCustomTabView(R.layout.custom_tab, R.id.custom_text);
+//        mViewPagerTab.setCustomTabView(R.layout.custom_tab, R.id.custom_text);
         mViewPagerTab.setDividerColors(getResources().getColor(R.color.transparent));
         mViewPagerTab.setViewPager(mViewPager);
 

@@ -29,7 +29,8 @@ public class LandingActivity extends AppCompatActivity {
             public void run() {
                 Intent intent = new Intent(LandingActivity.this, MainActivity.class);
                 startActivity(intent);
+                LandingActivity.this.finish();
             }
-        }, 3000);
+        }, 2000);
     }
 }

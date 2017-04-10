@@ -105,5 +105,7 @@ public class VideoLoader {
 
             } while(cursor.moveToNext());
         }
+
+        cursor.close();
     }
 }
