@@ -15,11 +15,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 import com.github.yuqilin.qmediaplayerapp.gui.home.HomeFragment;
 import com.github.yuqilin.qmediaplayerapp.gui.video.VideoFragment;
 import com.github.yuqilin.qmediaplayerapp.media.MediaWrapper;
+import com.github.yuqilin.qmediaplayerapp.util.ToastUtil;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 import java.util.ArrayList;
@@ -35,7 +40,7 @@ public class MainActivity extends BaseActivity {
     private static String[] sPageTitles = {"HOME", "VIDEOS", "FOLDERS"};
 
     private ViewPager mViewPager;
-    private SmartTabLayout mViewPagerTab;
+//    private SmartTabLayout mViewPagerTab;
     private FragmentPagerAdapter mAdpter;
 
     private Spinner mSpinner;
@@ -44,18 +49,23 @@ public class MainActivity extends BaseActivity {
 
     private VideoFragment mVideoFragment;
 
+    private long mPressedTime = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         // TODO: 17/4/11 spinner add adapter
+        String[] folders = { "All Videos", "Camera", "WeiXin" };
         mSpinner = (Spinner) findViewById(R.id.main_spinner);
-
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.item_video_spinner, R.id.item_video_spinner_text, folders);
+        mSpinner.setAdapter(arrayAdapter);
 
 //        mFragments.add(new HomeFragment());
         mVideoFragment = new VideoFragment();
@@ -82,10 +92,10 @@ public class MainActivity extends BaseActivity {
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(mAdpter);
 
-        mViewPagerTab = (SmartTabLayout) findViewById(R.id.main_viewpagertab);
-//        mViewPagerTab.setCustomTabView(R.layout.custom_tab, R.id.custom_text);
-        mViewPagerTab.setDividerColors(getResources().getColor(R.color.transparent));
-        mViewPagerTab.setViewPager(mViewPager);
+//        mViewPagerTab = (SmartTabLayout) findViewById(R.id.main_viewpagertab);
+////        mViewPagerTab.setCustomTabView(R.layout.custom_tab, R.id.custom_text);
+//        mViewPagerTab.setDividerColors(getResources().getColor(R.color.transparent));
+//        mViewPagerTab.setViewPager(mViewPager);
 
 //        LinkedBlockingQueue<Runnable> blockingQueue = new LinkedBlockingQueue<Runnable>();
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -160,6 +170,48 @@ public class MainActivity extends BaseActivity {
                 return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        long now = System.currentTimeMillis();
+        if ((now - mPressedTime) > 2000) {
+            ToastUtil.makeToastAndShow(this, " Press back key again to exit!");
+            mPressedTime = now;
+        } else {
+            this.finish();
+            System.exit(0);
+        }
+    }
+
+    private class MySpinnerAdapter extends BaseAdapter {
+
+        private List<String> mData;
+
+        public void setData(List<String> data) {
+            mData = data;
+        }
+
+
+        @Override
+        public int getCount() {
+            return mData.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return mData.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            return null;
+        }
     }
 
 

@@ -12,11 +12,20 @@
         android:minHeight="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         app:titleTextColor="@android:color/white">
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@drawable/ic_switchmode"-->
+            <!--/>-->
         <Spinner
             android:id="@+id/main_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:dropDownVerticalOffset="100dp"
             >
         </Spinner>
     </android.support.v7.widget.Toolbar>
@@ -40,23 +49,22 @@
         <!--android:layout_margin="10dp"-->
         <!--android:onClick="onClickPlay"/>-->
 
-    <com.ogaclejapan.smarttablayout.SmartTabLayout
-        android:id="@+id/main_viewpagertab"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:stl_distributeEvenly="true"
-        app:stl_dividerColor="@null"
-        app:stl_indicatorColor="@android:color/white"
-        app:stl_indicatorInterpolation="smart"
-        app:stl_indicatorThickness="2dp"
-        app:stl_indicatorWidth="auto" />
+    <!--<com.ogaclejapan.smarttablayout.SmartTabLayout-->
+        <!--android:id="@+id/main_viewpagertab"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--app:stl_distributeEvenly="true"-->
+        <!--app:stl_dividerColor="@null"-->
+        <!--app:stl_indicatorColor="@android:color/white"-->
+        <!--app:stl_indicatorInterpolation="smart"-->
+        <!--app:stl_indicatorThickness="2dp"-->
+        <!--app:stl_indicatorWidth="auto" />-->
 
 
     <android.support.v4.view.ViewPager
         android:id="@+id/main_viewpager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:background="@android:color/white" />
 
 </LinearLayout>
