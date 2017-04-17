@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
+        android:background="@color/colorPrimary"
         app:titleTextColor="@android:color/white">
         <!--<ImageView-->
             <!--android:layout_width="wrap_content"-->
@@ -25,7 +26,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:spinnerMode="dropdown"
-            android:dropDownVerticalOffset="100dp"
+            android:dropDownVerticalOffset="0dp"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             >
         </Spinner>
     </android.support.v7.widget.Toolbar>

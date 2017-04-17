@@ -21,10 +21,8 @@
 package com.github.yuqilin.qmediaplayerapp.gui.video;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.annotation.MainThread;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -67,8 +65,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
 
     private int mGridCardWidth = 0;
 
-    private ArrayList<MediaWrapper> mVideos = new ArrayList<>();
-    private ArrayList<MediaWrapper> mOriginalData = null;
+    private List<MediaWrapper> mVideos = new ArrayList<>();
 
     public VideoListAdapter(IEventsHandler eventsHandler) {
         super();
@@ -81,7 +78,6 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
         Log.d(TAG, "onCreateViewHolder viewType " + viewType);
         LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(mListMode ? R.layout.item_video_list : R.layout.item_video_grid, parent, false);
-
 
         if (!mListMode) {
             GridLayoutManager.LayoutParams params = (GridLayoutManager.LayoutParams) v.getLayoutParams();
@@ -178,7 +174,12 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
         mGridCardWidth = gridCardWidth;
     }
 
-    public void updateVideos(ArrayList<MediaWrapper> videos) {
+    public List<MediaWrapper> getVideos() {
+        return mVideos;
+    }
+
+    public void updateVideos(List<MediaWrapper> videos) {
+        Log.d(TAG, "updateVideos : " + videos.size());
         mVideos = videos;
         notifyDataSetChanged();
     }
@@ -209,7 +210,6 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
     @MainThread
     public void clear() {
         mVideos.clear();
-        mOriginalData = null;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnFocusChangeListener {

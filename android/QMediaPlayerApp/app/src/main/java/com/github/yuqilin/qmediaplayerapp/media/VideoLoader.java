@@ -6,8 +6,15 @@ import android.provider.MediaStore;
 import android.util.Log;
 
 import com.github.yuqilin.qmediaplayerapp.QApplication;
+import com.github.yuqilin.qmediaplayerapp.util.FileUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by yuqilin on 17/3/16.
@@ -19,10 +26,12 @@ public class VideoLoader {
 
     public interface VideoLoaderListener {
         void onLoadItem(int position, MediaWrapper video);
-        void onLoadCompleted(ArrayList<MediaWrapper> videos);
+        void onLoadCompleted(List<MediaWrapper> videos);
     }
 
     private ArrayList<MediaWrapper> mVideos = new ArrayList<>();
+
+//    private Map<String, List<MediaWrapper>> mAllVideos = new HashMap<>();
 
     private VideoLoaderListener mVideoLoaderListener;
 
@@ -42,9 +51,13 @@ public class VideoLoader {
         });
     }
 
-    public ArrayList<MediaWrapper> getVideos() {
+    public List<MediaWrapper> getVideos() {
         return mVideos;
     }
+
+//    public Map<String, List<MediaWrapper>> getAllVideos() {
+//        return mAllVideos;
+//    }
 
     public void loadVideos() {
         String[] thumbColumns = new String[]{
@@ -82,17 +95,27 @@ public class VideoLoader {
 //                        id+""
 //                };
 
-                String selection = MediaStore.Video.Thumbnails.VIDEO_ID + "=" + id;
-                String thumbPath = "";
-                Cursor thumbCursor = contentResolver.query(MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI, thumbColumns, selection, null, null);
-                if (thumbCursor != null && thumbCursor.moveToFirst()) {
-                    thumbPath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Thumbnails.DATA));
-                } else {
-                }
+//                String selection = MediaStore.Video.Thumbnails.VIDEO_ID + "=" + id;
+//                String thumbPath = "";
+//                Cursor thumbCursor = contentResolver.query(MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI, thumbColumns, selection, null, null);
+//                if (thumbCursor != null && thumbCursor.moveToFirst()) {
+//                    thumbPath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Thumbnails.DATA));
+//                } else {
+//                }
 
                 media.videoId = id;
 
-                Log.d(TAG, "====Scanned : [" + mVideos.size() + "] " + media.filePath + " " + media.title + " " + media.videoId + " " + thumbPath);
+                Log.d(TAG, "====Scanned : [" + mVideos.size() + "] " + media.filePath + " " + media.title + " " + media.videoId);
+
+//                String parentPath = FileUtils.getParent(media.filePath);
+//                List<MediaWrapper> videos = null;
+//                if (mAllVideos.containsKey(parentPath)) {
+//                    videos = mAllVideos.get(parentPath);
+//                } else {
+//                    videos = new ArrayList<>();
+//                }
+//                videos.add(media);
+//                mAllVideos.put(parentPath, videos);
 
                 //然后将其加入到videoList
                 mVideos.add(media);
@@ -105,6 +128,20 @@ public class VideoLoader {
 
             } while(cursor.moveToNext());
         }
+
+//        Collections.sort(mVideos, new Comparator<MediaWrapper>() {
+//            @Override
+//            public int compare(MediaWrapper item1, MediaWrapper item2) {
+//                if (item1 == null) {
+//                    return item2 == null ? 0 : -1;
+//                } else if (item2 == null) {
+//                    return 1;
+//                }
+//                int compare = 0;
+//                compare = item1.filePath.toUpperCase(Locale.ENGLISH).compareTo(item2.filePath.toUpperCase(Locale.ENGLISH));
+//                return compare;
+//            }
+//        });
 
         cursor.close();
     }

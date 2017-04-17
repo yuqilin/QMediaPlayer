@@ -1,12 +1,9 @@
 package com.github.yuqilin.qmediaplayerapp;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -16,28 +13,33 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 
-import com.github.yuqilin.qmediaplayerapp.gui.home.HomeFragment;
 import com.github.yuqilin.qmediaplayerapp.gui.video.VideoFragment;
 import com.github.yuqilin.qmediaplayerapp.media.MediaWrapper;
+import com.github.yuqilin.qmediaplayerapp.media.VideoLoader;
+import com.github.yuqilin.qmediaplayerapp.util.FileUtils;
 import com.github.yuqilin.qmediaplayerapp.util.ToastUtil;
-import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class MainActivity extends BaseActivity {
 
     private static final String TAG = "MainActivity";
     private static String[] sPageTitles = {"HOME", "VIDEOS", "FOLDERS"};
+
+    private final static String FOLDER_ALL_VIDEOS = "All Videos";
 
     private ViewPager mViewPager;
 //    private SmartTabLayout mViewPagerTab;
@@ -49,7 +51,117 @@ public class MainActivity extends BaseActivity {
 
     private VideoFragment mVideoFragment;
 
+    private VideoLoader mVideoLoader;
+
+    private Map<String, List<MediaWrapper>> mAllVideos = new TreeMap<>();
+
+    private ArrayAdapter<String> mArrayAdapter;
+
+    private int mCurrentFolderSelected = 0;
+
+    private List<String> mFolderNames = new ArrayList<>();
+
+    private boolean mLoadCompleted = false;
+
+    private static final int SCAN_START = 1;
+    private static final int SCAN_FINISH = 2;
+    private static final int SCAN_CANCEL = 3;
+    private static final int SCAN_ADD_ITEM = 4;
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case SCAN_START:
+                    mVideoLoader.scanStart();
+                    break;
+                case SCAN_FINISH:
+                    mVideoFragment.updateVideos(mVideoLoader.getVideos());
+                    break;
+                case SCAN_CANCEL:
+                    break;
+                case SCAN_ADD_ITEM:
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+    };
+
     private long mPressedTime = 0;
+
+    private VideoLoader.VideoLoaderListener mVideoLoaderListener = new VideoLoader.VideoLoaderListener() {
+        @Override
+        public void onLoadItem(int position, MediaWrapper video) {
+
+        }
+
+        @Override
+        public void onLoadCompleted(final List<MediaWrapper> videos) {
+
+            for (MediaWrapper video : videos) {
+                String folderPath = FileUtils.getParent(video.filePath);
+                String folderName = FileUtils.getFolderName(folderPath);
+                List<MediaWrapper> folderVideos = null;
+                if (mAllVideos.containsKey(folderName)) {
+                    folderVideos = mAllVideos.get(folderName);
+                } else {
+                    folderVideos = new ArrayList<>();
+                }
+                folderVideos.add(video);
+                Log.d(TAG, "video.filePath " + video.filePath + ", folderName : " + folderName);
+                mAllVideos.put(folderName, folderVideos);
+            }
+
+//            Collections.sort(mAllVideos, new Comparator<Map.Entry<String, MediaWrapper>>() {
+//                @Override
+//                public int compare(Map.Entry<String, MediaWrapper> stringMediaWrapperEntry, Map.Entry<String, MediaWrapper> t1) {
+//                    return 0;
+//                }
+//            });
+
+//            for (String folderPath : mAllVideos.keySet()) {
+//                String folderName = FileUtils.getFolderName(folderPath);
+//                Log.d(TAG, "folderName : " + folderName);
+//                mFolderNames.add(folderName);
+//            }
+            mFolderNames.addAll(mAllVideos.keySet());
+
+            Log.d(TAG, "mFolderNames : " + mFolderNames);
+
+            mLoadCompleted = true;
+
+            mHandler.sendEmptyMessage(SCAN_FINISH);
+//            new Handler().post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mArrayAdapter.notifyDataSetChanged();
+//                    mVideoFragment.updateVideos(videos);
+//                }
+//            });
+        }
+    };
+
+    private AdapterView.OnItemSelectedListener mOnItemSelectedListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+            Log.d(TAG, "onItemSelected, position = " + position + ", id = " + id);
+            if (!mLoadCompleted)
+                return;
+            List<MediaWrapper> selectedVideos = null;
+            if (position == 0) {
+                selectedVideos = mVideoLoader.getVideos();
+            } else {
+                selectedVideos = mAllVideos.get(mFolderNames.get(position));
+            }
+            mVideoFragment.updateVideos(selectedVideos);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+            Log.d(TAG, "onNothingSelected");
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +173,12 @@ public class MainActivity extends BaseActivity {
         setSupportActionBar(toolbar);
 //        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        // TODO: 17/4/11 spinner add adapter
-        String[] folders = { "All Videos", "Camera", "WeiXin" };
         mSpinner = (Spinner) findViewById(R.id.main_spinner);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.item_video_spinner, R.id.item_video_spinner_text, folders);
-        mSpinner.setAdapter(arrayAdapter);
+        mFolderNames.add(FOLDER_ALL_VIDEOS);
+        mArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mFolderNames);
+        mArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinner.setAdapter(mArrayAdapter);
+        mSpinner.setOnItemSelectedListener(mOnItemSelectedListener);
 
 //        mFragments.add(new HomeFragment());
         mVideoFragment = new VideoFragment();
@@ -92,6 +205,10 @@ public class MainActivity extends BaseActivity {
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(mAdpter);
 
+        mVideoLoader = new VideoLoader(mVideoLoaderListener);
+
+        mHandler.sendEmptyMessage(SCAN_START);
+
 //        mViewPagerTab = (SmartTabLayout) findViewById(R.id.main_viewpagertab);
 ////        mViewPagerTab.setCustomTabView(R.layout.custom_tab, R.id.custom_text);
 //        mViewPagerTab.setDividerColors(getResources().getColor(R.color.transparent));
@@ -113,6 +230,12 @@ public class MainActivity extends BaseActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+//        mVideoLoader.scanStart();
     }
 
     @Override

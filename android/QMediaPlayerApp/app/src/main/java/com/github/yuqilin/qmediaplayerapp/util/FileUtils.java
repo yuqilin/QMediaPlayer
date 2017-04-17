@@ -82,6 +82,17 @@ public class FileUtils {
         return parentPath;
     }
 
+    public static String getFolderName(String folderPath) {
+        String folderName = "";
+        if (folderPath.endsWith("/"))
+            folderPath = folderPath.substring(0, folderPath.length()-1);
+        int index = folderPath.lastIndexOf('/');
+        if (index > 0) {
+            folderName = folderPath.substring(index + 1);
+        }
+        return folderName;
+    }
+
     /*
      * Convert file:// uri from real path to emulated FS path.
      */

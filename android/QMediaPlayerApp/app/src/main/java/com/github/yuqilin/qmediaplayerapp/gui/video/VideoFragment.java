@@ -21,12 +21,13 @@ import com.github.yuqilin.qmediaplayerapp.media.MediaWrapper;
 import com.github.yuqilin.qmediaplayerapp.media.VideoLoader;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by yuqilin on 17/2/11.
  */
 
-public class VideoFragment extends BaseFragment implements IEventsHandler, VideoLoader.VideoLoaderListener {
+public class VideoFragment extends BaseFragment implements IEventsHandler {
     public static final String TAG = "VideoFragment";
 
     private static final String PAGE_TITLE = "VIDEOS";
@@ -40,34 +41,34 @@ public class VideoFragment extends BaseFragment implements IEventsHandler, Video
     private VideoListAdapter mVideoAdapter;
     private boolean mListMode;
 
-    private VideoLoader mVideoLoader;
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case SCAN_START:
-                    mVideoLoader.scanStart();
-                    break;
-                case SCAN_FINISH:
-                    mVideoAdapter.updateVideos(mVideoLoader.getVideos());
-//                    if (isVisible()) {
-//                        mVideoAdapter.notifyDataSetChanged();
-//                    }
-                    break;
-                case SCAN_CANCEL:
-                    break;
-                case SCAN_ADD_ITEM:
-                    mVideoAdapter.addVideo(msg.arg1, (MediaWrapper)msg.obj);
-                    break;
-                default:
-                    super.handleMessage(msg);
-            }
-        }
-    };
+//    private VideoLoader mVideoLoader;
+//    private Handler mHandler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case SCAN_START:
+//                    mVideoLoader.scanStart();
+//                    break;
+//                case SCAN_FINISH:
+//                    mVideoAdapter.updateVideos(mVideoLoader.getVideos());
+////                    if (isVisible()) {
+////                        mVideoAdapter.notifyDataSetChanged();
+////                    }
+//                    break;
+//                case SCAN_CANCEL:
+//                    break;
+//                case SCAN_ADD_ITEM:
+//                    mVideoAdapter.addVideo(msg.arg1, (MediaWrapper)msg.obj);
+//                    break;
+//                default:
+//                    super.handleMessage(msg);
+//            }
+//        }
+//    };
 
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
-        mVideoLoader = new VideoLoader(this);
+//        mVideoLoader = new VideoLoader(this);
 
         Resources res = getResources();
         mListMode = res.getBoolean(R.bool.list_mode);
@@ -81,7 +82,7 @@ public class VideoFragment extends BaseFragment implements IEventsHandler, Video
 
         mGridView.setAdapter(mVideoAdapter);
 
-        mHandler.sendEmptyMessage(SCAN_START);
+//        mHandler.sendEmptyMessage(SCAN_START);
     }
 
     @Override
@@ -203,24 +204,31 @@ public class VideoFragment extends BaseFragment implements IEventsHandler, Video
         }
     }
 
-    @Override
-    public void onLoadItem(int position, MediaWrapper video) {
-//        mHandler.sendMessage(Message.obtain(mHandler, SCAN_ADD_ITEM, position, 0, video));
-    }
-
-    @Override
-    public void onLoadCompleted(ArrayList<MediaWrapper> videos) {
-        mHandler.sendEmptyMessage(SCAN_FINISH);
-    }
+//    @Override
+//    public void onLoadItem(int position, MediaWrapper video) {
+////        mHandler.sendMessage(Message.obtain(mHandler, SCAN_ADD_ITEM, position, 0, video));
+//    }
+//
+//    @Override
+//    public void onLoadCompleted(ArrayList<MediaWrapper> videos) {
+//        mHandler.sendEmptyMessage(SCAN_FINISH);
+//    }
 
     public void toggleMode() {
         mListMode = !mListMode;
+        List<MediaWrapper> videos = mVideoAdapter.getVideos();
         mVideoAdapter = new VideoListAdapter(this);
         updateViewMode();
         mGridView.setAdapter(mVideoAdapter);
         mGridView.requestLayout();
         mGridView.invalidate();
-        mVideoAdapter.updateVideos(mVideoLoader.getVideos());
+        mVideoAdapter.updateVideos(videos);
+    }
+
+    public void updateVideos(List<MediaWrapper> videos) {
+        if (mVideoAdapter != null) {
+            mVideoAdapter.updateVideos(videos);
+        }
     }
 
 }
