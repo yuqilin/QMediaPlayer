@@ -21,6 +21,8 @@ import com.github.yuqilin.qmediaplayerapp.media.MediaWrapper;
 import com.github.yuqilin.qmediaplayerapp.media.VideoLoader;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -154,7 +156,7 @@ public class VideoFragment extends BaseFragment implements IEventsHandler {
 
     @Override
     public void onClick(View v, int position, MediaWrapper item) {
-        jumpToPlayerActivity(item.filePath);
+        jumpToPlayerActivity(item.getFilePath());
     }
 
     @Override
@@ -215,6 +217,7 @@ public class VideoFragment extends BaseFragment implements IEventsHandler {
 //    }
 
     public void toggleMode() {
+        Log.d(TAG, "toggleMode");
         mListMode = !mListMode;
         List<MediaWrapper> videos = mVideoAdapter.getVideos();
         mVideoAdapter = new VideoListAdapter(this);
@@ -229,6 +232,10 @@ public class VideoFragment extends BaseFragment implements IEventsHandler {
         if (mVideoAdapter != null) {
             mVideoAdapter.updateVideos(videos);
         }
+    }
+
+    public void sortVideos(Comparator<MediaWrapper> comparator) {
+        mVideoAdapter.sortVideos(comparator);
     }
 
 }

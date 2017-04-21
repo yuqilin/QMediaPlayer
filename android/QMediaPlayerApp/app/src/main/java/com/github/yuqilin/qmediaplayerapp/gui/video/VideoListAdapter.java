@@ -40,6 +40,8 @@ import com.github.yuqilin.qmediaplayerapp.util.AsyncImageLoader;
 import com.github.yuqilin.qmediaplayerapp.util.Strings;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.ViewHolder> {
@@ -105,13 +107,13 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
         if (media == null) {
             return;
         }
-        Log.d(TAG, "onBindViewHolder position[" + position + "] : " + media + " " + media.filePath);
+        Log.d(TAG, "onBindViewHolder position[" + position + "] : " + media + " " + media.getFilePath());
         holder.mThumbnail.setImageBitmap(AsyncImageLoader.DEFAULT_COVER_VIDEO);
         holder.mThumbnail.setTag(media);
         AsyncImageLoader.loadPicture(holder.mThumbnail, media, mListMode ? MediaStore.Video.Thumbnails.MICRO_KIND : MediaStore.Video.Thumbnails.MINI_KIND);
-        holder.mFileName.setText(media.filePath.substring(media.filePath.lastIndexOf('/') + 1));
-        holder.mFileSize.setText(Strings.readableSize(media.fileSize));
-        holder.mDuration.setText(Strings.millisToString(media.duration));
+        holder.mFileName.setText(media.getFilePath().substring(media.getFilePath().lastIndexOf('/') + 1));
+        holder.mFileSize.setText(Strings.readableSize(media.getFileSize()));
+        holder.mDuration.setText(Strings.millisToString(media.getLength()));
         holder.mListItem.setTag(media);
         holder.mListItem.setOnClickListener(mOnClickListener);
     }
@@ -187,6 +189,14 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
         Log.d(TAG, "addVideo position " + position);
         mVideos.add(position, video);
         notifyItemInserted(position);
+    }
+
+    // TODO: 17/4/21 优化：排序动作在后台处理，以防数据量大时耗时过长
+    public void sortVideos(Comparator<MediaWrapper> comparator) {
+        if (mVideos.size() > 1) {
+            Collections.sort(mVideos, comparator);
+        }
+        notifyDataSetChanged();
     }
 
 //    @Override

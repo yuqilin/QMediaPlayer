@@ -4,13 +4,45 @@
     <item
         android:id="@+id/mi_switchmode"
         android:icon="@drawable/ic_switchmode"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:title="SwitchMode">
     </item>
+    <group android:id="@+id/mg_sortby">
+        <item
+            android:id="@+id/mi_sortby"
+            app:showAsAction="never"
+            android:title="Sort by...">
+            <menu>
+                <item
+                    android:id="@+id/mi_sortby_name"
+                    android:title="@string/sortby_name" />
+                <item
+                    android:id="@+id/mi_sortby_length"
+                    android:title="@string/sortby_length" />
+                <item
+                    android:id="@+id/mi_sortby_date"
+                    android:title="@string/sortby_date" />
+            </menu>
+        </item>
+    </group>
     <item
-        android:id="@+id/mi_more"
-        android:icon="@drawable/ic_more_vert_24_px"
-        app:showAsAction="ifRoom|withText"
-        android:title="More">
+        android:id="@+id/mi_about"
+        app:showAsAction="never"
+        android:title="About">
+    </item>
+    <item
+        android:id="@+id/mi_rateus"
+        app:showAsAction="never"
+        android:title="Rate us">
+    </item>
+    <item
+        android:id="@+id/mi_invite"
+        app:showAsAction="never"
+        android:title="Invite Friends">
+    </item>
+    <item
+        android:id="@+id/mi_help"
+        app:showAsAction="never"
+        android:title="Help &amp; Feedback">
     </item>
 </menu>

@@ -4,32 +4,66 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/colorPrimary"
-    android:orientation="vertical">
+    android:orientation="vertical" >
+
+    <!--<RelativeLayout-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="?attr/actionBarSize"-->
+        <!--android:background="@color/colorPrimary"-->
+        <!--&gt;-->
+
+        <!--<Spinner-->
+            <!--android:id="@+id/main_spinner"-->
+            <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="24dp"-->
+            <!--android:spinnerMode="dropdown"-->
+            <!--app:popupTheme="@style/AppTheme.PopupOverlay"-->
+            <!--&gt;-->
+        <!--</Spinner>-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/main_switchmode"-->
+            <!--android:layout_toLeftOf="@+id/main_menu"-->
+            <!--android:layout_width="24dp"-->
+            <!--android:layout_height="24dp"-->
+            <!--android:src="@drawable/ic_switchmode"-->
+            <!--android:scaleType="centerInside"-->
+            <!--/>-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/main_menu"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+            <!--android:layout_marginRight="@dimen/activity_horizontal_margin"-->
+            <!--android:layout_width="24dp"-->
+            <!--android:layout_height="24dp"-->
+            <!--android:src="@drawable/ic_more_vert_24_px"-->
+            <!--android:scaleType="centerInside"-->
+            <!--/>-->
+
+    <!--</RelativeLayout>-->
+
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/main_toolbar"
         android:minHeight="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
         android:background="@color/colorPrimary"
-        app:titleTextColor="@android:color/white">
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:src="@drawable/ic_switchmode"-->
-            <!--/>-->
+        app:popupTheme="@style/AppTheme.PopupOverlay" >
+
         <Spinner
             android:id="@+id/main_spinner"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:spinnerMode="dropdown"
-            android:dropDownVerticalOffset="0dp"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
             >
         </Spinner>
+
     </android.support.v7.widget.Toolbar>
 
     <!--<EditText-->
@@ -66,7 +100,6 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/main_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

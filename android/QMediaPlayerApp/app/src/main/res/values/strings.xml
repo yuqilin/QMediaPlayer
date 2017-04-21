@@ -20,5 +20,11 @@
     <!--<string name="fragment_page_home">HOME</string>-->
     <!--<string name="fragment_page_videos">VIDEOS</string>-->
     <!--<string name="fragment_page_folders">FOLDERS</string>-->
-    <string name="landing_hint">Video Player HD</string>
+    <string name="welcome_hint">Video Player HD</string>
+    <string name="version_string">Version: v1.0.0</string>
+    <string name="contact_us">Contact us</string>
+    <string name="rate_us">Rate us on Play Store</string>
+    <string name="sortby_name">Name</string>
+    <string name="sortby_length">Length</string>
+    <string name="sortby_date">Date</string>
 </resources>

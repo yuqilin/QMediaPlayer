@@ -3,14 +3,19 @@ package com.github.yuqilin.qmediaplayerapp.media;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.MediaStore;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.github.yuqilin.qmediaplayerapp.QApplication;
 import com.github.yuqilin.qmediaplayerapp.util.FileUtils;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -71,7 +76,8 @@ public class VideoLoader {
                 MediaStore.Video.Media.TITLE,
                 MediaStore.Video.Media.MIME_TYPE,
                 MediaStore.Video.Media.DURATION,
-                MediaStore.Video.Media.SIZE
+                MediaStore.Video.Media.SIZE,
+                MediaStore.Video.Media.DATE_TAKEN
         };
 
         //首先检索SDcard上所有的video
@@ -82,11 +88,12 @@ public class VideoLoader {
             do{
                 MediaWrapper media = new MediaWrapper();
 
-                media.filePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
-                media.mimeType = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.MIME_TYPE));
-                media.title = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE));
-                media.duration = Long.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION)));
-                media.fileSize = Long.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE)));
+                media.setFilePath(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)));
+                media.setMimeType(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.MIME_TYPE)));
+                media.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE)));
+                media.setLength(Long.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION))));
+                media.setFileSize(Long.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE))));
+                media.setDateTaken(Long.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_TAKEN))));
 
                 //获取当前Video对应的Id，然后根据该ID获取其Thumb
                 long id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID));
@@ -103,9 +110,16 @@ public class VideoLoader {
 //                } else {
 //                }
 
-                media.videoId = id;
+                media.setVideoId(id);
 
-                Log.d(TAG, "====Scanned : [" + mVideos.size() + "] " + media.filePath + " " + media.title + " " + media.videoId);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+                Log.d(TAG, "====Scanned : [" + mVideos.size() + "] "
+                        + media.getVideoId() + " "
+                        + media.getFilePath() + " "
+                        + media.getTitle() + " "
+                        + simpleDateFormat.format(new Date(media.getDateTaken())));
+
 
 //                String parentPath = FileUtils.getParent(media.filePath);
 //                List<MediaWrapper> videos = null;

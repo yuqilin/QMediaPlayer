@@ -72,12 +72,13 @@ public class AutoFitRecyclerView extends ContextMenuRecyclerView {
 
     @Override
     protected void onMeasure(int widthSpec, int heightSpec) {
+        Log.d(TAG, "onMeasure widthSpec = " + widthSpec + ", heightSpec = " + heightSpec + ", mSpanCount = " + mSpanCount);
         super.onMeasure(widthSpec, heightSpec);
         if (mSpanCount == -1 && mColumnWidth > 0) {
             int ratio = getMeasuredWidth() / mColumnWidth;
             int spanCount = Math.max(1, ratio);
             mGridLayoutManager.setSpanCount(spanCount);
-        } else {
+        } else if (mSpanCount > 0){
             mGridLayoutManager.setSpanCount(mSpanCount);
         }
     }

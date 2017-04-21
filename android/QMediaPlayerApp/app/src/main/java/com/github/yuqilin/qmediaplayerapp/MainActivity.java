@@ -7,10 +7,13 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,17 +22,15 @@ import android.widget.BaseAdapter;
 import android.widget.Spinner;
 
 import com.github.yuqilin.qmediaplayerapp.gui.video.VideoFragment;
+import com.github.yuqilin.qmediaplayerapp.media.MediaComparators;
 import com.github.yuqilin.qmediaplayerapp.media.MediaWrapper;
 import com.github.yuqilin.qmediaplayerapp.media.VideoLoader;
 import com.github.yuqilin.qmediaplayerapp.util.FileUtils;
 import com.github.yuqilin.qmediaplayerapp.util.ToastUtil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -100,7 +101,7 @@ public class MainActivity extends BaseActivity {
         public void onLoadCompleted(final List<MediaWrapper> videos) {
 
             for (MediaWrapper video : videos) {
-                String folderPath = FileUtils.getParent(video.filePath);
+                String folderPath = FileUtils.getParent(video.getFilePath());
                 String folderName = FileUtils.getFolderName(folderPath);
                 List<MediaWrapper> folderVideos = null;
                 if (mAllVideos.containsKey(folderName)) {
@@ -109,7 +110,7 @@ public class MainActivity extends BaseActivity {
                     folderVideos = new ArrayList<>();
                 }
                 folderVideos.add(video);
-                Log.d(TAG, "video.filePath " + video.filePath + ", folderName : " + folderName);
+                Log.d(TAG, "video.filePath " + video.getFilePath() + ", folderName : " + folderName);
                 mAllVideos.put(folderName, folderVideos);
             }
 
@@ -271,6 +272,11 @@ public class MainActivity extends BaseActivity {
         startActivity(intent);
     }
 
+    private void jumpToAboutActivity() {
+        Intent intent= new Intent(this, AboutActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected int getContentViewId() {
         return 0;
@@ -283,15 +289,43 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG, "onOptionsItemSelected, item id = " + item.getItemId());
+
         switch (item.getItemId()) {
             case R.id.mi_switchmode:
                 mVideoFragment.toggleMode();
                 break;
-            case R.id.mi_more:
+            case R.id.mi_sortby:
+                break;
+            case R.id.mi_sortby_name:
+                mVideoFragment.sortVideos(MediaComparators.byName);
+                break;
+            case R.id.mi_sortby_length:
+                mVideoFragment.sortVideos(MediaComparators.byLength);
+                break;
+            case R.id.mi_sortby_date:
+                mVideoFragment.sortVideos(MediaComparators.byDate);
+                break;
+            case R.id.mi_about:
+                jumpToAboutActivity();
+                break;
+            case R.id.mi_rateus:
+                break;
+            case R.id.mi_invite:
+                break;
+            case R.id.mi_help:
                 break;
             default:
                 return super.onOptionsItemSelected(item);
         }
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu (Menu menu) {
+        Log.d(TAG, "onPrepareOptionsMenu");
+        super.onPrepareOptionsMenu(menu);
+
         return true;
     }
 
@@ -305,6 +339,43 @@ public class MainActivity extends BaseActivity {
             this.finish();
             System.exit(0);
         }
+    }
+
+    private PopupMenu.OnMenuItemClickListener onMoreMenuItemClickListener = new PopupMenu.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.mi_sortby:
+//                    showPopupMenu(findViewById(R.id.mi_sortby), R.menu.menu_sortby, );
+                    break;
+                case R.id.mi_about:
+                    jumpToAboutActivity();
+                    break;
+                case R.id.mi_rateus:
+                    break;
+                case R.id.mi_invite:
+                    break;
+                case R.id.mi_help:
+                    break;
+            }
+            return true;
+        }
+    };
+
+    private PopupMenu.OnMenuItemClickListener onSortbyMenuItemClickListener = new PopupMenu.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            switch (item.getItemId()) {
+            }
+            return true;
+        }
+    };
+
+    private void showPopupMenu(View anchor, int menuRes, PopupMenu.OnMenuItemClickListener onMenuItemClickListener) {
+        PopupMenu popup = new PopupMenu(this, anchor);
+        popup.getMenuInflater().inflate(menuRes, popup.getMenu());
+        popup.setOnMenuItemClickListener(onMenuItemClickListener);
+        popup.show();
     }
 
     private class MySpinnerAdapter extends BaseAdapter {

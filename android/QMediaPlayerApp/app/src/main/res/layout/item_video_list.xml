@@ -13,7 +13,7 @@
         android:layout_height="42dp"
         android:scaleType="fitXY"
         android:src="@drawable/ic_play_arrow_24_px"
-        android:background="@color/colorBlack"/>
+        android:background="@color/black"/>
 
     <LinearLayout
         android:orientation="vertical"

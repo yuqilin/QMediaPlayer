@@ -14,12 +14,14 @@ import android.os.Looper;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -429,6 +431,120 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
         getWindow().setAttributes(lp);
         mIsFirstBrightnessGesture = false;
     }
+
+//    public boolean onTouchEvent(MotionEvent event) {
+//        if (mService == null)
+//            return false;
+//        if (mDetector == null) {
+//            mDetector = new GestureDetectorCompat(this, mGestureListener);
+//            mDetector.setOnDoubleTapListener(mGestureListener);
+//        }
+//        if (mFov != 0f && mScaleGestureDetector == null)
+//            mScaleGestureDetector = new ScaleGestureDetector(this, this);
+//        if (mPlaybackSetting != DelayState.OFF) {
+//            if (event.getAction() == MotionEvent.ACTION_UP)
+//                endPlaybackSetting();
+//            return true;
+//        } else if (mPlaylist.getVisibility() == View.VISIBLE) {
+//            togglePlaylist();
+//            return true;
+//        }
+//        if (mTouchControls == 0 || mIsLocked) {
+//            // locked or swipe disabled, only handle show/hide & ignore all actions
+//            if (event.getAction() == MotionEvent.ACTION_UP) {
+//                if (!mShowing) {
+//                    showOverlay();
+//                } else {
+//                    hideOverlay(true);
+//                }
+//            }
+//            return false;
+//        }
+//        if (mFov != 0f && mScaleGestureDetector != null)
+//            mScaleGestureDetector.onTouchEvent(event);
+//        if ((mScaleGestureDetector != null && mScaleGestureDetector.isInProgress()) ||
+//                (mDetector != null && mDetector.onTouchEvent(event)))
+//            return true;
+//
+//        float x_changed, y_changed;
+//        if (mTouchX != -1f && mTouchY != -1f) {
+//            y_changed = event.getRawY() - mTouchY;
+//            x_changed = event.getRawX() - mTouchX;
+//        } else {
+//            x_changed = 0f;
+//            y_changed = 0f;
+//        }
+//
+//        // coef is the gradient's move to determine a neutral zone
+//        float coef = Math.abs (y_changed / x_changed);
+//        float xgesturesize = ((x_changed / mScreen.xdpi) * 2.54f);
+//        float delta_y = Math.max(1f, (Math.abs(mInitTouchY - event.getRawY()) / mScreen.xdpi + 0.5f) * 2f);
+//
+//        int xTouch = Math.round(event.getRawX());
+//        int yTouch = Math.round(event.getRawY());
+//
+//        switch (event.getAction()) {
+//
+//            case MotionEvent.ACTION_DOWN:
+//                // Audio
+//                mTouchY = mInitTouchY = event.getRawY();
+//                mVol = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+//                mTouchAction = TOUCH_NONE;
+//                // Seek
+//                mTouchX = event.getRawX();
+//                // Mouse events for the core
+//                sendMouseEvent(MotionEvent.ACTION_DOWN, 0, xTouch, yTouch);
+//                break;
+//
+//            case MotionEvent.ACTION_MOVE:
+//                // Mouse events for the core
+//                sendMouseEvent(MotionEvent.ACTION_MOVE, 0, xTouch, yTouch);
+//
+//                if (mFov == 0f) {
+//                    // No volume/brightness action if coef < 2 or a secondary display is connected
+//                    //TODO : Volume action when a secondary display is connected
+//                    if (mTouchAction != TOUCH_SEEK && coef > 2 && mPresentation == null) {
+//                        if (Math.abs(y_changed/mSurfaceYDisplayRange) < 0.05)
+//                            return false;
+//                        mTouchY = event.getRawY();
+//                        mTouchX = event.getRawX();
+//                        // Volume (Up or Down - Right side)
+//                        if (mTouchControls == 1 || (mTouchControls == 3 && (int)mTouchX > (4 * mScreen.widthPixels / 7f))){
+//                            doVolumeTouch(y_changed);
+//                            hideOverlay(true);
+//                        }
+//                        // Brightness (Up or Down - Left side)
+//                        if (mTouchControls == 2 || (mTouchControls == 3 && (int)mTouchX < (3 * mScreen.widthPixels / 7f))){
+//                            doBrightnessTouch(y_changed);
+//                            hideOverlay(true);
+//                        }
+//                    } else {
+//                        // Seek (Right or Left move)
+//                        doSeekTouch(Math.round(delta_y), xgesturesize, false);
+//                    }
+//                } else {
+//                    mTouchY = event.getRawY();
+//                    mTouchX = event.getRawX();
+//                    mTouchAction = TOUCH_MOVE;
+//                    float yaw = mFov * -x_changed/(float)mSurfaceXDisplayRange;
+//                    float pitch = mFov * -y_changed/(float)mSurfaceXDisplayRange;
+//                    mService.updateViewpoint(yaw, pitch, 0, 0, false);
+//                }
+//                break;
+//
+//            case MotionEvent.ACTION_UP:
+//                // Mouse events for the core
+//                sendMouseEvent(MotionEvent.ACTION_UP, 0, xTouch, yTouch);
+//                // Seek
+//                if (mTouchAction == TOUCH_SEEK)
+//                    doSeekTouch(Math.round(delta_y), xgesturesize, true);
+//                mTouchX = -1f;
+//                mTouchY = -1f;
+//                break;
+//        }
+//        return mTouchAction != TOUCH_NONE;
+//    }
+
 
     private void doBrightnessTouch(float y_changed) {
         if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_BRIGHTNESS)

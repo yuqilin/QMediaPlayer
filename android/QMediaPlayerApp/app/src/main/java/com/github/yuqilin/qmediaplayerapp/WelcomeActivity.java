@@ -10,14 +10,14 @@ import android.util.Log;
  * Created by yuqilin on 17/4/8.
  */
 
-public class LandingActivity extends AppCompatActivity {
+public class WelcomeActivity extends AppCompatActivity {
 
-    private static final String TAG = "LandingActivity";
+    private static final String TAG = "WelcomeActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_landing);
+        setContentView(R.layout.activity_welcome);
         startNextPage();
     }
 
@@ -49,9 +49,9 @@ public class LandingActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(LandingActivity.this, MainActivity.class);
+                Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
                 startActivity(intent);
-                LandingActivity.this.finish();
+                WelcomeActivity.this.finish();
             }
         }, 1500);
     }

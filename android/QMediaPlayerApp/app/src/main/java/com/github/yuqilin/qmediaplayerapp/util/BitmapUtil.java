@@ -97,7 +97,7 @@ public class BitmapUtil {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 1;
         Bitmap picture = MediaStore.Video.Thumbnails.getThumbnail(contentResolver,
-                media.videoId, kind, options);
+                media.getVideoId(), kind, options);
         return picture;
     }
 
