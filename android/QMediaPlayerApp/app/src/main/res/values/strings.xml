@@ -21,10 +21,18 @@
     <!--<string name="fragment_page_videos">VIDEOS</string>-->
     <!--<string name="fragment_page_folders">FOLDERS</string>-->
     <string name="welcome_hint">Video Player HD</string>
-    <string name="version_string">Version: v1.0.0</string>
+    <string name="about_app_name">Video Player HD</string>
+    <string name="about_version">Version: V %1$s</string>
     <string name="contact_us">Contact us</string>
     <string name="rate_us">Rate us on Play Store</string>
     <string name="sortby_name">Name</string>
     <string name="sortby_length">Length</string>
     <string name="sortby_date">Date</string>
+    <string name="brightness">50%</string>
+    <string name="display_ratio_best_fit">Best Fit</string>
+    <string name="display_ratio_fit_horizontal">Fit Horizontal</string>
+    <string name="display_ratio_fit_vertical">Fit Vertical</string>
+    <string name="display_ratio_fill">Fill</string>
+    <string name="display_ratio_16_9">16:9</string>
+    <string name="display_ratio_4_3">4:3</string>
 </resources>

@@ -13,6 +13,16 @@ public class MediaWrapper {
 //    public String thumbPath;
     private String title;
     private long dateTaken;
+    private int width;
+    private int height;
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
 
     public long getLength() {
         return length;
@@ -73,4 +83,11 @@ public class MediaWrapper {
         this.dateTaken = dateTaken;
     }
 
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
 }

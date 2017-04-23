@@ -215,6 +215,9 @@ public class VideoFragment extends BaseFragment implements IEventsHandler {
 //    public void onLoadCompleted(ArrayList<MediaWrapper> videos) {
 //        mHandler.sendEmptyMessage(SCAN_FINISH);
 //    }
+    public boolean isListMode() {
+        return mListMode;
+    }
 
     public void toggleMode() {
         Log.d(TAG, "toggleMode");

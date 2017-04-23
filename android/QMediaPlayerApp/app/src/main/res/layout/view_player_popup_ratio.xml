@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/overlay_info"
+    >
+
+    <TextView
+        android:id="@+id/popup_ratio_best_fit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/display_ratio_text_size"
+        android:text="@string/display_ratio_best_fit"/>
+
+    <TextView
+        android:id="@+id/popup_ratio_fit_horizontal"
+        android:layout_marginTop="@dimen/display_ratio_text_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/display_ratio_text_size"
+        android:text="@string/display_ratio_fit_horizontal"/>
+
+    <TextView
+        android:id="@+id/popup_ratio_fit_vertical"
+        android:layout_marginTop="@dimen/display_ratio_text_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/display_ratio_text_size"
+        android:text="@string/display_ratio_fit_vertical"/>
+
+    <TextView
+        android:id="@+id/popup_ratio_fill"
+        android:layout_marginTop="@dimen/display_ratio_text_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/display_ratio_text_size"
+        android:text="@string/display_ratio_fill"/>
+    <TextView
+        android:id="@+id/popup_ratio_16_9"
+        android:layout_marginTop="@dimen/display_ratio_text_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/display_ratio_text_size"
+        android:text="@string/display_ratio_16_9"/>
+
+    <TextView
+        android:id="@+id/popup_ratio_4_3"
+        android:layout_marginTop="@dimen/display_ratio_text_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/display_ratio_text_size"
+        android:text="@string/display_ratio_4_3"/>
+
+</LinearLayout>

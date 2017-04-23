@@ -7,13 +7,11 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -26,11 +24,10 @@ import com.github.yuqilin.qmediaplayerapp.media.MediaComparators;
 import com.github.yuqilin.qmediaplayerapp.media.MediaWrapper;
 import com.github.yuqilin.qmediaplayerapp.media.VideoLoader;
 import com.github.yuqilin.qmediaplayerapp.util.FileUtils;
+import com.github.yuqilin.qmediaplayerapp.util.ShareUtils;
 import com.github.yuqilin.qmediaplayerapp.util.ToastUtil;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -179,6 +176,7 @@ public class MainActivity extends BaseActivity {
         mArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mFolderNames);
         mArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(mArrayAdapter);
+//        mSpinner.setMinimumWidth(500);
         mSpinner.setOnItemSelectedListener(mOnItemSelectedListener);
 
 //        mFragments.add(new HomeFragment());
@@ -293,6 +291,7 @@ public class MainActivity extends BaseActivity {
 
         switch (item.getItemId()) {
             case R.id.mi_switchmode:
+                item.setIcon(mVideoFragment.isListMode() ? R.drawable.ic_list_mode : R.drawable.ic_grid_mode);
                 mVideoFragment.toggleMode();
                 break;
             case R.id.mi_sortby:
@@ -310,10 +309,12 @@ public class MainActivity extends BaseActivity {
                 jumpToAboutActivity();
                 break;
             case R.id.mi_rateus:
+                ShareUtils.launchAppDetail(MainActivity.this, getPackageName(), "com.android.vending");
                 break;
             case R.id.mi_invite:
                 break;
             case R.id.mi_help:
+                ShareUtils.adviceEmail(MainActivity.this);
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -352,10 +353,12 @@ public class MainActivity extends BaseActivity {
                     jumpToAboutActivity();
                     break;
                 case R.id.mi_rateus:
+                    ShareUtils.launchAppDetail(MainActivity.this, getPackageName(), "com.android.vending");
                     break;
                 case R.id.mi_invite:
                     break;
                 case R.id.mi_help:
+                    ShareUtils.adviceEmail(MainActivity.this);
                     break;
             }
             return true;

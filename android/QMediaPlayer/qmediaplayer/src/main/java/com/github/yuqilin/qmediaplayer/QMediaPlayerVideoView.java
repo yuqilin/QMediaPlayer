@@ -39,7 +39,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class QMediaPlayerVideoView extends FrameLayout implements IMediaController.MediaPlayerControl {
-    private String TAG = "IjkVideoView";
+    private String TAG = "QMediaPlayerVideoView";
     // settable by the client
     private Uri mUri;
     private Map<String, String> mHeaders;
@@ -635,6 +635,7 @@ public class QMediaPlayerVideoView extends FrameLayout implements IMediaControll
     IRenderView.IRenderCallback mSHCallback = new IRenderView.IRenderCallback() {
         @Override
         public void onSurfaceChanged(IRenderView.ISurfaceHolder holder, int format, int w, int h) {
+            Log.d(TAG, "onSurfaceChanged format = " + format + ", w = " + w + ", h = " + h);
             if (holder.getRenderView() != mRenderView) {
                 Log.e(TAG, "onSurfaceChanged: unmatched render callback\n");
                 return;
@@ -649,9 +650,9 @@ public class QMediaPlayerVideoView extends FrameLayout implements IMediaControll
                     seekTo(mSeekWhenPrepared);
                 }
                 start();
-                if (mMediaController != null) {
-                    mMediaController.show();
-                }
+//                if (mMediaController != null) {
+//                    mMediaController.show();
+//                }
             }
         }
 
@@ -709,6 +710,7 @@ public class QMediaPlayerVideoView extends FrameLayout implements IMediaControll
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+        Log.d(TAG, "onTouchEvent");
         if (isInPlaybackState() && mMediaController != null) {
             toggleMediaControlsVisiblity();
         }
@@ -717,6 +719,7 @@ public class QMediaPlayerVideoView extends FrameLayout implements IMediaControll
 
     @Override
     public boolean onTrackballEvent(MotionEvent ev) {
+        Log.d(TAG, "onTrackballEvent");
         if (isInPlaybackState() && mMediaController != null) {
             toggleMediaControlsVisiblity();
         }
@@ -900,6 +903,14 @@ public class QMediaPlayerVideoView extends FrameLayout implements IMediaControll
             mRenderView.setAspectRatio(mCurrentAspectRatio);
         return mCurrentAspectRatio;
     }
+
+    public void setAspectRatio(int aspectRatio) {
+        mCurrentAspectRatio = aspectRatio;
+        if (mRenderView != null) {
+            mRenderView.setAspectRatio(aspectRatio);
+        }
+    }
+
 
     //-------------------------
     // Extend: Render

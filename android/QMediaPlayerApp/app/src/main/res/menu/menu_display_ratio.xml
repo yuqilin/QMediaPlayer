@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/mi_ratio_best_fit"
+        android:title="@string/display_ratio_best_fit">
+    </item>
+    <item
+        android:id="@+id/mi_ratio_fit_horizontal"
+        android:title="@string/display_ratio_fit_horizontal">
+    </item>
+    <item
+        android:id="@+id/mi_ratio_fit_vertical"
+        android:title="@string/display_ratio_fit_vertical">
+    </item>
+    <item
+        android:id="@+id/mi_ratio_fill"
+        android:title="@string/display_ratio_fill">
+    </item>
+    <item
+        android:id="@+id/mi_ratio_16_9"
+        android:title="@string/display_ratio_16_9">
+    </item>
+    <item
+        android:id="@+id/mi_ratio_4_3"
+        android:title="@string/display_ratio_4_3">
+    </item>
+</menu>

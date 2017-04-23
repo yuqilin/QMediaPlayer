@@ -25,7 +25,8 @@
     
     <color name="color_progress">#7c4dff</color>
 
-    <color name="blacktransparent">#b4000000</color>
+    <color name="black_transparent">#b4000000</color>
+    <color name="black_transparent_50">#50000000</color>
     <color name="whitetransparent">#dcffffff</color>
     <color name="transparent">#00000000</color>
 

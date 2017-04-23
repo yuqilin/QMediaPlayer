@@ -20,7 +20,8 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_back"/>
+            android:src="@drawable/ic_back"
+            />
 
         <TextView
             android:layout_marginLeft="32dp"
@@ -43,15 +44,16 @@
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Video Player HD"
+        android:text="@string/about_app_name"
         android:textSize="16sp"
         android:textColor="@color/text_gray_dark"/>
 
     <TextView
+        android:id="@+id/about_version"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/version_string"
+        android:text="@string/about_version"
         android:textSize="14sp"
         android:textColor="@color/text_gray_dark"/>
 
@@ -62,10 +64,12 @@
         android:background="@color/black" />
 
     <LinearLayout
+        android:id="@+id/about_contact"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="56dp">
+        android:layout_height="56dp"
+        >
 
         <ImageView
             android:layout_marginLeft="24dp"
@@ -85,10 +89,12 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/about_rate"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="56dp">
+        android:layout_height="56dp"
+        >
 
         <ImageView
             android:layout_marginLeft="24dp"

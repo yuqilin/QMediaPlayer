@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -23,13 +24,13 @@ import com.github.yuqilin.qmediaplayerapp.media.MediaWrapper;
 public class AsyncImageLoader {
     public interface Callbacks {
         Bitmap getImage(int kind);
-        void updateImage(Bitmap bitmap, View target);
+        void updateImage(Bitmap bitmap, View target, int kind);
     }
 
     public final static String TAG = "AsyncImageLoader";
     private static final Handler sHandler = new Handler(Looper.getMainLooper());
 
-    public static final Bitmap DEFAULT_COVER_VIDEO = BitmapFactory.decodeResource(QApplication.getAppResources(), R.drawable.ic_play_arrow_24_px);
+    public static final Bitmap DEFAULT_COVER_VIDEO = BitmapFactory.decodeResource(QApplication.getAppResources(), R.drawable.ic_play_grid);
 //    public static final BitmapDrawable DEFAULT_COVER_VIDEO_DRAWABLE = new BitmapDrawable(QApplication.getAppResources(), BitmapCache.getFromResource(QApplication.getAppResources(), R.drawable.ic_play_arrow_24_px));
 
     public static void loadPicture(View view, MediaWrapper media, int kind) {
@@ -41,7 +42,7 @@ public class AsyncImageLoader {
             @Override
             public void run() {
                 final Bitmap bitmap = cbs.getImage(kind);
-                cbs.updateImage(bitmap, target);
+                cbs.updateImage(bitmap, target, kind);
             }
         });
     }
@@ -52,7 +53,7 @@ public class AsyncImageLoader {
         public void updateImageView(final Bitmap bitmap, View target) {}
 
         @Override
-        public void updateImage(final Bitmap bitmap, final View target) {
+        public void updateImage(final Bitmap bitmap, final View target, int kind) {
             sHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -75,7 +76,7 @@ public class AsyncImageLoader {
         }
 
         @Override
-        public void updateImage(final Bitmap bitmap, final View target) {
+        public void updateImage(final Bitmap bitmap, final View target, final int kind) {
             sHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -90,6 +91,7 @@ public class AsyncImageLoader {
 //                            }
 //                        }
                         if (iv.getTag() == media) {
+//                            iv.setScaleType(kind == MediaStore.Video.Thumbnails.MICRO_KIND ? ImageView.ScaleType.FIT_XY : ImageView.ScaleType.CENTER_CROP);
                             iv.setImageBitmap(bitmap);
                         }
                     } else if (target instanceof TextView) {
