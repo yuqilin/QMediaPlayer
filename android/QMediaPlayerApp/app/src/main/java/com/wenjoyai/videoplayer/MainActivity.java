@@ -177,6 +177,7 @@ public class MainActivity extends BaseActivity {
         mArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(mArrayAdapter);
 //        mSpinner.setMinimumWidth(500);
+//        mSpinner.setDropDownWidth(900);
         mSpinner.setOnItemSelectedListener(mOnItemSelectedListener);
 
 //        mFragments.add(new HomeFragment());
@@ -201,7 +202,7 @@ public class MainActivity extends BaseActivity {
         };
 
         mViewPager = (ViewPager) findViewById(R.id.main_viewpager);
-        mViewPager.setOffscreenPageLimit(2);
+//        mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(mAdpter);
 
         mVideoLoader = new VideoLoader(mVideoLoaderListener);
@@ -312,6 +313,7 @@ public class MainActivity extends BaseActivity {
                 ShareUtils.launchAppDetail(MainActivity.this, getPackageName(), "com.android.vending");
                 break;
             case R.id.mi_invite:
+                ShareUtils.shareAppText(MainActivity.this);
                 break;
             case R.id.mi_help:
                 ShareUtils.adviceEmail(MainActivity.this);

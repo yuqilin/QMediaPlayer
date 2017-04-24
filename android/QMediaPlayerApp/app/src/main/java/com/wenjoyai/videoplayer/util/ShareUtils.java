@@ -22,7 +22,7 @@ public class ShareUtils {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_TEXT,
-            "I'm using a great ringtone maker APP,come and enjoy in MP3 cutter and ringtone maker. https://play.google.com/store/apps/details?id=com.av.ringtone");
+            "I'm using a lite video player app, come and enjoy playing video. https://play.google.com/store/apps/details?id=com.wenjoyai.videoplayer");
         shareIntent.setType("text/plain");
 
         // 设置分享列表的标题，并且每次都显示分享列表
