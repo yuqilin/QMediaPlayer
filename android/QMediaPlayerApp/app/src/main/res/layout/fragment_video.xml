@@ -6,7 +6,7 @@
     android:orientation="vertical"
     >
 
-    <com.github.yuqilin.qmediaplayerapp.gui.view.AutoFitRecyclerView
+    <com.wenjoyai.videoplayer.gui.view.AutoFitRecyclerView
         android:id="@+id/video_grid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

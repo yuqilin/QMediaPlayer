@@ -37,7 +37,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/group_2"
+        android:src="@drawable/ic_logo"
         />
 
     <TextView

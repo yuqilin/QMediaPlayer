@@ -801,7 +801,10 @@ public class QMediaPlayerVideoView extends FrameLayout implements IMediaControll
     }
 
     public void resume() {
-        openVideo();
+//        openVideo();
+        if (mMediaPlayer != null) {
+            mMediaPlayer.start();
+        }
     }
 
     @Override

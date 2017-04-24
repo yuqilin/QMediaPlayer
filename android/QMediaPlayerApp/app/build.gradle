@@ -2,15 +2,19 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
-        config {
-            keyAlias '11'
-            keyPassword '11'
+        debug {
+        }
+        release {
+            keyAlias 'keywenjoyai'
+            keyPassword 'wenjoyai'
+            storeFile file('../../keystore/wenjoyai.jks')
+            storePassword 'wenjoyai'
         }
     }
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
     defaultConfig {
-        applicationId "com.github.yuqilin.qmediaplayerapp"
+        applicationId "com.wenjoyai.videoplayer"
         minSdkVersion 9
         targetSdkVersion 22
         versionCode 1
@@ -18,12 +22,40 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
-        release {
+        debug {
+            shrinkResources false
+            zipAlignEnabled false
             minifyEnabled false
+            signingConfig signingConfigs.debug
+        }
+        release {
+            shrinkResources true
+            zipAlignEnabled true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
+    productFlavors {
+    }
 }
+
+//File propFile = file('signing.properties');
+//if (propFile.exists()) {
+//    def Properties props = new Properties()
+//    props.load(new FileInputStream(propFile))
+//    if (props.containsKey('STORE_FILE') && props.containsKey('STORE_PASSWORD') &&
+//            props.containsKey('KEY_ALIAS') && props.containsKey('KEY_PASSWORD')) {
+//        android.signingConfigs.release.storeFile = file(props['STORE_FILE'])
+//        android.signingConfigs.release.storePassword = props['STORE_PASSWORD']
+//        android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
+//        android.signingConfigs.release.keyPassword = props['KEY_PASSWORD']
+//    } else {
+//        android.buildTypes.release.signingConfig = null
+//    }
+//} else {
+//    android.buildTypes.release.signingConfig = null
+//}
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
