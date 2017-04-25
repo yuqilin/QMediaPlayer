@@ -13,6 +13,7 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".WelcomeActivity"
+            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/AppTheme.Fullscreen"
             android:noHistory="true">
@@ -29,11 +30,13 @@
         </activity>
 
         <activity android:name=".VideoPlayerActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Fullscreen"
             android:launchMode="singleTop"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
 
         <activity android:name=".AboutActivity"
+            android:screenOrientation="portrait"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar"
             />
