@@ -293,7 +293,7 @@ public class MainActivity extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.mi_switchmode:
                 mVideoFragment.toggleMode();
-                item.setIcon(mVideoFragment.isListMode() ? R.drawable.ic_grid_mode : R.drawable.ic_list_mode);
+                item.setIcon(mVideoFragment.isListMode() ? R.drawable.ic_list_mode : R.drawable.ic_grid_mode);
                 break;
             case R.id.mi_sortby:
                 break;
