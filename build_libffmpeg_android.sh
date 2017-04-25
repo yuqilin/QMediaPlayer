@@ -10,7 +10,7 @@ cd $IJK_LOCAL_REPO
 ./init-android.sh
 
 cd android/contrib
-# ./compile-ffmpeg.sh clean
+./compile-ffmpeg.sh clean
 
 for ARCH in $ARCHS; do
     ./compile-ffmpeg.sh $ARCH

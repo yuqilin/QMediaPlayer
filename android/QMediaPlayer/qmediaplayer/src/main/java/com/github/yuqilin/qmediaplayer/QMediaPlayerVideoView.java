@@ -929,6 +929,10 @@ public class QMediaPlayerVideoView extends FrameLayout implements IMediaControll
     private void initRenders() {
         mAllRenders.clear();
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            mOptions.setEnableTextureView(true);
+        }
+
         if (mOptions.getEnableSurfaceView())
             mAllRenders.add(RENDER_SURFACE_VIEW);
         if (mOptions.getEnableTextureView() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)

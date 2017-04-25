@@ -3100,7 +3100,7 @@ static void ffp_log_callback_report(void *ptr, int level, const char *fmt, va_li
     ALOG(ffplv, IJK_LOG_TAG, "%s", line);
 }
 
-int ijkav_register_all(void);
+// int ijkav_register_all(void);
 void ffp_global_init()
 {
     if (g_ffmpeg_global_inited)
@@ -3116,7 +3116,7 @@ void ffp_global_init()
 #endif
     av_register_all();
 
-    ijkav_register_all();
+    // ijkav_register_all();
 
     avformat_network_init();
 

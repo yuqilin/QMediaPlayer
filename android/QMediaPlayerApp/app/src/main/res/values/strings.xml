@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Video Player</string>
-    <string name="allow_storage_access_title">Allow Video Player to access video and audio files</string>
-    <string name="allow_storage_access_description">Video Player needs you to grant this permission to access the media files on this device.</string>
     <string name="allow_settings_access_ringtone_title">Allow Video Player to set the ringtone</string>
     <string name="allow_settings_access_ringtone_description">Video Player needs you to grant this permission to set up this song as your ringtone.</string>
     <string name="allow_settings_access_brightness_title">Allow Video Player to change brightness mode</string>
@@ -9,14 +7,8 @@
     <string name="allow_draw_overlays_title">Allow Video Player popup over other apps</string>
     <string name="allow_sdraw_overlays_description">Video Player needs you to grant this permission display your video in a popup over other applications.</string>
     <string name="permission_ask_again">Grant permission</string>
-    <string name="exit_app">Close Video Player</string>
 
-    <string name="home_item_movies">All Videos</string>
-    <string name="home_item_movies_sub">8 Videos</string>
-    <string name="home_item_works">All Works</string>
-    <string name="home_item_works_sub">9 Works</string>
-    <string name="home_item_private">Private Box</string>
-    <string name="home_item_private_sub"></string>
+    <string name="share_app_text">"I'm using a lite video player app, come and enjoy playing video. https://play.google.com/store/apps/details?id=com.wenjoyai.videoplayer"</string>
 
     <!--<string name="fragment_page_home">HOME</string>-->
     <!--<string name="fragment_page_videos">VIDEOS</string>-->
@@ -32,7 +24,6 @@
     <string name="sortby_length">Length</string>
     <string name="sortby_date">Date</string>
 
-    <string name="brightness">50%</string>
     <string name="display_ratio_best_fit">Best Fit</string>
     <string name="display_ratio_fit_horizontal">Fit Horizontal</string>
     <string name="display_ratio_fit_vertical">Fit Vertical</string>

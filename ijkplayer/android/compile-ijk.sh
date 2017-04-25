@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+set -e
 
 if [ -z "$ANDROID_NDK" -o -z "$ANDROID_NDK" ]; then
     echo "You must define ANDROID_NDK, ANDROID_SDK before starting."

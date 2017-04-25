@@ -58,9 +58,26 @@ static int ijkdummy_open(URLContext *h, const char *arg, int flags, AVDictionary
     return -1;
 }
 
+#if CONFIG_ASYNC_PROTOCOL
 IJK_FF_PROTOCOL(async);
+#endif
+
+#if CONFIG_IJKMEDIADATASOURCE_PROTOCOL
 IJK_DUMMY_PROTOCOL(ijkmediadatasource);
+#endif
+
+#if CONFIG_IJKHTTPHOOK_PROTOCOL
 IJK_DUMMY_PROTOCOL(ijkhttphook);
+#endif
+
+#if CONFIG_IJKLONGURL_PROTOCOL
 IJK_DUMMY_PROTOCOL(ijklongurl);
+#endif
+
+#if CONFIG_IJKSEGMENT_PROTOCOL
 IJK_DUMMY_PROTOCOL(ijksegment);
+#endif
+
+#if CONFIG_IJKTCPHOOK_PROTOCOL
 IJK_DUMMY_PROTOCOL(ijktcphook);
+#endif
