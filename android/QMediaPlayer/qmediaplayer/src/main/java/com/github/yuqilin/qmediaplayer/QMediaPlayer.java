@@ -419,7 +419,7 @@ public class QMediaPlayer extends AbstractMediaPlayer {
             case Options.PLAYER_TYPE_IjkMediaPlayer:
             default: {
                 IjkMediaPlayer ijkMediaPlayer = new IjkMediaPlayer();
-                ijkMediaPlayer.native_setLogLevel(IjkMediaPlayer.IJK_LOG_DEBUG);
+                ijkMediaPlayer.native_setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
 
                 if (playerOptions.getUsingMediaCodec()) {
                     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
