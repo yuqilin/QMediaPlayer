@@ -433,7 +433,6 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
                 showOverlay();
             }
             mShowing = true;
-            dimStatusBar(false);
         }
         if (!mIsLocked) {
             updatePlayPause();
@@ -455,7 +454,6 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
             hideLock();
             hideOverlay();
             mShowing = false;
-            dimStatusBar(true);
         }
     }
 
@@ -597,7 +595,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
 //
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.d(TAG, "onTouchEvent");
+        Log.d(TAG, "onTouchEvent : " + event.getAction());
 //        if (true)
 //            return true;
         if (mDetector == null) {
@@ -672,12 +670,12 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
                         // Volume (Up or Down - Right side)
                         if (mTouchControls == 1 || (mTouchControls == 3 && (int) mTouchX > (4 * mScreen.widthPixels / 7f))) {
                             doVolumeTouch(y_changed);
-                            hideOverlay();
+//                            hideOverlay();
                         }
                         // Brightness (Up or Down - Left side)
                         if (mTouchControls == 2 || (mTouchControls == 3 && (int) mTouchX < (3 * mScreen.widthPixels / 7f))) {
                             doBrightnessTouch(y_changed);
-                            hideOverlay();
+//                            hideOverlay();
                         }
                     } else {
                         // Seek (Right or Left move)
@@ -703,7 +701,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
                 mTouchY = -1f;
                 break;
         }
-        Log.d(TAG, "onTouchEvent " + (mTouchAction != TOUCH_NONE));
+        Log.d(TAG, "onTouchEvent mTouchAction : " + mTouchAction);
         return mTouchAction != TOUCH_NONE;
     }
 
@@ -1182,12 +1180,12 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
         mScreenLock.setImageResource(R.drawable.ic_lock_on);
         mIsLocked = true;
         hideOverlay();
-        dimStatusBar(true);
         show();
     }
 
     private void unlockScreen() {
-        mScreenLock.setImageResource(R.drawable.ic_lock_off);
+        mScreenLock.setImageResource(R.drawable.ic_lock_open);
+        mScreenLock.setBackgroundResource(R.drawable.overlay_circle);
         mIsLocked = false;
         showOverlay();
         show();
@@ -1269,11 +1267,13 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
 //        }
         mTitleView.setVisibility(View.VISIBLE);
         mBottomView.setVisibility(View.VISIBLE);
+        dimStatusBar(false);
     }
 
     private void hideOverlay() {
         mTitleView.setVisibility(View.INVISIBLE);
         mBottomView.setVisibility(View.INVISIBLE);
+        dimStatusBar(true);
     }
 
     /**

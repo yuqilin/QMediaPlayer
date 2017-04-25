@@ -209,7 +209,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:background="@drawable/overlay_info"
+            android:background="@drawable/overlay_rectangle"
             android:visibility="gone"
             >
 
@@ -243,11 +243,14 @@
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
             android:gravity="center_vertical">
+
             <ImageView
                 android:id="@+id/view_player_screen_lock"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/ic_lock_off"/>
+                android:background="@drawable/overlay_circle"
+                android:src="@drawable/ic_lock_open"
+                android:scaleType="centerInside"/>
 
             <!--<ImageView-->
             <!--android:id="@+id/view_player_play_speed"-->
@@ -272,7 +275,7 @@
         <!--android:gravity="center_vertical"-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
-        <!--android:background="@drawable/overlay_info"-->
+        <!--android:background="@drawable/overlay_rectangle"-->
         <!--android:layout_centerInParent="true"-->
         <!--android:visibility="gone"-->
         <!--&gt;-->
@@ -303,7 +306,7 @@
         <!--android:gravity="center_vertical"-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
-        <!--android:background="@drawable/overlay_info"-->
+        <!--android:background="@drawable/overlay_rectangle"-->
         <!--android:layout_centerInParent="true"-->
         <!--android:visibility="gone"-->
         <!--&gt;-->
