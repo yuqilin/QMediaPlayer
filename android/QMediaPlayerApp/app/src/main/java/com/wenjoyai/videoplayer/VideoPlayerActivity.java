@@ -254,6 +254,9 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
 //            Toast.makeText(MainActivity.this, "横屏模式", 3000).show();
         }
 
+        getWindowManager().getDefaultDisplay().getMetrics(mScreen);
+        mSurfaceYDisplayRange = Math.min(mScreen.widthPixels, mScreen.heightPixels);
+        mSurfaceXDisplayRange = Math.max(mScreen.widthPixels, mScreen.heightPixels);
     }
 
     private String getFileName(String filePath) {
