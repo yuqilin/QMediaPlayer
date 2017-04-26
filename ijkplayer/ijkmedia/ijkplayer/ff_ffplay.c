@@ -780,6 +780,8 @@ static double get_clock(Clock *c)
 
 static void set_clock_at(Clock *c, double pts, int serial, double time)
 {
+    av_log(NULL, AV_LOG_DEBUG, "set_clock_at: c = %p, pts = %f, serial = %d, time = %f",
+        c, pts, serial, time);
     c->pts = pts;
     c->last_updated = time;
     c->pts_drift = c->pts - time;
@@ -3582,6 +3584,18 @@ long ffp_get_current_position_l(FFPlayer *ffp)
 
     int64_t pos = 0;
     double pos_clock = get_master_clock(is);
+    av_log(ffp, AV_LOG_DEBUG, "ffp_get_current_position_l: 1 pos_clock = %f", pos_clock);
+
+    double pos_audio_clock = 0, pos_video_clock = 0;
+    if (is->audio_st) {
+        pos_audio_clock = get_clock(&is->audclk);
+    }
+    if (is->video_st) {
+        pos_video_clock = get_clock(&is->vidclk);
+    }
+    pos_clock = FFMAX(pos_audio_clock, pos_video_clock);
+    av_log(ffp, AV_LOG_DEBUG, "ffp_get_current_position_l: 2 pos_clock = %f", pos_clock);
+
     if (isnan(pos_clock)) {
         pos = fftime_to_milliseconds(is->seek_pos);
     } else {
@@ -3600,6 +3614,8 @@ long ffp_get_current_position_l(FFPlayer *ffp)
         return 0;
 
     int64_t adjust_pos = pos - start_diff;
+    av_log(ffp, AV_LOG_DEBUG, "ffp_get_current_position_l: adjust_pos = %lld, pos = %lld, start_diff = %lld",
+     adjust_pos, pos, start_diff);
     return (long)adjust_pos;
 }
 

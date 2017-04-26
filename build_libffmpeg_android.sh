@@ -3,7 +3,7 @@ IJK_LOCAL_REPO=ijkplayer
 
 set -e
 
-ARCHS="armv5 armv7a arm64"
+ARCHS="armv7a arm64"
 
 cd $IJK_LOCAL_REPO
 
