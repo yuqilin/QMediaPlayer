@@ -148,9 +148,14 @@ public class TextureRenderView extends TextureView implements IRenderView {
             if (mp == null)
                 return;
 
+            tv.danmaku.ijk.media.player.IMediaPlayer ijkMediaPlayer = null;
+            if (mp instanceof QMediaPlayer) {
+                ijkMediaPlayer = ((QMediaPlayer)mp).getIjkIMediaPlayer();
+            }
+
             if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) &&
-                    (mp instanceof ISurfaceTextureHolder)) {
-                ISurfaceTextureHolder textureHolder = (ISurfaceTextureHolder) mp;
+                    (ijkMediaPlayer instanceof ISurfaceTextureHolder)) {
+                ISurfaceTextureHolder textureHolder = (ISurfaceTextureHolder) ijkMediaPlayer;
                 mTextureView.mSurfaceCallback.setOwnSurfaceTexture(false);
 
                 SurfaceTexture surfaceTexture = textureHolder.getSurfaceTexture();

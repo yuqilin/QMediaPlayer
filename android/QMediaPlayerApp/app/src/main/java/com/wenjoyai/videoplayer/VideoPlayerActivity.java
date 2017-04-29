@@ -161,6 +161,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
 
 //    private PopupWindow mDisplayRatioPopup;
 //    private ActionBar mActionBar;
+    private boolean mPauseByUser = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,7 +229,9 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
     @Override
     protected void onResume() {
         super.onResume();
-        mVideoView.resume();
+        if (!mPauseByUser) {
+            mVideoView.resume();
+        }
     }
 
     @Override
@@ -990,6 +993,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
     }
 
     private void onPlayPause() {
+        mPauseByUser = !mPauseByUser;
         doPauseResume();
         show(DEFAULT_TIMEOUT);
     }

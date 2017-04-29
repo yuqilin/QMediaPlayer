@@ -1,6 +1,7 @@
 package com.github.yuqilin.qmediaplayer;
 
 import android.content.Context;
+import android.graphics.SurfaceTexture;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.view.Surface;
@@ -13,6 +14,7 @@ import java.util.Map;
 import tv.danmaku.ijk.media.player.AndroidMediaPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
+import tv.danmaku.ijk.media.player.TextureMediaPlayer;
 
 /**
  * Created by yuqilin on 16/12/20.
@@ -134,6 +136,10 @@ public class QMediaPlayer extends AbstractMediaPlayer {
 
     private Options playerOptions;
     private tv.danmaku.ijk.media.player.IMediaPlayer ijkIMediaPlayer;
+
+    public tv.danmaku.ijk.media.player.IMediaPlayer getIjkIMediaPlayer() {
+        return ijkIMediaPlayer;
+    }
     private tv.danmaku.ijk.media.player.IMediaPlayer.OnPreparedListener ijkOnPreparedListener = new tv.danmaku.ijk.media.player.IMediaPlayer.OnPreparedListener() {
         @Override
         public void onPrepared(tv.danmaku.ijk.media.player.IMediaPlayer mp) {
@@ -460,8 +466,8 @@ public class QMediaPlayer extends AbstractMediaPlayer {
             }
         }
 
-//        if (mSettings.getEnableDetachedSurfaceTextureView()) {
-//            mediaPlayer = new TextureMediaPlayer(mediaPlayer);
+//        if (playerOptions.getEnableDetachedSurfaceTextureView()) {
+            iMediaPlayer = new TextureMediaPlayer(iMediaPlayer);
 //        }
 
         return iMediaPlayer;
