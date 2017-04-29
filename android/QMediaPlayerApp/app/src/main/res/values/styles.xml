@@ -7,6 +7,10 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/white</item>
+        <!-- if using android.widget.PopupMenu -->
+        <!--<item name="android:popupMenuStyle">@style/PopupMenu</item>-->
+        <!-- if using android.support.v7.widget.PopupMenu -->
+        <!--<item name="popupMenuStyle">@style/PopupMenu</item>-->
     </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">
@@ -43,9 +47,16 @@
         <!--<item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.TextView.SpinnerItem</item>-->
     </style>
 
-    <!--<style name="PopupMenu" parent="Widget.AppCompat.PopupMenu.Overflow">-->
-    <style name="PopupMenu" parent="Widget.AppCompat.Light.PopupMenu">
-        <!--<item name="android:textColor">#ffffffdd</item>-->
+    <style name="CustomPopupTheme" parent="ThemeOverlay.AppCompat.Dark">
+        <!-- if using android.widget.PopupMenu -->
+        <!--<item name="android:popupMenuStyle">@style/PopupMenu</item>-->
+        <!-- if using android.support.v7.widget.PopupMenu -->
+        <item name="popupMenuStyle">@style/PopupMenu</item>
+    </style>
+    <style name="PopupMenu" parent="ThemeOverlay.AppCompat.Dark">
+        <!--<item name="android:textColor">@color/white</item>-->
+        <!--<item name="android:itemBackground">@color/player_bg_transparent_30</item>-->
+        <item name="android:popupBackground">@color/bg_transparent_50</item>
     </style>
 
     <style name="SpinnerTheme" parent="Base.Widget.AppCompat.Spinner">

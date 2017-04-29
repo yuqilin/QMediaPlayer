@@ -4,7 +4,7 @@
     android:shape="oval">
 
     <solid
-        android:color="@color/player_bg_transparent_30"/>
+        android:color="@color/bg_transparent_30"/>
 
     <!--<corners android:radius="8dp"/>-->
 

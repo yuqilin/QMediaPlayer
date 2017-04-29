@@ -12,8 +12,8 @@
     <color name="text_gray">#757575</color>
     <color name="text_gray_dark">#4a4a4a</color>
 
-    <color name="player_bg_transparent_30">#30000000</color>
-    <color name="player_bg_transparent_50">#50000000</color>
+    <color name="bg_transparent_30">#30000000</color>
+    <color name="bg_transparent_50">#50000000</color>
 
     <color name="grey400transparent">#80bdbdbd</color>
 

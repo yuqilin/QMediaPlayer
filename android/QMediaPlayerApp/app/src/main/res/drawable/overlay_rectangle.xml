@@ -4,7 +4,7 @@
     android:shape="rectangle">
 
     <solid
-        android:color="@color/player_bg_transparent_50"/>
+        android:color="@color/bg_transparent_50"/>
 
     <corners android:radius="8dp"/>
 

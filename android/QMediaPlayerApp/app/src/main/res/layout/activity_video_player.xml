@@ -23,7 +23,7 @@
             android:layout_height="@dimen/activity_video_player_title_height"
             android:orientation="horizontal"
             android:gravity="center"
-            android:background="@color/player_bg_transparent_30">
+            android:background="@color/bg_transparent_30">
 
             <ImageView
                 android:id="@+id/view_player_back"
@@ -79,7 +79,7 @@
             android:layout_height="@dimen/activity_video_player_bottom_height"
             android:orientation="vertical"
             android:layout_alignParentBottom="true"
-            android:background="@color/player_bg_transparent_30">
+            android:background="@color/bg_transparent_30">
             <LinearLayout
                 android:layout_marginTop="4dp"
                 android:layout_width="match_parent"

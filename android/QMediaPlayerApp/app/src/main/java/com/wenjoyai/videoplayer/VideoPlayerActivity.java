@@ -21,7 +21,9 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.InputDevice;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -1007,7 +1009,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
 //        SpannableString spannableString = new SpannableString(popupMenu.getMenu().getItem(mCurrentRatioId).getTitle());
 //        popupMenu.getMenu().getItem(mCurrentRatioId).setTitle(spannableString);
 
-        final PopupMenu mPopupMenu = new PopupMenu(this, mDisplayRatio);
+        Context wrapper = new ContextThemeWrapper(this, R.style.CustomPopupTheme);
+        final PopupMenu mPopupMenu = new PopupMenu(wrapper, mDisplayRatio, Gravity.CENTER);
         mPopupMenu.inflate(R.menu.menu_display_ratio);
         mPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
