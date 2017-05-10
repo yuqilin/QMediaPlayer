@@ -17,7 +17,7 @@ android {
         applicationId "com.wenjoyai.videoplayer"
         minSdkVersion 9
         targetSdkVersion 22
-        versionCode 1
+        versionCode 100
         versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
