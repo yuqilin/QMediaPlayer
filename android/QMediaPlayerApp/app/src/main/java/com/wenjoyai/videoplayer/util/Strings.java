@@ -107,7 +107,7 @@ public class Strings {
         return new DecimalFormat("#,##0.#").format(size/Math.pow(1000, digitGroups)) + " " + units[digitGroups];
     }
 
-    public static String removeFileProtocole(String path){
+    public static String removeFileProtocole(String path) {
         if (path == null)
             return null;
         if (path.startsWith("file://"))

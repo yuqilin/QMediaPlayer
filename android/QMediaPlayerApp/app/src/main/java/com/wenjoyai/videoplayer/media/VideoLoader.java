@@ -76,15 +76,15 @@ public class VideoLoader {
         Cursor cursor = contentResolver.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, mediaColumns, null, null, null);
 
         if (cursor.moveToFirst()) {
-            do{
+            do {
                 MediaWrapper media = new MediaWrapper();
 
                 media.setFilePath(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)));
                 media.setMimeType(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.MIME_TYPE)));
                 media.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE)));
-                media.setLength(Long.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION))));
-                media.setFileSize(Long.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE))));
-                media.setDateTaken(Long.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_TAKEN))));
+                media.setLength(parseLong(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION))));
+                media.setFileSize(parseLong(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE))));
+                media.setDateTaken(parseLong(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_TAKEN))));
 
                 //获取当前Video对应的Id，然后根据该ID获取其Thumb
                 long id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID));
@@ -149,5 +149,15 @@ public class VideoLoader {
 //        });
 
         cursor.close();
+    }
+
+    private long parseLong(String value) {
+        long result = 0;
+        try {
+            Long.parseLong(value);
+        } catch (NumberFormatException e) {
+            Log.e(TAG, "parseLong NumberFormatException : " + value);
+        }
+        return result;
     }
 }
