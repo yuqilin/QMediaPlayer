@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
+    <permission android:name = "com.android.permission.RECV_XXX"/>
+
     <application
         android:name=".QApplication"
         android:allowBackup="true"
@@ -46,6 +48,7 @@
             android:configChanges="orientation|screenSize"
             android:enabled="true">
         </service>
+
     </application>
 
 </manifest>

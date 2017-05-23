@@ -37,7 +37,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
     final static int UPDATE_THUMB = 1;
     final static int UPDATE_TIME = 2;
 
-    private boolean mListMode = true;
+    private boolean mListMode = false;
 //    private VideoFragment mFragment;
     private IEventsHandler mEventsHandler;
 

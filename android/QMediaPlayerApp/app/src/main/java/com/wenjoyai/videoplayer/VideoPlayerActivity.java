@@ -8,8 +8,9 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -1000,22 +1001,106 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
         }
     };
 
-    private void onSnapshot() {
-        Bitmap bitmap = Bitmap.createBitmap(mVideoWidth, mVideoHeight, Bitmap.Config.ARGB_8888);
-        if (mVideoView.getCurrentFrame(bitmap)) {
-            String externalStorage = Environment.getExternalStorageDirectory().getPath();
-            Log.d(TAG, "external storage directory : " + externalStorage);
-            File snapshotDirectory = new File(Environment.getExternalStorageDirectory().getPath() + "/snapshot");
-            if (!snapshotDirectory.exists()) {
-                snapshotDirectory.mkdirs();
-            }
-            File savePath = new File(snapshotDirectory.getPath() + "/"
-                    + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg");
+    private PopupWindow showPopupWindow(View anchorView, View popupView) {
+        PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        int[] location = new int[2];
+        anchorView.getLocationOnScreen(location);
+        popupWindow.showAtLocation(anchorView, Gravity.NO_GRAVITY,
+                location[0] - popupView.getMeasuredWidth() - getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin),
+                location[1] + (anchorView.getHeight() - popupView.getMeasuredHeight()) / 2);
+        return popupWindow;
+    }
 
-            if (!BitmapUtil.saveBitmap(savePath, bitmap)) {
-                Log.e(TAG, "saveBitmap failed : " + savePath.getPath());
+    private void onSnapshot() {
+//        PackageManager m = getPackageManager();
+//        String dataDir = null;
+//        PackageInfo packageInfo = null;
+//        try {
+//            packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+//            dataDir = packageInfo.applicationInfo.dataDir;
+//            Log.d(TAG, "data dir : " + dataDir);
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//            Log.e(TAG, "onSnapshot NameNotFoundException : ", e);
+//        }
+        Log.d(TAG, "getFilesDir : " + getFilesDir()
+                + ", getCacheDir : " + getCacheDir()
+                + ", getExternalFilesDir : " + getExternalFilesDir(null)
+                + ", getExternalCacheDir : " + getExternalCacheDir());
+
+//        dataDir = getExternalFilesDir(null).getPath();
+//
+//        if (dataDir == null) {
+//            return;
+//        }
+//
+//        File snapshotDir = new File(dataDir + "/cutVideo/screenshot");
+//        if (!snapshotDir.exists()) {
+//            if (!snapshotDir.mkdirs()) {
+//                Log.e(TAG, "snapshotDir mkdirs failed : " + snapshotDir.getPath());
+//                return;
+//            }
+//        }
+
+//        File snapshotFile = new File(snapshotDir + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg");
+//        Log.d(TAG, "snapshotFile : " + snapshotFile.getAbsolutePath() + ", name : " + snapshotFile.getName());
+
+        Bitmap bitmap = Bitmap.createBitmap(mVideoWidth, mVideoHeight, Bitmap.Config.ARGB_8888);
+        if (!mVideoView.getCurrentFrame(bitmap)) {
+            Log.e(TAG, "getCurrentFrame failed");
+            return;
+        }
+        String externalStorage = Environment.getExternalStorageDirectory().getPath();
+        Log.d(TAG, "external storage directory : " + externalStorage);
+        File snapshotDirectory = new File(QApplication.getSnapshotStoragePath());
+        if (!snapshotDirectory.exists()) {
+            if (!snapshotDirectory.mkdirs()) {
+                Log.e(TAG, "onSnapshot mkdirs failed : " + snapshotDirectory.getPath());
+                return;
             }
         }
+        File snapshotFile = new File(snapshotDirectory.getAbsolutePath() + "/"
+                + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg");
+        Log.d(TAG, "onSnapshot snapshotFile : " + snapshotFile);
+        if (!BitmapUtil.saveBitmap(snapshotFile, bitmap)) {
+            Log.e(TAG, "saveBitmap failed : " + snapshotFile.getAbsolutePath());
+            return;
+        }
+
+        // show share popup
+//        View popupView = getLayoutInflater().inflate(R.layout.view_player_popup_snapshot, null);
+//        final PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+//        popupWindow.setTouchable(true);
+//        popupWindow.setOutsideTouchable(true);
+//        popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+//
+//        int[] location = new int[2];
+//        mSnapshot.getLocationOnScreen(location);
+//        popupWindow.showAtLocation(mSnapshot, Gravity.NO_GRAVITY, location[0] - popupView.getMeasuredWidth() - getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin), location[1] + (mSnapshot.getHeight() - popupView.getMeasuredHeight()) / 2);
+
+        View popupView = getLayoutInflater().inflate(R.layout.view_player_popup_snapshot, null);
+        final PopupWindow popupWindow = showPopupWindow(mSnapshot, popupView);
+        popupView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "popup snapshot clicked");
+                popupWindow.dismiss();
+            }
+        });
+
+        ImageView thumbnail = (ImageView)popupView.findViewById(R.id.view_popup_snapshot_thumbnail);
+        thumbnail.setImageBitmap(bitmap);
+
+        // notify system image library
+        MediaScannerConnection.scanFile(this, new String[]{snapshotFile.getAbsolutePath()}, null, new MediaScannerConnection.OnScanCompletedListener() {
+            @Override
+            public void onScanCompleted(String s, Uri uri) {
+                Log.d(TAG, "onScanCompleted, s : " + s + ", uri : " + uri);
+            }
+        });
     }
 
     private void onRecord() {

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Process;
@@ -99,5 +100,19 @@ public class QApplication extends Application {
         return instance.mThreadPool.remove(runnable);
     }
 
+    public static String getSnapshotStoragePath() {
+        return Environment.getExternalStorageDirectory().getAbsolutePath() + "/" +
+                getAppContext().getPackageName() + "/cutVideo/screenshot";
+    }
+
+    public static String getGifStoragePath() {
+        return Environment.getExternalStorageDirectory().getAbsolutePath() + "/" +
+                getAppContext().getPackageName() + "/cutVideo/gif";
+    }
+
+    public static String getVideoStoragePath() {
+        return Environment.getExternalStorageDirectory().getAbsolutePath() + "/" +
+                getAppContext().getPackageName() + "/cutVideo/video";
+    }
 
 }
