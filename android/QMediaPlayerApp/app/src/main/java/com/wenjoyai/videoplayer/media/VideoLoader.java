@@ -154,7 +154,7 @@ public class VideoLoader {
     private long parseLong(String value) {
         long result = 0;
         try {
-            Long.parseLong(value);
+            result = Long.parseLong(value);
         } catch (NumberFormatException e) {
             Log.e(TAG, "parseLong NumberFormatException : " + value);
         }

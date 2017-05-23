@@ -56,7 +56,7 @@
     <style name="PopupMenu" parent="ThemeOverlay.AppCompat.Dark">
         <!--<item name="android:textColor">@color/white</item>-->
         <!--<item name="android:itemBackground">@color/player_bg_transparent_30</item>-->
-        <item name="android:popupBackground">@color/bg_transparent_50</item>
+        <item name="android:popupBackground">@color/bg_transparent_80</item>
     </style>
 
     <style name="SpinnerTheme" parent="Base.Widget.AppCompat.Spinner">

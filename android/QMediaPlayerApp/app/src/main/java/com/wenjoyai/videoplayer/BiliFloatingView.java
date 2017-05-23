@@ -1,9 +1,7 @@
 package com.wenjoyai.videoplayer;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.PixelFormat;
-import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Message;
@@ -18,7 +16,6 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -96,7 +93,7 @@ public class BiliFloatingView implements OnVideoSizeChangedListener, OnInfoListe
     private ImageView mPlayPause;
     private View mOverlay;
 
-    private String playUrl;
+    private String mVideoPath;
 //    private IjkMediaPlayer ijkMediaPlayer;
     private IMediaController.MediaPlayerControl mMediaPlayerControl;
     private IMediaController mMediaController = new IMediaController() {
@@ -146,21 +143,11 @@ public class BiliFloatingView implements OnVideoSizeChangedListener, OnInfoListe
     };
 
 
-    public BiliFloatingView(PlayBackService c, String playUrl) {
-        this.playUrl = playUrl;
-        mService = c;
-        int notificationBarResources[] = {android.R.drawable.stat_sys_phone_call, android.R.drawable.stat_notify_call_mute,
-                android.R.drawable.stat_notify_sdcard, android.R.drawable.stat_notify_sync, android.R.drawable.stat_notify_missed_call,
-                android.R.drawable.stat_sys_headset, android.R.drawable.stat_sys_warning};
-        for (int i = 0; i < notificationBarResources.length; i++) {
-            try {
-                Drawable phoneCallIcon = mService.getResources().getDrawable(notificationBarResources[i]);
-                if ((stateBarHeight = phoneCallIcon.getIntrinsicHeight()) != -1) {
-                    break;
-                }
-            } catch (Resources.NotFoundException e) {
-            }
-        }
+    public BiliFloatingView(PlayBackService playBackService, String playUrl, int videoWidth, int videoHeight) {
+        mVideoPath = playUrl;
+        mVideoWidth = videoWidth;
+        mVideoHeight = videoHeight;
+        mService = playBackService;
         mLayout = (ViewGroup) View.inflate(mService, R.layout.view_floating, null);
         mScaleGestureDetector = new ScaleGestureDetector(mService, new ScaleGestureListener());
 
@@ -185,6 +172,8 @@ public class BiliFloatingView implements OnVideoSizeChangedListener, OnInfoListe
         btn_fullscreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mService.jumpToPlayerActivity(mVideoPath);
+                quit();
             }
         });
         mLayout.setOnTouchListener(new OnTouchListener() {
@@ -220,6 +209,23 @@ public class BiliFloatingView implements OnVideoSizeChangedListener, OnInfoListe
         mSeekBar.setMax(1000);
 
         mVideoView.setMediaController(mMediaController);
+        mVideoView.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(IMediaPlayer mp) {
+                final int videoWidth = mp.getVideoWidth();
+                final int videoHeight = mp.getVideoHeight();
+                if (videoWidth != mVideoWidth || videoHeight != mVideoHeight) {
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            wmParams.width = videoWidth;
+                            wmParams.height = videoHeight;
+                            wm.updateViewLayout(mLayout, wmParams);
+                        }
+                    });
+                }
+            }
+        });
     }
 
     private void doPauseResume() {
@@ -266,7 +272,11 @@ public class BiliFloatingView implements OnVideoSizeChangedListener, OnInfoListe
         ScreenWidth = currentDisplay.getWidth();
         ScreenHeight = currentDisplay.getHeight() - stateBarHeight;
         mWindowWidth = ScreenWidth;
-        mWindowHeight = mWindowWidth * 9 / 16;
+        if (mVideoWidth > 0 && mVideoHeight > 0) {
+            mWindowHeight = mWindowWidth * mVideoHeight / mVideoWidth;
+        } else {
+            mWindowHeight = mWindowWidth * 9 / 16;
+        }
         MinWindowWidth = (ScreenWidth < ScreenHeight ? ScreenWidth : ScreenHeight) / 2;
         wmParams.width = mWindowWidth;
         wmParams.height = mWindowHeight;
@@ -296,7 +306,7 @@ public class BiliFloatingView implements OnVideoSizeChangedListener, OnInfoListe
 //        }
 //        ijkMediaPlayer.start();
 
-        mVideoView.setVideoPath(playUrl);
+        mVideoView.setVideoPath(mVideoPath);
         mVideoView.start();
 
         showLoading();

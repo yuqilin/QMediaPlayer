@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.ViewHolder> {
 
@@ -48,6 +49,8 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
     private int mGridCardWidth = 0;
 
     private List<MediaWrapper> mVideos = new ArrayList<>();
+
+    private VideoComparator mVideoComparator = new VideoComparator();
 
     public VideoListAdapter(IEventsHandler eventsHandler) {
         super();
@@ -163,6 +166,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
     public void updateVideos(List<MediaWrapper> videos) {
         Log.d(TAG, "updateVideos : " + videos.size());
         mVideos = videos;
+        Collections.sort(mVideos, mVideoComparator);
         notifyDataSetChanged();
     }
     public void addVideo(int position, MediaWrapper video) {
@@ -244,6 +248,67 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
 
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
+        }
+    }
+
+    int sortDirection(int sortDirection) {
+        return mVideoComparator.sortDirection(sortDirection);
+    }
+
+    void sortBy(int sortby) {
+        mVideoComparator.sortBy(sortby);
+    }
+
+    private class VideoComparator implements Comparator<MediaWrapper> {
+
+        private int mSortDirection;
+        private int mSortBy;
+
+        VideoComparator() {
+            mSortBy = SORT_BY_TITLE;
+            mSortDirection = 1;
+        }
+
+        int sortDirection(int sortby) {
+            if (sortby == mSortBy) {
+                return mSortDirection;
+            } else {
+                return -1;
+            }
+        }
+
+        void sortBy(int sortby) {
+            if (mSortBy == sortby) {
+                mSortDirection *= -1;
+            } else {
+                mSortBy = sortby;
+                mSortDirection *= 1;
+            }
+            Collections.sort(mVideos, mVideoComparator);
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public int compare(MediaWrapper item1, MediaWrapper item2) {
+            if (item1 == null) {
+                return item2 == null ? 0 : -1;
+            } else if (item2 == null) {
+                return 1;
+            }
+            int compare = 0;
+            switch (mSortBy) {
+                case SORT_BY_DATE:
+                    compare = ((Long)item1.getDateTaken()).compareTo((Long)item2.getDateTaken());
+                    break;
+                case SORT_BY_TITLE:
+                    compare = item1.getTitle().toUpperCase(Locale.ENGLISH).compareTo(
+                            item2.getTitle().toUpperCase(Locale.ENGLISH));
+                    break;
+                case SORT_BY_LENGTH:
+                    compare = ((Long)item1.getLength()).compareTo((Long)item2.getLength());
+                    break;
+            }
+            return mSortDirection * compare;
         }
     }
 

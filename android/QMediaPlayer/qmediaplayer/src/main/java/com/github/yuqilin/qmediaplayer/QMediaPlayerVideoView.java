@@ -19,6 +19,7 @@ package com.github.yuqilin.qmediaplayer;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -972,6 +973,13 @@ public class QMediaPlayerVideoView extends FrameLayout implements IMediaControll
                 break;
         }
         return text;
+    }
+
+    public boolean getCurrentFrame(Bitmap bitmap) {
+        if (mMediaPlayer != null) {
+            return mMediaPlayer.getCurrentFrame(bitmap);
+        }
+        return false;
     }
 
     //-------------------------

@@ -650,6 +650,10 @@ int ijkmp_get_loop(IjkMediaPlayer *mp)
     return loop;
 }
 
+bool ijkmp_get_current_frame(IjkMediaPlayer *mp, uint8_t *frame_buffer) {
+    return ffp_get_current_frame_l(mp->ffplayer, frame_buffer);
+}
+
 void *ijkmp_get_weak_thiz(IjkMediaPlayer *mp)
 {
     return mp->weak_thiz;

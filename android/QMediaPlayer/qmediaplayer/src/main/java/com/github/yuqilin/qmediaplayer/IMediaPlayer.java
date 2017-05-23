@@ -2,6 +2,7 @@ package com.github.yuqilin.qmediaplayer;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.view.Surface;
@@ -78,6 +79,8 @@ public interface IMediaPlayer {
     int getVideoHeight();
     int getVideoSarNum();
     int getVideoSarDen();
+
+    boolean getCurrentFrame(Bitmap bitmap);
 
     boolean isPlaying();
 

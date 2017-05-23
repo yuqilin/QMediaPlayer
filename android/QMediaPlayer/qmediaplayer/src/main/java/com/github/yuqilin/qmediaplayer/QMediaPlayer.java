@@ -1,6 +1,7 @@
 package com.github.yuqilin.qmediaplayer;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -369,6 +370,14 @@ public class QMediaPlayer extends AbstractMediaPlayer {
             den = ijkIMediaPlayer.getVideoSarDen();
         }
         return den;
+    }
+
+    @Override
+    public boolean getCurrentFrame(Bitmap bitmap) {
+        if (ijkIMediaPlayer != null) {
+            return ijkIMediaPlayer.getCurrentFrame(bitmap);
+        }
+        return false;
     }
 
     @Override

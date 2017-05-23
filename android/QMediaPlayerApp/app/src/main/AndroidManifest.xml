@@ -41,11 +41,11 @@
             android:theme="@style/AppTheme.NoActionBar"
             />
 
-        <!--<service-->
-            <!--android:name=".PlayBackService"-->
-            <!--android:configChanges="orientation|screenSize"-->
-            <!--android:enabled="true">-->
-        <!--</service>-->
+        <service
+            android:name=".PlayBackService"
+            android:configChanges="orientation|screenSize"
+            android:enabled="true">
+        </service>
     </application>
 
 </manifest>

@@ -13,6 +13,11 @@ import android.provider.MediaStore;
 import com.wenjoyai.videoplayer.QApplication;
 import com.wenjoyai.videoplayer.media.MediaWrapper;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 /**
  * Created by yuqilin on 17/3/13.
  */
@@ -180,5 +185,40 @@ public class BitmapUtil {
             return 1;
         }
         return 1;
+    }
+
+    public static boolean saveBitmap(String path, Bitmap bitmap) {
+        return saveBitmap(new File(path), bitmap);
+    }
+
+    public static boolean saveBitmap(File file, Bitmap bitmap) {
+        if (bitmap == null || bitmap.isRecycled()) {
+            return false;
+        }
+
+        FileOutputStream outputStream = null;
+        try {
+            if (file.exists())
+                file.createNewFile();
+            outputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            outputStream.flush();
+            return true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
     }
 }

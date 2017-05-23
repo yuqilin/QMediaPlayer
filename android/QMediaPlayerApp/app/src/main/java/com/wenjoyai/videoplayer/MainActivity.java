@@ -20,7 +20,7 @@ import android.widget.BaseAdapter;
 import android.widget.Spinner;
 
 import com.wenjoyai.videoplayer.gui.video.VideoFragment;
-import com.wenjoyai.videoplayer.media.MediaComparators;
+import com.wenjoyai.videoplayer.gui.video.VideoListAdapter;
 import com.wenjoyai.videoplayer.media.MediaWrapper;
 import com.wenjoyai.videoplayer.media.VideoLoader;
 import com.wenjoyai.videoplayer.util.FileUtils;
@@ -65,6 +65,12 @@ public class MainActivity extends BaseActivity {
     private static final int SCAN_FINISH = 2;
     private static final int SCAN_CANCEL = 3;
     private static final int SCAN_ADD_ITEM = 4;
+
+//    private int mSortBy = 0;
+//    private boolean mSortByChanged = false;
+//    private static final int SORT_BY_DATE = 1;
+//    private static final int SORT_BY_NAME = 2;
+//    private static final int SORT_BY_LENGTH = 3;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -152,6 +158,23 @@ public class MainActivity extends BaseActivity {
             } else {
                 selectedVideos = mAllVideos.get(mFolderNames.get(position));
             }
+//            if (mSortByChanged) {
+//                Comparator<MediaWrapper> comparator = null;
+//                switch (mSortBy) {
+//                    case SORT_BY_DATE:
+//                        comparator = MediaComparators.byDate;
+//                        break;
+//                    case SORT_BY_NAME:
+//                        comparator = MediaComparators.byName;
+//                        break;
+//                    case SORT_BY_LENGTH:
+//                        comparator = MediaComparators.byLength;
+//                        break;
+//                }
+//                if (comparator != null) {
+//                    Collections.sort(selectedVideos, comparator);
+//                }
+//            }
             mVideoFragment.updateVideos(selectedVideos);
         }
 
@@ -297,14 +320,35 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.mi_sortby:
                 break;
-            case R.id.mi_sortby_name:
-                mVideoFragment.sortVideos(MediaComparators.byName);
+            case R.id.mi_sortby_date:
+//                if (mSortBy != SORT_BY_DATE) {
+//                    mSortBy = SORT_BY_DATE;
+//                    mSortByChanged = true;
+//                } else {
+//                    mSortByChanged = false;
+//                }
+//                mVideoFragment.sortVideos(MediaComparators.byDate);
+                mVideoFragment.sortBy(VideoListAdapter.SORT_BY_DATE);
+                break;
+            case R.id.mi_sortby_title:
+//                if (mSortBy != SORT_BY_NAME) {
+//                    mSortBy = SORT_BY_NAME;
+//                    mSortByChanged = true;
+//                } else {
+//                    mSortByChanged = false;
+//                }
+//                mVideoFragment.sortVideos(MediaComparators.byName);
+                mVideoFragment.sortBy(VideoListAdapter.SORT_BY_TITLE);
                 break;
             case R.id.mi_sortby_length:
-                mVideoFragment.sortVideos(MediaComparators.byLength);
-                break;
-            case R.id.mi_sortby_date:
-                mVideoFragment.sortVideos(MediaComparators.byDate);
+//                if (mSortBy != SORT_BY_LENGTH) {
+//                    mSortBy = SORT_BY_LENGTH;
+//                    mSortByChanged = true;
+//                } else {
+//                    mSortByChanged = false;
+//                }
+//                mVideoFragment.sortVideos(MediaComparators.byLength);
+                mVideoFragment.sortBy(VideoListAdapter.SORT_BY_LENGTH);
                 break;
             case R.id.mi_about:
                 jumpToAboutActivity();
@@ -328,7 +372,6 @@ public class MainActivity extends BaseActivity {
     public boolean onPrepareOptionsMenu (Menu menu) {
         Log.d(TAG, "onPrepareOptionsMenu");
         super.onPrepareOptionsMenu(menu);
-
         return true;
     }
 

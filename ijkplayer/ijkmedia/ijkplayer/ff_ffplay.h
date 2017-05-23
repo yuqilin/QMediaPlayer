@@ -69,6 +69,9 @@ long      ffp_get_playable_duration_l(FFPlayer *ffp);
 void      ffp_set_loop(FFPlayer *ffp, int loop);
 int       ffp_get_loop(FFPlayer *ffp);
 
+/* snapshot */
+bool      ffp_get_current_frame_l(FFPlayer *ffp, uint8_t *frame_buffer);
+
 /* for internal usage */
 int       ffp_packet_queue_init(PacketQueue *q);
 void      ffp_packet_queue_destroy(PacketQueue *q);

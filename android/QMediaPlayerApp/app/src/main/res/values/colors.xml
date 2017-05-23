@@ -14,6 +14,7 @@
 
     <color name="bg_transparent_30">#30000000</color>
     <color name="bg_transparent_50">#50000000</color>
+    <color name="bg_transparent_80">#80000000</color>
 
     <color name="grey400transparent">#80bdbdbd</color>
 

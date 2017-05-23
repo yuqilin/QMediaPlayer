@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/mi_record_gif"
+        android:title="@string/record_gif">
+    </item>
+    <item
+        android:id="@+id/mi_record_video"
+        android:title="@string/record_video">
+    </item>
+</menu>

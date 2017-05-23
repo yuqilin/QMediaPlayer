@@ -236,4 +236,12 @@ public class VideoFragment extends BaseFragment implements IEventsHandler {
         mVideoAdapter.sortVideos(comparator);
     }
 
+    public void sortBy(int sortby) {
+        mVideoAdapter.sortBy(sortby);
+    }
+
+    public int sortDirection(int sortby) {
+        return mVideoAdapter.sortDirection(sortby);
+    }
+
 }

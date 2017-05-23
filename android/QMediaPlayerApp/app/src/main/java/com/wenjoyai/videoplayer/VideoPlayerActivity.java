@@ -2,13 +2,17 @@ package com.wenjoyai.videoplayer;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -29,9 +33,11 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -42,10 +48,14 @@ import com.github.yuqilin.qmediaplayer.IRenderView;
 import com.github.yuqilin.qmediaplayer.QMediaPlayerVideoView;
 import com.wenjoyai.videoplayer.util.AndroidDevices;
 import com.wenjoyai.videoplayer.util.AndroidUtil;
+import com.wenjoyai.videoplayer.util.BitmapUtil;
 import com.wenjoyai.videoplayer.util.Permissions;
 import com.wenjoyai.videoplayer.util.Tools;
 import com.wenjoyai.videoplayer.util.Util;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -76,6 +86,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
 //    private PlayerBottomView mBottomView;
     private QMediaPlayerVideoView mVideoView;
     private IMediaController.MediaPlayerControl mMediaPlayerControl;
+    private int mVideoWidth;
+    private int mVideoHeight;
 
     // title view
     View mTitleView;
@@ -98,12 +110,14 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
     ImageView mDisplayRatio;
     ImageView mRotateScreen;
 //    ImageView mPlaySpeed;
+    ImageView mSnapshot;
+    ImageView mRecord;
 
     // center tools view
     View mToolsView;
 //    ImageView mSnapshot;
 //    ImageView mTakeGif;
-//    ImageView mLockCenter;
+    ImageView mLockCenter;
     ImageView mScreenLock;
 
     View mOverlay;
@@ -203,6 +217,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
         mVideoView.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(IMediaPlayer mp) {
+                mVideoWidth = mp.getVideoWidth();
+                mVideoHeight = mp.getVideoHeight();
                 show();
             }
         });
@@ -327,7 +343,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
         mTotalTime = (TextView) findViewById(R.id.view_player_total_time);
         mSeekBar = (SeekBar) findViewById(R.id.view_player_seekbar);
 //        mLockScreen = (ImageView) findViewById(R.id.view_player_lock_screen);
-//        mFloatScreen = (ImageView) findViewById(R.id.view_player_float_screen);
+        mFloatScreen = (ImageView) findViewById(R.id.view_player_float_screen);
         mForward = (ImageView) findViewById(R.id.view_player_forward);
         mPlayPause = (ImageView) findViewById(R.id.view_player_play_pause);
         mRewind = (ImageView) findViewById(R.id.view_player_rewind);
@@ -338,9 +354,11 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
         mToolsView = findViewById(R.id.player_tools_view);
 //        mSnapshot = (ImageView) findViewById(R.id.view_player_take_snapshot);
 //        mTakeGif = (ImageView) findViewById(R.id.view_player_take_gif);
-//        mLockCenter = (ImageView) findViewById(R.id.view_player_lock_center);
+        mLockCenter = (ImageView) findViewById(R.id.view_player_lock_center);
 //        mPlaySpeed = (ImageView) findViewById(R.id.view_player_play_speed);
         mScreenLock = (ImageView) findViewById(R.id.view_player_screen_lock);
+        mSnapshot = (ImageView) findViewById(R.id.view_player_snapshot);
+        mRecord = (ImageView) findViewById(R.id.view_player_record);
 
 //        mBrightnessOverlay = findViewById(R.id.view_player_brightness_overlay);
 //        mVolumeOverlay = findViewById(R.id.view_player_volume_overlay);
@@ -400,9 +418,12 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
         mRewind.setOnClickListener(mOnClickListener);
         mDisplayRatio.setOnClickListener(mOnClickListener);
         mRotateScreen.setOnClickListener(mOnClickListener);
-//        mLockCenter.setOnClickListener(mOnClickListener);
 //        mPlaySpeed.setOnClickListener(mOnClickListener);
         mScreenLock.setOnClickListener(mOnClickListener);
+        mLockCenter.setOnClickListener(mOnClickListener);
+        mFloatScreen.setOnClickListener(mOnClickListener);
+        mSnapshot.setOnClickListener(mOnClickListener);
+        mRecord.setOnClickListener(mOnClickListener);
 
         mSeekBar.setOnSeekBarChangeListener(mSeekListener);
         mSeekBar.setThumbOffset(1);
@@ -430,14 +451,13 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
 
     @Override
     public void show(int timeout) {
-        Log.d(TAG, "show timeout " + timeout);
-        if (!mShowing) {
+        Log.d(TAG, "show timeout " + timeout + ", mShowing = " + mShowing);
+        if (!mShowing || mIsLocked) {
             if (mPlayPause != null)
                 mPlayPause.requestFocus();
             if (mIsLocked) {
                 showLock();
             } else {
-                showLock();
                 showOverlay();
             }
             mShowing = true;
@@ -964,9 +984,110 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
                 case R.id.view_player_screen_lock:
                     onScreenLock();
                     break;
+                case R.id.view_player_lock_center:
+                    onScreenLock();
+                    break;
+                case R.id.view_player_float_screen:
+                    onFloatScreen();
+                    break;
+                case R.id.view_player_snapshot:
+                    onSnapshot();
+                    break;
+                case R.id.view_player_record:
+                    onRecord();
+                    break;
             }
         }
     };
+
+    private void onSnapshot() {
+        Bitmap bitmap = Bitmap.createBitmap(mVideoWidth, mVideoHeight, Bitmap.Config.ARGB_8888);
+        if (mVideoView.getCurrentFrame(bitmap)) {
+            String externalStorage = Environment.getExternalStorageDirectory().getPath();
+            Log.d(TAG, "external storage directory : " + externalStorage);
+            File snapshotDirectory = new File(Environment.getExternalStorageDirectory().getPath() + "/snapshot");
+            if (!snapshotDirectory.exists()) {
+                snapshotDirectory.mkdirs();
+            }
+            File savePath = new File(snapshotDirectory.getPath() + "/"
+                    + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg");
+
+            if (!BitmapUtil.saveBitmap(savePath, bitmap)) {
+                Log.e(TAG, "saveBitmap failed : " + savePath.getPath());
+            }
+        }
+    }
+
+    private void onRecord() {
+        View popupView = getLayoutInflater().inflate(R.layout.view_player_popup_record, null);
+        final PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+//        popupView.setBackgroundDrawable(new BitmapDrawable());
+        int[] recordLocation = new int[2];
+        mRecord.getLocationOnScreen(recordLocation);
+        popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        TextView recordGif = (TextView)popupView.findViewById(R.id.view_popup_record_gif);
+        TextView recordVideo = (TextView)popupView.findViewById(R.id.view_popup_record_video);
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                ((TextView)view).setTextColor(getResources().getColor(R.color.colorPrimary));
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        popupWindow.dismiss();
+                        switch (view.getId()) {
+                            case R.id.view_popup_record_gif:
+                                onRecordGif();
+                                break;
+                            case R.id.view_popup_record_video:
+                                onRecordVideo();
+                                break;
+                        }
+                    }
+                }, 200);
+
+            }
+        };
+        recordGif.setOnClickListener(onClickListener);
+        recordVideo.setOnClickListener(onClickListener);
+
+        Log.d(TAG, "recordLocation : " + recordLocation[0] + " , " + recordLocation[1]);
+        Log.d(TAG, "record width : " + mRecord.getWidth() + " , height : " + mRecord.getHeight());
+        Log.d(TAG, "popupView width : " + popupView.getMeasuredWidth() + " , height : " + popupView.getMeasuredHeight());
+
+        popupWindow.showAtLocation(mRecord, Gravity.NO_GRAVITY, recordLocation[0] - popupView.getMeasuredWidth() - getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin), recordLocation[1] + (mRecord.getHeight() - popupView.getMeasuredHeight()) / 2);
+
+//        Context wrapper = new ContextThemeWrapper(this, R.style.CustomPopupTheme);
+//        final PopupMenu mPopupMenu = new PopupMenu(wrapper, mRecord, Gravity.LEFT);
+//        mPopupMenu.inflate(R.menu.menu_record);
+//        mPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                setMenuItemColor(item, getResources().getColor(R.color.colorPrimary));
+//                switch (item.getItemId()) {
+//                    case R.id.mi_record_gif:
+//                        onRecordGif();
+//                        break;
+//                    case R.id.mi_record_video:
+//                        onRecordVideo();
+//                        break;
+//                }
+//                return false;
+//            }
+//        });
+//        mPopupMenu.show();
+
+    }
+
+    private void onRecordGif() {
+        Log.d(TAG, "onRecordGif");
+    }
+
+    private void onRecordVideo() {
+        Log.d(TAG, "onRecordVideo");
+    }
 
     private void onRewind() {
         long pos = mMediaPlayerControl.getCurrentPosition();
@@ -1081,13 +1202,6 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
         }
     }
 
-//    private View.OnClickListener mFloatScreenListener = new View.OnClickListener() {
-//        @Override
-//        public void onClick(View view) {
-//            floatScreen();
-//        }
-//    };
-
     private void updatePlayPause() {
         if (mPlayPause == null)
             return;
@@ -1177,35 +1291,44 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
     }
 
     private void showLock() {
-        mScreenLock.setVisibility(View.VISIBLE);
+//        mScreenLock.setVisibility(View.VISIBLE);
+        Log.d(TAG, "showLock");
+        mLockCenter.setVisibility(View.VISIBLE);
     }
 
     private void hideLock() {
-        mScreenLock.setVisibility(View.INVISIBLE);
+        Log.d(TAG, "hideLock");
+//        mScreenLock.setVisibility(View.INVISIBLE);
+        mLockCenter.setVisibility(View.GONE);
     }
 
     private void lockScreen() {
-        mScreenLock.setImageResource(R.drawable.ic_lock_on);
+        Log.d(TAG, "lockScreen");
+//        mScreenLock.setImageResource(R.drawable.ic_lock_on);
+        mLockCenter.setImageResource(R.drawable.ic_lock_on);
         mIsLocked = true;
         hideOverlay();
         show();
     }
 
     private void unlockScreen() {
-        mScreenLock.setImageResource(R.drawable.ic_lock_open);
-        mScreenLock.setBackgroundResource(R.drawable.overlay_circle);
+        Log.d(TAG, "unlockScreen");
+//        mScreenLock.setImageResource(R.drawable.ic_lock_open);
+        mLockCenter.setImageResource(R.drawable.ic_lock_off);
         mIsLocked = false;
         showOverlay();
         show();
     }
 
-//    private void floatScreen() {
-//        Intent mIntent = new Intent();
-//        mIntent.putExtra("playUrl", mVideoPath);
-//        mIntent.setClass(VideoPlayerActivity.this, PlayBackService.class);
-//        VideoPlayerActivity.this.startService(mIntent);
-//        VideoPlayerActivity.this.finish();
-//    }
+    private void onFloatScreen() {
+        Intent mIntent = new Intent();
+        mIntent.putExtra("playUrl", mVideoPath);
+        mIntent.putExtra("videoWidth", mVideoWidth);
+        mIntent.putExtra("videoHeight", mVideoHeight);
+        mIntent.setClass(VideoPlayerActivity.this, PlayBackService.class);
+        startService(mIntent);
+        finish();
+    }
 
     private void takeSnapshot() {
         FFmpegInvoke.help();
@@ -1262,25 +1385,18 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
     }
 
     private void showOverlay() {
-//        if (mIsLocked) {
-//            mScreenLock.setVisibility(View.VISIBLE);
-////            mTitleView.setVisibility(View.INVISIBLE);
-////            mBottomView.setVisibility(View.INVISIBLE);
-////            mToolsView.setVisibility(View.INVISIBLE);
-//        } else {
-////            mLockCenter.setVisibility(View.INVISIBLE);
-//            mTitleView.setVisibility(View.VISIBLE);
-//            mBottomView.setVisibility(View.VISIBLE);
-//            mToolsView.setVisibility(View.VISIBLE);
-//        }
         mTitleView.setVisibility(View.VISIBLE);
         mBottomView.setVisibility(View.VISIBLE);
+        mSnapshot.setVisibility(View.VISIBLE);
+        mRecord.setVisibility(View.VISIBLE);
         dimStatusBar(false);
     }
 
     private void hideOverlay() {
         mTitleView.setVisibility(View.INVISIBLE);
         mBottomView.setVisibility(View.INVISIBLE);
+        mSnapshot.setVisibility(View.INVISIBLE);
+        mRecord.setVisibility(View.INVISIBLE);
         dimStatusBar(true);
     }
 
