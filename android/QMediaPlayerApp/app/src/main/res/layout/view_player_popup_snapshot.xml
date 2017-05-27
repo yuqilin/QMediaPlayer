@@ -9,6 +9,7 @@
         android:id="@+id/view_popup_snapshot_thumbnail"
         android:layout_width="64dp"
         android:layout_height="64dp"
+        android:padding="8dp"
         android:scaleType="centerCrop"/>
 
     <TextView

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.github.yuqilin.qmediaplayer.QMediaPlayerVideoView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="false">
+
+    </com.github.yuqilin.qmediaplayer.QMediaPlayerVideoView>
+
+    <TextView
+        android:id="@+id/record_video_cancel"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:textSize="16sp"
+        android:text="Cancel"/>
+
+    <TextView
+        android:id="@+id/record_video_save"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_alignParentRight="true"
+        android:gravity="right"
+        android:textSize="16sp"
+        android:text="Save"/>
+
+    <ImageView
+        android:id="@+id/record_video_play"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/icon_play"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:background="@color/bg_transparent_50"
+        >
+
+        <TextView
+            android:id="@+id/record_video_start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:textSize="14sp"
+            android:text="00:01:15"/>
+
+        <TextView
+            android:id="@+id/record_video_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="14sp"
+            android:text="01:03:45"/>
+
+        <TextView
+            android:id="@+id/record_video_end_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textSize="14sp"
+            android:text="01:05:00"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/record_video_snapshots"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:layout_below="@+id/record_video_duration"
+            android:layout_marginTop="2dp"
+            >
+
+        </android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>

@@ -14,6 +14,8 @@ import android.util.Log;
 import com.wenjoyai.videoplayer.util.AndroidUtil;
 import com.wenjoyai.videoplayer.util.BitmapCache;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;

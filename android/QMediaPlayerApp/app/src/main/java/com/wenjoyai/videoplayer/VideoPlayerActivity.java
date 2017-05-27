@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -1118,7 +1120,21 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
             @Override
             public void onClick(final View view) {
                 ((TextView)view).setTextColor(getResources().getColor(R.color.colorPrimary));
-                new Handler().postDelayed(new Runnable() {
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        popupWindow.dismiss();
+//                        switch (view.getId()) {
+//                            case R.id.view_popup_record_gif:
+//                                onRecordGif();
+//                                break;
+//                            case R.id.view_popup_record_video:
+//                                onRecordVideo();
+//                                break;
+//                        }
+//                    }
+//                }, 200);
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         popupWindow.dismiss();
@@ -1131,7 +1147,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
                                 break;
                         }
                     }
-                }, 200);
+                });
 
             }
         };
@@ -1168,10 +1184,53 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
 
     private void onRecordGif() {
         Log.d(TAG, "onRecordGif");
+        mVideoView.pause();
+        updatePlayPause();
+        mPauseByUser = true;
+        Intent intent = new Intent(this, RecordGifActivity.class);
+        intent.putExtra("videoPath", mVideoPath);
+        intent.putExtra("startPos", mMediaPlayerControl.getCurrentPosition());
+        startActivity(intent);
     }
 
     private void onRecordVideo() {
         Log.d(TAG, "onRecordVideo");
+//        mVideoView.pause();
+//        updatePlayPause();
+//        mPauseByUser = true;
+//        Intent intent = new Intent(this, RecordVideoActivity.class);
+//        intent.putExtra("videoPath", mVideoPath);
+//        intent.putExtra("duration", mVideoView.getDuration());
+//        startActivity(intent);
+        File filesDir = getFilesDir();
+        File[] files = filesDir.listFiles();
+        for (File f : files) {
+            Log.d(TAG, "file : " + f.getPath());
+        }
+        File[] filesDirParentFiles = filesDir.getParentFile().listFiles();
+        for (File f : filesDirParentFiles) {
+            Log.d(TAG, "parent dir file : " + f.getPath());
+        }
+
+//        File libDir = new File(filesDir.getParentFile().getPath() + "/lib");
+//        File[] libDirFiles = libDir.listFiles();
+//        for (File f : libDirFiles) {
+//            Log.d(TAG, "lib file : " + f.getPath());
+//        }
+        String[] files1 = this.fileList();
+        for (String f : files1) {
+            Log.d(TAG, "list file : " + f);
+        }
+
+        String libraryPath = getApplicationInfo().dataDir + "/lib";
+        String nativeLibraryPath = getApplicationInfo().nativeLibraryDir;
+        Log.d(TAG, "libraryPath : " + libraryPath + ", nativeLibraryPath : " + nativeLibraryPath);
+        File[] nativeLibs = new File(nativeLibraryPath).listFiles();
+        for (File f : nativeLibs) {
+            Log.d(TAG, "native lib file : " + f.getPath());
+        }
+
+        FFmpegInvoke.help(nativeLibraryPath + "/libffmpeg_android.so");
     }
 
     private void onRewind() {
@@ -1416,7 +1475,6 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
     }
 
     private void takeSnapshot() {
-        FFmpegInvoke.help();
     }
 
     private void takeGif() {

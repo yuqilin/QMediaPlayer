@@ -4,8 +4,6 @@
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
-    <permission android:name = "com.android.permission.RECV_XXX"/>
-
     <application
         android:name=".QApplication"
         android:allowBackup="true"
@@ -41,6 +39,16 @@
             android:screenOrientation="portrait"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar"
+            />
+
+        <activity android:name=".RecordGifActivity"
+            android:theme="@style/AppTheme.Fullscreen"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            />
+
+        <activity android:name=".RecordVideoActivity"
+            android:theme="@style/AppTheme.Fullscreen"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             />
 
         <service

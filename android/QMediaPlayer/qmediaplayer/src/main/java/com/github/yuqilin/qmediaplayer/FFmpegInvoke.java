@@ -9,12 +9,12 @@ public final class FFmpegInvoke {
         System.loadLibrary("ffmpeg_invoke");
     }
 
-    public static void help() {
+    public static void help(String ffmpegPath) {
         FFmpegInvoke ffmpeg = new FFmpegInvoke();
-        ffmpeg.run(new String[]{
+        ffmpeg.run(ffmpegPath, new String[]{
                 "ffmpeg", "-h"
         });
     }
 
-    public native void run(String[] args);
+    public native void run(String ffmpegPath, String[] args);
 }
