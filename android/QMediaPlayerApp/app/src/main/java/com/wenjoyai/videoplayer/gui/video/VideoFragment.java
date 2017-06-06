@@ -189,10 +189,12 @@ public class VideoFragment extends BaseFragment implements IEventsHandler {
         if (!mListMode) {
             int thumbnailWidth = res.getDimensionPixelSize(R.dimen.grid_card_thumb_width);
             mGridView.setColumnWidth(mGridView.getPerfectColumnWidth(thumbnailWidth, res.getDimensionPixelSize(R.dimen.default_margin)));
-            mVideoAdapter.setGridCardWidth(mGridView.getColumnWidth());
+            if (mVideoAdapter != null) {
+                mVideoAdapter.setGridCardWidth(mGridView.getColumnWidth());
+            }
         }
         mGridView.setNumColumns(mListMode ? 1 : 2);
-        if (mVideoAdapter.isListMode() != mListMode) {
+        if (mVideoAdapter != null && mVideoAdapter.isListMode() != mListMode) {
 //            if (listMode)
 //                mGridView.addItemDecoration(mDividerItemDecoration);
 //            else
@@ -217,13 +219,18 @@ public class VideoFragment extends BaseFragment implements IEventsHandler {
     public void toggleMode() {
         Log.d(TAG, "toggleMode");
         mListMode = !mListMode;
-        List<MediaWrapper> videos = mVideoAdapter.getVideos();
+        List<MediaWrapper> videos = null;
+        if (mVideoAdapter != null) {
+            videos = mVideoAdapter.getVideos();
+        }
         mVideoAdapter = new VideoListAdapter(this);
         updateViewMode();
         mGridView.setAdapter(mVideoAdapter);
         mGridView.requestLayout();
         mGridView.invalidate();
-        mVideoAdapter.updateVideos(videos);
+        if (videos != null && videos.size() > 0) {
+            mVideoAdapter.updateVideos(videos);
+        }
     }
 
     public void updateVideos(List<MediaWrapper> videos) {
