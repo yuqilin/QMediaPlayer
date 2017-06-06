@@ -337,6 +337,12 @@ public class QMediaPlayerVideoView extends FrameLayout implements IMediaControll
         }
     }
 
+    public void setLooping(boolean looping) {
+        if (mMediaPlayer != null) {
+            mMediaPlayer.setLooping(looping);
+        }
+    }
+
     public void setMediaController(IMediaController controller) {
         if (mMediaController != null) {
             mMediaController.hide();
@@ -1219,4 +1225,12 @@ public class QMediaPlayerVideoView extends FrameLayout implements IMediaControll
 //    public void setOnInfoListener(IMediaPlayer.OnInfoListener listener) {
 //
 //    }
+
+    public int getVideoWidth() {
+        return mVideoWidth;
+    }
+
+    public int getVideoHeight() {
+        return mVideoHeight;
+    }
 }

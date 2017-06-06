@@ -1,5 +1,7 @@
 package com.wenjoyai.videoplayer;
 
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,7 +15,10 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.github.yuqilin.qmediaplayer.FFmpegAndroid;
 import com.github.yuqilin.qmediaplayer.QMediaPlayerVideoView;
+import com.wenjoyai.videoplayer.util.FileUtils;
+import com.wenjoyai.videoplayer.util.ShareUtils;
 import com.wenjoyai.videoplayer.util.Strings;
 
 import java.io.File;
@@ -28,16 +33,21 @@ public class RecordGifActivity extends AppCompatActivity {
     private static final String TAG = "RecordGifActivity";
 
     private QMediaPlayerVideoView mVideoView;
+    private QMediaPlayerVideoView mGifView;
 
     private SeekBar mSeekbarLeft;
     private SeekBar mSeekbarRight;
     private ImageView mRecordStop;
     private TextView mCancel;
 
+    private ImageView mShareButton;
+
     private TextView mCurrentPlayPos;
+    private TextView mRecordTips;
 
     private static final int UPDATE_PROGRESS = 1;
     private static final int RECORD_STOP = 2;
+    private static final int GIF_GOT = 3;
 
     private static final int DEFAULT_FPS = 5;
     private static final int DEFAULT_SCALE_WIDTH = -2;
@@ -51,9 +61,17 @@ public class RecordGifActivity extends AppCompatActivity {
     private int mMinProgress = 3;
     private int mMaxProgress = 10;
 
+    private String mGifFile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        boolean landscape = getIntent().getBooleanExtra("landscape", false);
+        if (landscape) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+
         setContentView(R.layout.activity_record_gif);
         mVideoPath = getIntent().getStringExtra("videoPath");
         mStartPlayPos = getIntent().getLongExtra("startPos", 0);
@@ -64,7 +82,11 @@ public class RecordGifActivity extends AppCompatActivity {
         mRecordStop = (ImageView) findViewById(R.id.record_gif_stop);
         mCancel = (TextView) findViewById(R.id.record_gif_cancel);
 
+        mGifView = (QMediaPlayerVideoView) findViewById(R.id.record_gif_player_gif_view);
+        mShareButton = (ImageView) findViewById(R.id.record_gif_share);
+
         mCurrentPlayPos = (TextView) findViewById(R.id.record_gif_current_play_pos);
+        mRecordTips = (TextView) findViewById(R.id.record_gif_tips_text);
 
         mSeekbarLeft.setMax(mMaxProgress);
         mSeekbarRight.setMax(mMaxProgress);
@@ -83,12 +105,27 @@ public class RecordGifActivity extends AppCompatActivity {
                 finish();
             }
         });
+        mShareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (new File(mGifFile).exists()) {
+                    ShareUtils.shareFile(RecordGifActivity.this, Uri.parse(mGifFile));
+                }
+            }
+        });
 
         mVideoView.setVideoPath(mVideoPath);
         mVideoView.seekTo(mStartPlayPos);
         mVideoView.start();
 //        mCurrentPlayPos.setText(Strings.millisToString(mVideoView.getCurrentPosition()));
         mHandler.sendEmptyMessageDelayed(UPDATE_PROGRESS, 1000);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        // TODO Auto-generated method stub
+        super.onConfigurationChanged(newConfig);
+        Log.d(TAG, "onConfigurationChanged newConfig.orientation : " + newConfig.orientation);
     }
 
     @Override
@@ -111,9 +148,10 @@ public class RecordGifActivity extends AppCompatActivity {
 //                    break;
                 case UPDATE_PROGRESS:
                     mCurrentProgress++;
-                    mSeekbarLeft.setProgress(mCurrentProgress);
-                    mSeekbarRight.setProgress(mCurrentProgress);
                     if (mCurrentProgress <= mMaxProgress) {
+                        mRecordTips.setText(String.format(getString(R.string.record_gif_tips), mCurrentProgress));
+                        mSeekbarLeft.setProgress(mCurrentProgress);
+                        mSeekbarRight.setProgress(mCurrentProgress);
                         mHandler.sendEmptyMessageDelayed(UPDATE_PROGRESS, 1000);
                     } else {
                         mHandler.sendEmptyMessage(RECORD_STOP);
@@ -122,7 +160,19 @@ public class RecordGifActivity extends AppCompatActivity {
                     break;
                 case RECORD_STOP:
                     mVideoView.stopPlayback();
+                    mGifView.setVisibility(View.VISIBLE);
+                    mShareButton.setVisibility(View.VISIBLE);
+                    mRecordStop.setVisibility(View.GONE);
+                    mCancel.setVisibility(View.GONE);
+                    mSeekbarLeft.setVisibility(View.GONE);
+                    mSeekbarRight.setVisibility(View.GONE);
                     doRecordGif();
+                    break;
+                case GIF_GOT:
+                    mGifFile = (String) message.obj;
+                    mGifView.setVideoPath(mGifFile);
+                    mGifView.setLooping(true);
+                    mGifView.start();
                     break;
             }
             return true;
@@ -137,22 +187,35 @@ public class RecordGifActivity extends AppCompatActivity {
                 return;
             }
         }
-        String gifFile = QApplication.getGifStoragePath() + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".gif";
-        convertGif(mStartPlayPos / 1000, mCurrentProgress, mVideoPath, DEFAULT_FPS, DEFAULT_SCALE_WIDTH, DEFAULT_SCALE_HEIGHT, gifFile);
 
-        // notify system image library
-        MediaScannerConnection.scanFile(this, new String[]{ gifFile }, null, new MediaScannerConnection.OnScanCompletedListener() {
+        QApplication.runBackground(new Runnable() {
             @Override
-            public void onScanCompleted(String s, Uri uri) {
-                Log.d(TAG, "onScanCompleted, s : " + s + ", uri : " + uri);
+            public void run() {
+                String gifFile = QApplication.getGifStoragePath() + "/" + FileUtils.getFileBaseNameFromPath(mVideoPath) + "_" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".gif";
+                int scaleWidth = DEFAULT_SCALE_WIDTH;
+                int scaleHeight = DEFAULT_SCALE_HEIGHT;
+                if (mVideoView.getVideoHeight() > 0 && mVideoView.getVideoHeight() < scaleHeight) {
+                    scaleHeight = mVideoView.getVideoHeight();
+                }
+                convertGif(mStartPlayPos / 1000, mCurrentProgress, mVideoPath, DEFAULT_FPS, scaleWidth, scaleHeight, gifFile);
+                // notify system image library
+                MediaScannerConnection.scanFile(RecordGifActivity.this, new String[]{ gifFile }, null, new MediaScannerConnection.OnScanCompletedListener() {
+                    @Override
+                    public void onScanCompleted(String s, Uri uri) {
+                        Log.d(TAG, "onScanCompleted, s : " + s + ", uri : " + uri);
+                    }
+                });
+                mHandler.sendMessage(Message.obtain(mHandler, GIF_GOT, gifFile));
             }
         });
+
+
     }
 
     private void convertGif(long startTime, long duration, String videoPath, int fps, int scaleWidth, int scaleHeight, String output) {
         String command = "ffmpeg -ss " + startTime + " -t " + duration + " -i " + videoPath + " -f gif -vf fps=" + fps + ",scale=" + scaleWidth + ":" + scaleHeight + ":flags=lanczos -y " + output;
         Log.d(TAG, "convertGif run command : " + command);
-//        new FFmpegAndroid().run(command.split(" "));
+        new FFmpegAndroid().run(command.split(" "));
     }
 
 

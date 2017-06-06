@@ -45,6 +45,17 @@ public class FileUtils {
             return path;
     }
 
+    public static String getFileBaseNameFromPath(String path) {
+        String fileName = getFileNameFromPath(path);
+        if (!TextUtils.isEmpty(fileName)) {
+            int index = fileName.lastIndexOf('.');
+            if (index > -1) {
+                return fileName.substring(0, index);
+            }
+        }
+        return fileName;
+    }
+
     public static String getParent(String path){
         if (TextUtils.equals("/", path))
             return path;

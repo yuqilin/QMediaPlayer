@@ -17,8 +17,8 @@ android {
         applicationId "com.wenjoyai.videoplayer"
         minSdkVersion 9
         targetSdkVersion 22
-        versionCode 101
-        versionName "1.0.1"
+        versionCode 102
+        versionName "1.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters "armeabi-v7a", "arm64-v8a"
@@ -38,6 +38,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
     }
     productFlavors {
     }
@@ -69,5 +73,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.0.0'
     compile 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     compile project(path: ':qmediaplayer')
+    compile project(path: ':k4l-video-trimmer')
     testCompile 'junit:junit:4.12'
 }

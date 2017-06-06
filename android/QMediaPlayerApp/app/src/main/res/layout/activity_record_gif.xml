@@ -10,6 +10,25 @@
         android:fitsSystemWindows="false">
 
     </com.github.yuqilin.qmediaplayer.QMediaPlayerVideoView>
+
+    <com.github.yuqilin.qmediaplayer.QMediaPlayerVideoView
+        android:id="@+id/record_gif_player_gif_view"
+        android:layout_width="400dp"
+        android:layout_height="300dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone">
+
+    </com.github.yuqilin.qmediaplayer.QMediaPlayerVideoView>
+
+    <ImageView
+        android:id="@+id/record_gif_share"
+        android:layout_below="@id/record_gif_player_gif_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/button"
+        android:visibility="gone"/>
     
     <TextView
         android:id="@+id/record_gif_cancel"
@@ -26,7 +45,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/record_gif_stop"
@@ -67,6 +87,15 @@
             android:paddingEnd="0dp"
             android:progressDrawable="@drawable/po_seekbar"/>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/record_gif_tips_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:textSize="16sp"
+        android:text="@string/record_gif_tips"/>
 
 
 </RelativeLayout>

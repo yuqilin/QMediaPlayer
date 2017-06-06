@@ -6,9 +6,10 @@ IJK_LOCAL_REPO=$CURRENT_PATH/ijkplayer
 set -e
 
 
-ARCHS="armeabi armv7a arm64"
+ARCHS="armv5 armv7a arm64"
 
 cd $IJK_LOCAL_REPO/android
+#./compile-ijk.sh clean
 for ARCH in $ARCHS; do
     ./compile-ijk.sh $ARCH
 done

@@ -21,3 +21,7 @@
 -keep public class tv.danmaku.ijk.media.player.** {*;}
 -keep public interface tv.danmaku.ijk.media.player.** {*;}
 #-keep public class com.github.yuqilin.qmediaplayer.** {*;}
+-dontwarn com.googlecode.mp4parser.**
+-keep public class com.coremedia.iso.** {*;}
+-keep public class com.mp4parser.** {*;}
+-keep public class com.googlecode.mp4parser.** {*;}

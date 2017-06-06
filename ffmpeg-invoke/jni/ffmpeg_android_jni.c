@@ -40,7 +40,9 @@ JNIEXPORT void JNICALL FFmpeg_run(JNIEnv *env, jobject obj, jobjectArray args) {
         argv[i] = (char *)(*env)->GetStringUTFChars(env, strObjs[i], NULL);
     }
 
-    av_log_set_level(AV_LOG_DEBUG);
+    int level = av_log_get_level();
+    LOG("av_log_get_level : %d", level);
+    av_log_set_level(AV_LOG_INFO);
     av_log_set_callback(ffp_log_callback_brief);
 
     for (i = 0; i < argc; i++) {

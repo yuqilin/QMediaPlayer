@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -43,8 +41,9 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.github.yuqilin.qmediaplayer.FFmpegInvoke;
+import com.github.yuqilin.qmediaplayer.FFmpegAndroid;
 import com.github.yuqilin.qmediaplayer.IMediaController;
 import com.github.yuqilin.qmediaplayer.IMediaPlayer;
 import com.github.yuqilin.qmediaplayer.IRenderView;
@@ -52,7 +51,9 @@ import com.github.yuqilin.qmediaplayer.QMediaPlayerVideoView;
 import com.wenjoyai.videoplayer.util.AndroidDevices;
 import com.wenjoyai.videoplayer.util.AndroidUtil;
 import com.wenjoyai.videoplayer.util.BitmapUtil;
+import com.wenjoyai.videoplayer.util.FileUtils;
 import com.wenjoyai.videoplayer.util.Permissions;
+import com.wenjoyai.videoplayer.util.ShareUtils;
 import com.wenjoyai.videoplayer.util.Tools;
 import com.wenjoyai.videoplayer.util.Util;
 
@@ -271,6 +272,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
     @Override
     public void onConfigurationChanged(Configuration configuration) {
         super.onConfigurationChanged(configuration);
+
+        Log.d(TAG, "onConfigurationChanged configuration.orientation : " + configuration.orientation);
 
         if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
 //            Toast.makeText(MainActivity.this, "竖屏模式", 3000).show();
@@ -1064,8 +1067,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
                 return;
             }
         }
-        File snapshotFile = new File(snapshotDirectory.getAbsolutePath() + "/"
-                + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg");
+        final File snapshotFile = new File(snapshotDirectory.getAbsolutePath() + "/"
+                + FileUtils.getFileBaseNameFromPath(mVideoPath) + "_" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg");
         Log.d(TAG, "onSnapshot snapshotFile : " + snapshotFile);
         if (!BitmapUtil.saveBitmap(snapshotFile, bitmap)) {
             Log.e(TAG, "saveBitmap failed : " + snapshotFile.getAbsolutePath());
@@ -1090,6 +1093,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
             public void onClick(View view) {
                 Log.d(TAG, "popup snapshot clicked");
                 popupWindow.dismiss();
+                ShareUtils.shareFile(VideoPlayerActivity.this, Uri.parse(snapshotFile.getAbsolutePath()));
             }
         });
 
@@ -1188,6 +1192,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
         updatePlayPause();
         mPauseByUser = true;
         Intent intent = new Intent(this, RecordGifActivity.class);
+        intent.putExtra("landscape", getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         intent.putExtra("videoPath", mVideoPath);
         intent.putExtra("startPos", mMediaPlayerControl.getCurrentPosition());
         startActivity(intent);
@@ -1195,42 +1200,22 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
 
     private void onRecordVideo() {
         Log.d(TAG, "onRecordVideo");
-//        mVideoView.pause();
-//        updatePlayPause();
-//        mPauseByUser = true;
+        mVideoView.pause();
+        updatePlayPause();
+        mPauseByUser = true;
 //        Intent intent = new Intent(this, RecordVideoActivity.class);
+//        intent.putExtra("landscape", getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 //        intent.putExtra("videoPath", mVideoPath);
 //        intent.putExtra("duration", mVideoView.getDuration());
 //        startActivity(intent);
-        File filesDir = getFilesDir();
-        File[] files = filesDir.listFiles();
-        for (File f : files) {
-            Log.d(TAG, "file : " + f.getPath());
-        }
-        File[] filesDirParentFiles = filesDir.getParentFile().listFiles();
-        for (File f : filesDirParentFiles) {
-            Log.d(TAG, "parent dir file : " + f.getPath());
-        }
+        startTrimActivity(mVideoPath, mVideoView.getDuration());
+    }
 
-//        File libDir = new File(filesDir.getParentFile().getPath() + "/lib");
-//        File[] libDirFiles = libDir.listFiles();
-//        for (File f : libDirFiles) {
-//            Log.d(TAG, "lib file : " + f.getPath());
-//        }
-        String[] files1 = this.fileList();
-        for (String f : files1) {
-            Log.d(TAG, "list file : " + f);
-        }
-
-        String libraryPath = getApplicationInfo().dataDir + "/lib";
-        String nativeLibraryPath = getApplicationInfo().nativeLibraryDir;
-        Log.d(TAG, "libraryPath : " + libraryPath + ", nativeLibraryPath : " + nativeLibraryPath);
-        File[] nativeLibs = new File(nativeLibraryPath).listFiles();
-        for (File f : nativeLibs) {
-            Log.d(TAG, "native lib file : " + f.getPath());
-        }
-
-        FFmpegInvoke.help(nativeLibraryPath + "/libffmpeg_android.so");
+    private void startTrimActivity(String videoPath, long duration) {
+        Intent intent = new Intent(this, TrimmerActivity.class);
+        intent.putExtra("videoPath", videoPath);
+        intent.putExtra("duration", duration);
+        startActivityForResult(intent, 1);
     }
 
     private void onRewind() {
@@ -1465,6 +1450,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
     }
 
     private void onFloatScreen() {
+        requestDrawOverLays();
+
         Intent mIntent = new Intent();
         mIntent.putExtra("playUrl", mVideoPath);
         mIntent.putExtra("videoWidth", mVideoWidth);
@@ -1567,6 +1554,34 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
         mOverlay.setVisibility(View.VISIBLE);
         mHandler.removeMessages(FADE_OUT_OVERLAY);
         mHandler.sendEmptyMessageDelayed(FADE_OUT_OVERLAY, 1000);
+    }
+
+    //参考自http://stackoverflow.com/questions/32061934/permission-from-manifest-doesnt-work-in-android-6
+    public static int OVERLAY_PERMISSION_REQ_CODE = 1234;
+
+    @TargetApi(Build.VERSION_CODES.M)
+    public void requestDrawOverLays() {
+        if (!Settings.canDrawOverlays(VideoPlayerActivity.this)) {
+            Toast.makeText(this, "Need permission to Play Video Overlay", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+            startActivityForResult(intent, OVERLAY_PERMISSION_REQ_CODE);
+        } else {
+            // Already hold the SYSTEM_ALERT_WINDOW permission, do addview or something.
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == OVERLAY_PERMISSION_REQ_CODE) {
+            if (!Settings.canDrawOverlays(this)) {
+                // SYSTEM_ALERT_WINDOW permission not granted...
+                Toast.makeText(this, "Permission Denied by user.Please Check it in Settings", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Permission Allowed", Toast.LENGTH_SHORT).show();
+                // Already hold the SYSTEM_ALERT_WINDOW permission, do addview or something.
+            }
+        }
     }
 
 }

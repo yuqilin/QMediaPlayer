@@ -3,6 +3,8 @@ package com.wenjoyai.videoplayer;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.github.yuqilin.qmediaplayer.FFmpegAndroid;
 import com.wenjoyai.videoplayer.util.AsyncImageLoader;
 import com.wenjoyai.videoplayer.util.FileUtils;
 
@@ -29,6 +32,7 @@ public class RecordVideoActivity extends AppCompatActivity {
     private RecyclerView mSnapshotView;
     private long mDuration;
     private SnapshotAdapter mSnapshotAdapter;
+    private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,8 @@ public class RecordVideoActivity extends AppCompatActivity {
         mSnapshotAdapter = new SnapshotAdapter();
         mSnapshotView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mSnapshotView.setAdapter(mSnapshotAdapter);
+
+        mHandler = new Handler();
     }
 
     @Override
@@ -63,29 +69,47 @@ public class RecordVideoActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(ViewHolder holder, final int position) {
             holder.mSnapshot.setImageBitmap(AsyncImageLoader.DEFAULT_COVER_VIDEO);
-            AsyncImageLoader.LoadImage(new AsyncImageLoader.Callbacks() {
-                @Override
-                public Bitmap getImage(int kind) {
-                    String baseName = FileUtils.getFileNameFromPath(mVideoPath).substring(0, FileUtils.getFileNameFromPath(mVideoPath).lastIndexOf('.'));
-                    File cacheDir = new File(getApplicationContext().getExternalCacheDir() + "/snapshot/");
-                    if (!cacheDir.exists()) {
-                        cacheDir.mkdirs();
-                    }
-                    String cache = getApplicationContext().getExternalCacheDir() + "/snapshot/" + baseName + "_" + String.format("%03d", position) + ".bmp";
-                    ffmpegExtractFrame(mVideoPath, position * 2, cache);
-                    Bitmap bitmap = BitmapFactory.decodeFile(cache);
-                    return bitmap;
-                }
 
-                @Override
-                public void updateImage(Bitmap bitmap, View target, int kind) {
+            String baseName = FileUtils.getFileBaseNameFromPath(mVideoPath);
+            File cacheDir = new File(getApplicationContext().getExternalCacheDir() + "/snapshot/");
+            if (!cacheDir.exists()) {
+                cacheDir.mkdirs();
+            }
+            String cache = getApplicationContext().getExternalCacheDir() + "/snapshot/" + baseName + "_" + String.format("%03d", position) + ".bmp";
+            if (!new File(cache).exists()) {
+                ffmpegExtractFrame(mVideoPath, position * 2, cache);
+            }
+            Bitmap bitmap = BitmapFactory.decodeFile(cache);
+            holder.mSnapshot.setImageBitmap(bitmap);
 
-                    if (target instanceof ImageView) {
-                        ((ImageView) target).setImageBitmap(bitmap);
-                    }
-
-                }
-            }, holder.mSnapshot, 0);
+//            AsyncImageLoader.LoadImage(new AsyncImageLoader.Callbacks() {
+//                @Override
+//                public Bitmap getImage(int kind) {
+//                    String baseName = FileUtils.getFileNameFromPath(mVideoPath).substring(0, FileUtils.getFileNameFromPath(mVideoPath).lastIndexOf('.'));
+//                    File cacheDir = new File(getApplicationContext().getExternalCacheDir() + "/snapshot/");
+//                    if (!cacheDir.exists()) {
+//                        cacheDir.mkdirs();
+//                    }
+//                    String cache = getApplicationContext().getExternalCacheDir() + "/snapshot/" + baseName + "_" + String.format("%03d", position) + ".bmp";
+//                    ffmpegExtractFrame(mVideoPath, position * 2, cache);
+//                    Bitmap bitmap = BitmapFactory.decodeFile(cache);
+//                    return bitmap;
+//                }
+//
+//                @Override
+//                public void updateImage(final Bitmap bitmap, final View target, int kind) {
+//
+//                    mHandler.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (target instanceof ImageView) {
+//                                ((ImageView) target).setImageBitmap(bitmap);
+//                            }
+//
+//                        }
+//                    });
+//                }
+//            }, holder.mSnapshot, 0);
         }
 
         @Override
@@ -104,8 +128,9 @@ public class RecordVideoActivity extends AppCompatActivity {
 
         private boolean ffmpegExtractFrame(String videoPath, long startTime, String output) {
             String command = "ffmpeg -ss " + startTime + " -i " + videoPath + " -vframes 1 -y " + output;
+//            String command = "ffmpeg -ss " + startTime + " -i " + videoPath + " -vf fps=1 -y thumb%04d.jpg";// + output;
             Log.d(TAG, "ffmpegExtractFrame command : " + command);
-//            new FFmpegAndroid().run(command.split(" "));
+            new FFmpegAndroid().run(command.split(" "));
             return true;
         }
     }

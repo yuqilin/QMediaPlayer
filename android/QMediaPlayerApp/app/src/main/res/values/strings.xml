@@ -33,4 +33,7 @@
     <string name="record_gif">GIF</string>
     <string name="record_video">Crop Video</string>
     <string name="snapshot_share">Share</string>
+    <string name="record_gif_tips">Record %d seconds to share</string>
+    <string name="trimming_progress">Trimming your video...</string>
+    <string name="video_saved_at">Video Saved at : </string>
 </resources>

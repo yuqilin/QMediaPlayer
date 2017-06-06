@@ -982,6 +982,7 @@ int configure_filtergraph(FilterGraph *fg)
     int ret, i, simple = filtergraph_is_simple(fg);
     const char *graph_desc = simple ? fg->outputs[0]->ost->avfilter :
                                       fg->graph_desc;
+    av_log(NULL, AV_LOG_INFO, "simple = %d, graph_desc = %p(%s)", simple, graph_desc, graph_desc);
 
     avfilter_graph_free(&fg->graph);
     if (!(fg->graph = avfilter_graph_alloc()))
@@ -1023,6 +1024,9 @@ int configure_filtergraph(FilterGraph *fg)
         if (e)
             av_opt_set(fg->graph, "threads", e->value, 0);
     }
+
+    av_log(NULL, AV_LOG_INFO, "configure_filtergraph, fg->graph = %p, graph_desc = %p", fg->graph, graph_desc);
+    av_log(NULL, AV_LOG_INFO, "configure_filtergraph, fg->graph = %p, graph_desc = %s", fg->graph, graph_desc);
 
     if ((ret = avfilter_graph_parse2(fg->graph, graph_desc, &inputs, &outputs)) < 0)
         return ret;

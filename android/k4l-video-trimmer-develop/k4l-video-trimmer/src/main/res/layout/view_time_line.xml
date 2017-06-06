@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+
+    <RelativeLayout
+        android:id="@+id/layout_surface_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:orientation="vertical">
+
+        <VideoView
+            android:id="@+id/video_loader"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
+
+        <ImageView
+            android:id="@+id/icon_video_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/play_button"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/btCancel"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="Cacel"/>
+
+    <TextView
+        android:id="@+id/btSave"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="Save"/>
+
+    <RelativeLayout
+        android:id="@+id/layout"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background_video_color">
+
+        <SeekBar
+            android:id="@+id/handlerTop"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:max="1000"
+            android:progressDrawable="@android:color/transparent"
+            android:secondaryProgress="0"
+            android:thumb="@drawable/apptheme_text_select_handle_middle"/>
+
+        <life.knowledge4.videotrimmer.view.ProgressBarView
+            android:id="@+id/timeVideoView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/handlerTop"/>
+
+        <life.knowledge4.videotrimmer.view.TimeLineView
+            android:id="@+id/timeLineView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/timeVideoView"/>
+
+        <life.knowledge4.videotrimmer.view.RangeSeekBarView
+            android:id="@+id/timeLineBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/timeLineView"/>
+
+        <View
+            android:id="@+id/lineTop"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/timeLineBar"
+            android:background="@color/line_button"/>
+
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/spinner_view"-->
+            <!--android:layout_below="@+id/lineTop"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/view_format"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="FORMAT"-->
+                <!--android:layout_alignParentLeft="true"-->
+                <!--android:layout_marginTop="2dp"-->
+                <!--android:layout_marginLeft="8dp"-->
+                <!--android:textSize="16dp"-->
+                <!--android:textColor="@android:color/white"/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/view_bits"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="2dp"-->
+                <!--android:layout_marginRight="8dp"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:text="BITS"-->
+                <!--android:layout_marginLeft="8dp"-->
+                <!--android:textSize="16dp"-->
+                <!--android:textColor="@android:color/white"/>-->
+
+            <!--<Spinner-->
+                <!--android:id="@+id/view_choose_format"-->
+                <!--android:layout_width="140dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:layout_alignParentLeft="true"-->
+                <!--android:layout_below="@id/view_format"-->
+                <!--android:layout_marginBottom="8dp"-->
+                <!--android:layout_marginLeft="8dp"-->
+                <!--android:layout_marginTop="8dp"-->
+                <!--android:background="@android:color/white"-->
+                <!--android:popupBackground="@android:color/background_light" />-->
+
+            <!--<Spinner-->
+                <!--android:id="@+id/view_choose_bit"-->
+                <!--android:layout_width="140dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_below="@id/view_bits"-->
+                <!--android:layout_marginBottom="8dp"-->
+                <!--android:layout_marginRight="8dp"-->
+                <!--android:layout_marginTop="8dp"-->
+                <!--android:background="@android:color/white"-->
+                <!--android:popupBackground="@android:color/background_light" />-->
+
+        <!--</RelativeLayout>-->
+
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@+id/spinner_view"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<Button-->
+                <!--android:id="@+id/btCancel"-->
+                <!--android:layout_alignParentLeft="true"-->
+                <!--android:layout_width="140dp"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:layout_marginTop="8dp"-->
+                <!--android:layout_marginLeft="8dp"-->
+                <!--android:background="@color/orange500transparent"-->
+                <!--android:text="@string/cancel"-->
+                <!--android:textColor="@android:color/white"/>-->
+
+            <!--<View-->
+                <!--android:layout_width="1dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginBottom="5dp"-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:background="@color/line_button"/>-->
+
+            <!--<Button-->
+                <!--android:id="@+id/btConvert"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_marginTop="8dp"-->
+                <!--android:layout_marginRight="8dp"-->
+                <!--android:layout_width="140dp"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:background="@color/orange500transparent"-->
+                <!--android:text="@string/convert"-->
+                <!--android:textColor="@android:color/white"/>-->
+
+        <!--</RelativeLayout>-->
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/timeText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/layout"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/textSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textColor="@android:color/white"/>
+
+        <TextView
+            android:id="@+id/textTimeSelection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/textSize"
+            android:layout_toLeftOf="@+id/textTime"
+            android:layout_toRightOf="@+id/textSize"
+            android:layout_toStartOf="@+id/textTime"
+            android:gravity="center"
+            android:textColor="@android:color/white"/>
+
+        <TextView
+            android:id="@+id/textTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:textColor="@android:color/white"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

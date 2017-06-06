@@ -463,6 +463,8 @@ static void ffmpeg_cleanup(int ret)
 {
     int i, j;
 
+    av_log(NULL, AV_LOG_INFO, "ffmpeg_cleanup ret = %d", ret);
+
     if (do_benchmark) {
         int maxrss = getmaxrss() / 1024;
         av_log(NULL, AV_LOG_INFO, "bench: maxrss=%ikB\n", maxrss);
@@ -592,8 +594,13 @@ static void ffmpeg_cleanup(int ret)
     } else if (ret && transcode_init_done) {
         av_log(NULL, AV_LOG_INFO, "Conversion failed!\n");
     }
-    term_exit();
+//    term_exit();
     ffmpeg_exited = 1;
+    nb_filtergraphs = 0;
+    nb_input_streams = 0;
+    nb_input_files = 0;
+    nb_output_streams = 0;
+    nb_output_files = 0;
 }
 
 void remove_avoptions(AVDictionary **a, AVDictionary *b)
@@ -4411,7 +4418,8 @@ static int transcode(void)
     }
     flush_encoders();
 
-    term_exit();
+//    term_exit();
+    return -1;
 
     /* write the trailer if needed and close file */
     for (i = 0; i < nb_output_files; i++) {
@@ -4539,7 +4547,7 @@ int main(int argc, char **argv)
 
     init_dynload();
 
-    register_exit(ffmpeg_cleanup);
+    // register_exit(ffmpeg_cleanup);
 
     setvbuf(stderr,NULL,_IONBF,0); /* win32 runtime needs this */
 
@@ -4570,21 +4578,24 @@ int main(int argc, char **argv)
     }
 
     if (g_should_exit) {
-        return g_exit_code;
+        // return g_exit_code;
+        goto EXIT_LABEL;
     }
 
     if (nb_output_files <= 0 && nb_input_files == 0) {
         show_usage();
         av_log(NULL, AV_LOG_WARNING, "Use -h to get full help or, even better, run 'man %s'\n", program_name);
 //        exit_program(1);
-        return g_exit_code;
+        // return g_exit_code;
+        goto EXIT_LABEL;
     }
 
     /* file converter / grab */
     if (nb_output_files <= 0) {
         av_log(NULL, AV_LOG_FATAL, "At least one output file must be specified\n");
 //        exit_program(1);
-        return g_exit_code;
+        // return g_exit_code;
+        goto EXIT_LABEL;
     }
 
 //     if (nb_input_files == 0) {
@@ -4600,7 +4611,7 @@ int main(int argc, char **argv)
     current_time = ti = getutime();
     if (transcode() < 0) {
 //        exit_program(1);
-        return g_exit_code;
+        goto EXIT_LABEL;
     }
     ti = getutime() - ti;
     if (do_benchmark) {
@@ -4610,9 +4621,12 @@ int main(int argc, char **argv)
            decode_error_stat[0], decode_error_stat[1]);
     if ((decode_error_stat[0] + decode_error_stat[1]) * max_error_rate < decode_error_stat[1]) {
 //        exit_program(69);
-        return g_exit_code;
+        // return g_exit_code;
+        goto EXIT_LABEL;
     }
 
 //    exit_program(received_nb_signals ? 255 : main_return_code);
-    return main_return_code;
+EXIT_LABEL:
+    ffmpeg_cleanup(g_exit_code);
+    return g_exit_code;
 }

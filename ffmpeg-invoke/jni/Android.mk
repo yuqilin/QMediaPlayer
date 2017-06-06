@@ -31,12 +31,12 @@ FFMPEG_SRC_PATH := $(LOCAL_PATH)/../../ijkplayer/extra/ffmpeg
 
 # FFMPEG_LIBS := \
 # 	$(addprefix $(FFMPEG_LIB_PATH)/, \
+# 	libavformat.a \
 # 	libavcodec.a \
 # 	libavfilter.a \
-# 	libavformat.a \
+# 	libswscale.a \
 # 	libavutil.a \
-# 	libswresample.a \
-# 	libswscale.a )
+# 	libswresample.a )
 
 $(warning FFMPEG_LIBS=$(FFMPEG_LIBS))
 
@@ -49,60 +49,67 @@ LOCAL_SRC_FILES := \
 	$(FFMPEG_SRC_PATH)/ffmpeg_filter.c \
 	$(FFMPEG_SRC_PATH)/ffmpeg_opt.c
 
-LOCAL_MODULE    := ffmpeg_android
+LOCAL_MODULE    := ffmpeg-android
 
 # other arm ABI LOCAL_ARM_MODE := thumb
 # ifeq ($(TARGET_ARCH_ABI),armeabi)
 LOCAL_ARM_MODE  := arm
 # endif
 
-LOCAL_CFLAGS 	:= -std=c99 -g
+LOCAL_CFLAGS 	:= -std=c99 -g -O0
 LOCAL_LDLIBS 	:= -llog -lz
 
 LOCAL_C_INCLUDES := \
 	$(FFMPEG_INCLUDE_PATH)
 
-LOCAL_STATIC_LIBRARIES := libavfilter libavformat libavcodec libswscale libavutil libswresample 
+# LOCAL_STATIC_LIBRARIES := libavfilter libavformat libavcodec libswscale libavutil libswresample 
+
+LOCAL_SHARED_LIBRARIES := ijkffmpeg
 
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := libavcodec
-LOCAL_SRC_FILES := $(FFMPEG_LIB_PATH)/libavcodec.a
-include $(PREBUILT_STATIC_LIBRARY)
+LOCAL_MODULE := ijkffmpeg
+LOCAL_SRC_FILES := $(FFMPEG_SO_PATH)/libijkffmpeg.so
+include $(PREBUILT_SHARED_LIBRARY)
 
-include $(CLEAR_VARS)
-LOCAL_MODULE := libavfilter
-LOCAL_SRC_FILES := $(FFMPEG_LIB_PATH)/libavfilter.a
-include $(PREBUILT_STATIC_LIBRARY)
+# include $(CLEAR_VARS)
+# LOCAL_MODULE := libavcodec
+# LOCAL_SRC_FILES := $(FFMPEG_LIB_PATH)/libavcodec.a
+# include $(PREBUILT_STATIC_LIBRARY)
 
-include $(CLEAR_VARS)
-LOCAL_MODULE := libavformat
-LOCAL_SRC_FILES := $(FFMPEG_LIB_PATH)/libavformat.a
-include $(PREBUILT_STATIC_LIBRARY)
+# include $(CLEAR_VARS)
+# LOCAL_MODULE := libavfilter
+# LOCAL_SRC_FILES := $(FFMPEG_LIB_PATH)/libavfilter.a
+# include $(PREBUILT_STATIC_LIBRARY)
 
-include $(CLEAR_VARS)
-LOCAL_MODULE := libavutil
-LOCAL_SRC_FILES := $(FFMPEG_LIB_PATH)/libavutil.a
-include $(PREBUILT_STATIC_LIBRARY)
+# include $(CLEAR_VARS)
+# LOCAL_MODULE := libavformat
+# LOCAL_SRC_FILES := $(FFMPEG_LIB_PATH)/libavformat.a
+# include $(PREBUILT_STATIC_LIBRARY)
 
-include $(CLEAR_VARS)
-LOCAL_MODULE := libswresample
-LOCAL_SRC_FILES := $(FFMPEG_LIB_PATH)/libswresample.a
-include $(PREBUILT_STATIC_LIBRARY)
+# include $(CLEAR_VARS)
+# LOCAL_MODULE := libavutil
+# LOCAL_SRC_FILES := $(FFMPEG_LIB_PATH)/libavutil.a
+# include $(PREBUILT_STATIC_LIBRARY)
 
-include $(CLEAR_VARS)
-LOCAL_MODULE := libswscale
-LOCAL_SRC_FILES := $(FFMPEG_LIB_PATH)/libswscale.a
-include $(PREBUILT_STATIC_LIBRARY)
+# include $(CLEAR_VARS)
+# LOCAL_MODULE := libswresample
+# LOCAL_SRC_FILES := $(FFMPEG_LIB_PATH)/libswresample.a
+# include $(PREBUILT_STATIC_LIBRARY)
+
+# include $(CLEAR_VARS)
+# LOCAL_MODULE := libswscale
+# LOCAL_SRC_FILES := $(FFMPEG_LIB_PATH)/libswscale.a
+# include $(PREBUILT_STATIC_LIBRARY)
 
 # Use to safely invoke ffmpeg multiple times from the same Activity
-include $(CLEAR_VARS)
+# include $(CLEAR_VARS)
 
-LOCAL_MODULE := ffmpeg_invoke
-LOCAL_ARM_MODE  := arm
-LOCAL_SRC_FILES := ffmpeg_invoke_jni.c
-LOCAL_CFLAGS 	:= -std=c99 -g
-LOCAL_LDLIBS    := -llog
+# LOCAL_MODULE := ffmpeg
+# LOCAL_ARM_MODE  := arm
+# LOCAL_SRC_FILES := ffmpeg_invoke_jni.c
+# LOCAL_CFLAGS 	:= -std=c99 -g
+# LOCAL_LDLIBS    := -llog
 
-include $(BUILD_SHARED_LIBRARY)
+# include $(BUILD_SHARED_LIBRARY)

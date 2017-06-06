@@ -19,7 +19,7 @@ echo "ANDROID_NDK=${ANDROID_NDK}"
 THIS_SCRIPT_PATH=$(cd "$(dirname "$0")"; pwd)
 
 cd $THIS_SCRIPT_PATH/ffmpeg-invoke/jni
-$ANDROID_NDK/ndk-build clean V=1
+#$ANDROID_NDK/ndk-build clean V=1
 $ANDROID_NDK/ndk-build V=1
 
 JNILIBS_PATH=$THIS_SCRIPT_PATH/android/QMediaPlayer/qmediaplayer/src/main/jniLibs

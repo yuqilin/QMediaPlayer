@@ -30,7 +30,7 @@ public class AboutActivity extends AppCompatActivity {
         mContact = findViewById(R.id.about_contact);
         mRate = findViewById(R.id.about_rate);
 
-        mVersion.setText(String.format(getString(R.string.about_version),getVersion()));
+        mVersion.setText(String.format(getString(R.string.about_version), getVersion()));
         mBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

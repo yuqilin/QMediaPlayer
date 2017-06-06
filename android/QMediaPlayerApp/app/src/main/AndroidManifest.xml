@@ -51,6 +51,12 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             />
 
+        <activity
+            android:name=".TrimmerActivity"
+            android:theme="@style/AppTheme.Fullscreen"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            />
+
         <service
             android:name=".PlayBackService"
             android:configChanges="orientation|screenSize"

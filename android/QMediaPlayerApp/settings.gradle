@@ -3,3 +3,5 @@ include ':app'
 include ':qmediaplayer'
 project(':qmediaplayer').projectDir = new File('../QMediaPlayer/qmediaplayer')
 
+include ':k4l-video-trimmer'
+project(':k4l-video-trimmer').projectDir = new File('../k4l-video-trimmer-develop/k4l-video-trimmer')
