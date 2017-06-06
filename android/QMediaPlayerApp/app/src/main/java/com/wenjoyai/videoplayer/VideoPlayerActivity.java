@@ -1559,27 +1559,31 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
     //参考自http://stackoverflow.com/questions/32061934/permission-from-manifest-doesnt-work-in-android-6
     public static int OVERLAY_PERMISSION_REQ_CODE = 1234;
 
-    @TargetApi(Build.VERSION_CODES.M)
+//    @TargetApi(Build.VERSION_CODES.M)
     public void requestDrawOverLays() {
-        if (!Settings.canDrawOverlays(VideoPlayerActivity.this)) {
-            Toast.makeText(this, "Need permission to Play Video Overlay", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
-            startActivityForResult(intent, OVERLAY_PERMISSION_REQ_CODE);
-        } else {
-            // Already hold the SYSTEM_ALERT_WINDOW permission, do addview or something.
+        if(Build.VERSION.SDK_INT >= 23) {
+            if (!Settings.canDrawOverlays(VideoPlayerActivity.this)) {
+                Toast.makeText(this, "Need permission to Play Video Overlay", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+                startActivityForResult(intent, OVERLAY_PERMISSION_REQ_CODE);
+            } else {
+                // Already hold the SYSTEM_ALERT_WINDOW permission, do addview or something.
+            }
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
+//    @TargetApi(Build.VERSION_CODES.M)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == OVERLAY_PERMISSION_REQ_CODE) {
-            if (!Settings.canDrawOverlays(this)) {
-                // SYSTEM_ALERT_WINDOW permission not granted...
-                Toast.makeText(this, "Permission Denied by user.Please Check it in Settings", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Permission Allowed", Toast.LENGTH_SHORT).show();
-                // Already hold the SYSTEM_ALERT_WINDOW permission, do addview or something.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (!Settings.canDrawOverlays(this)) {
+                    // SYSTEM_ALERT_WINDOW permission not granted...
+                    Toast.makeText(this, "Permission Denied by user.Please Check it in Settings", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Permission Allowed", Toast.LENGTH_SHORT).show();
+                    // Already hold the SYSTEM_ALERT_WINDOW permission, do addview or something.
+                }
             }
         }
     }
