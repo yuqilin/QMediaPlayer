@@ -22,7 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.github.yuqilin.qmediaplayer.IMediaController;
+import com.github.yuqilin.mediaplayerlite.IMediaController;
 
 import java.util.Locale;
 

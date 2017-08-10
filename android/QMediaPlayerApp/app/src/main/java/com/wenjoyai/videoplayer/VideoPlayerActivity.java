@@ -43,11 +43,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.yuqilin.qmediaplayer.FFmpegAndroid;
-import com.github.yuqilin.qmediaplayer.IMediaController;
-import com.github.yuqilin.qmediaplayer.IMediaPlayer;
-import com.github.yuqilin.qmediaplayer.IRenderView;
-import com.github.yuqilin.qmediaplayer.QMediaPlayerVideoView;
+//import com.github.yuqilin.mediaplayerlite.FFmpegAndroid;
+import com.github.yuqilin.mediaplayerlite.IMediaController;
+import com.github.yuqilin.mediaplayerlite.IMediaPlayer;
+import com.github.yuqilin.mediaplayerlite.IRenderView;
+import com.github.yuqilin.mediaplayerlite.MediaPlayerVideoView;
 import com.wenjoyai.videoplayer.util.AndroidDevices;
 import com.wenjoyai.videoplayer.util.AndroidUtil;
 import com.wenjoyai.videoplayer.util.BitmapUtil;
@@ -88,7 +88,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
     private String mVideoPath;
     //    private PlayerTitleView mTitleView;
 //    private PlayerBottomView mBottomView;
-    private QMediaPlayerVideoView mVideoView;
+    private MediaPlayerVideoView mVideoView;
     private IMediaController.MediaPlayerControl mMediaPlayerControl;
     private int mVideoWidth;
     private int mVideoHeight;
@@ -331,7 +331,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements IMediaCont
 //            Log.d(TAG, "mActionBar is null");
 //        }
 
-        mVideoView = (QMediaPlayerVideoView) findViewById(R.id.player_video_view);
+        mVideoView = (MediaPlayerVideoView) findViewById(R.id.player_video_view);
 //        mTitleView = (PlayerTitleView) findViewById(R.id.player_title_view);
 //        mBottomView = (PlayerBottomView) findViewById(R.id.player_bottom_view);
 

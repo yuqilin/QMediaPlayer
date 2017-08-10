@@ -19,14 +19,14 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
-import com.github.yuqilin.qmediaplayer.IMediaController;
-import com.github.yuqilin.qmediaplayer.IMediaPlayer;
-import com.github.yuqilin.qmediaplayer.IMediaPlayer.OnVideoSizeChangedListener;
-import com.github.yuqilin.qmediaplayer.IMediaPlayer.OnInfoListener;
-import com.github.yuqilin.qmediaplayer.IMediaPlayer.OnBufferingUpdateListener;
-import com.github.yuqilin.qmediaplayer.IMediaPlayer.OnErrorListener;
-import com.github.yuqilin.qmediaplayer.IMediaPlayer.OnCompletionListener;
-import com.github.yuqilin.qmediaplayer.QMediaPlayerVideoView;
+import com.github.yuqilin.mediaplayerlite.IMediaController;
+import com.github.yuqilin.mediaplayerlite.IMediaPlayer;
+import com.github.yuqilin.mediaplayerlite.IMediaPlayer.OnVideoSizeChangedListener;
+import com.github.yuqilin.mediaplayerlite.IMediaPlayer.OnInfoListener;
+import com.github.yuqilin.mediaplayerlite.IMediaPlayer.OnBufferingUpdateListener;
+import com.github.yuqilin.mediaplayerlite.IMediaPlayer.OnErrorListener;
+import com.github.yuqilin.mediaplayerlite.IMediaPlayer.OnCompletionListener;
+import com.github.yuqilin.mediaplayerlite.MediaPlayerVideoView;
 
 /**
  * Created by Lakeinchina(lakeinchina@hotmail.com) on 2015/10/25.
@@ -49,7 +49,7 @@ import com.github.yuqilin.qmediaplayer.QMediaPlayerVideoView;
 public class BiliFloatingView implements OnVideoSizeChangedListener, OnInfoListener, OnBufferingUpdateListener, OnErrorListener, OnCompletionListener {
     private FrameLayout mSurfaceFrame;
 //    private SurfaceView psv_player;
-    private QMediaPlayerVideoView mVideoView;
+    private MediaPlayerVideoView mVideoView;
     // size of the video
     private int navigationBarHeight = 0;
     private int mVideoHeight;
@@ -151,7 +151,7 @@ public class BiliFloatingView implements OnVideoSizeChangedListener, OnInfoListe
         mLayout = (ViewGroup) View.inflate(mService, R.layout.view_floating, null);
         mScaleGestureDetector = new ScaleGestureDetector(mService, new ScaleGestureListener());
 
-        mVideoView = (QMediaPlayerVideoView) mLayout.findViewById(R.id.view_floating_video);
+        mVideoView = (MediaPlayerVideoView) mLayout.findViewById(R.id.view_floating_video);
         mOverlay = mLayout.findViewById(R.id.view_floating_overlay);
         mSeekBar = (SeekBar) mLayout.findViewById(R.id.view_floating_progress);
         mPlayPause = (ImageView) mLayout.findViewById(R.id.view_floating_playpause);

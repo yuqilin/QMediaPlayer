@@ -5,3 +5,6 @@ project(':qmediaplayer').projectDir = new File('../QMediaPlayer/qmediaplayer')
 
 include ':k4l-video-trimmer'
 project(':k4l-video-trimmer').projectDir = new File('../k4l-video-trimmer-develop/k4l-video-trimmer')
+
+include ':media-player-lite'
+project(':media-player-lite').projectDir = new File('/Users/yuqilin/mygithub/media-player-lite/MediaPlayerLite/mediaplayerlite')

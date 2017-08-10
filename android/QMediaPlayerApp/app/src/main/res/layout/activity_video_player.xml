@@ -6,7 +6,7 @@
     android:background="@color/black"
     tools:context=".VideoPlayerActivity" >
 
-    <com.github.yuqilin.qmediaplayer.QMediaPlayerVideoView
+    <com.github.yuqilin.mediaplayerlite.MediaPlayerVideoView
         android:id="@+id/player_video_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

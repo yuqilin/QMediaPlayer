@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.github.yuqilin.qmediaplayer.FFmpegAndroid;
+//import com.github.yuqilin.mediaplayerlite.FFmpegAndroid;
 import com.wenjoyai.videoplayer.util.AsyncImageLoader;
 import com.wenjoyai.videoplayer.util.FileUtils;
 
@@ -130,7 +130,7 @@ public class RecordVideoActivity extends AppCompatActivity {
             String command = "ffmpeg -ss " + startTime + " -i " + videoPath + " -vframes 1 -y " + output;
 //            String command = "ffmpeg -ss " + startTime + " -i " + videoPath + " -vf fps=1 -y thumb%04d.jpg";// + output;
             Log.d(TAG, "ffmpegExtractFrame command : " + command);
-            new FFmpegAndroid().run(command.split(" "));
+//            new FFmpegAndroid().run(command.split(" "));
             return true;
         }
     }

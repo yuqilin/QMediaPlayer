@@ -15,8 +15,8 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.github.yuqilin.qmediaplayer.FFmpegAndroid;
-import com.github.yuqilin.qmediaplayer.QMediaPlayerVideoView;
+//import com.github.yuqilin.mediaplayerlite.FFmpegAndroid;
+import com.github.yuqilin.mediaplayerlite.MediaPlayerVideoView;
 import com.wenjoyai.videoplayer.util.FileUtils;
 import com.wenjoyai.videoplayer.util.ShareUtils;
 import com.wenjoyai.videoplayer.util.Strings;
@@ -32,8 +32,8 @@ import java.util.Date;
 public class RecordGifActivity extends AppCompatActivity {
     private static final String TAG = "RecordGifActivity";
 
-    private QMediaPlayerVideoView mVideoView;
-    private QMediaPlayerVideoView mGifView;
+    private MediaPlayerVideoView mVideoView;
+    private MediaPlayerVideoView mGifView;
 
     private SeekBar mSeekbarLeft;
     private SeekBar mSeekbarRight;
@@ -76,13 +76,13 @@ public class RecordGifActivity extends AppCompatActivity {
         mVideoPath = getIntent().getStringExtra("videoPath");
         mStartPlayPos = getIntent().getLongExtra("startPos", 0);
 
-        mVideoView = (QMediaPlayerVideoView) findViewById(R.id.record_gif_player_video_view);
+        mVideoView = (MediaPlayerVideoView) findViewById(R.id.record_gif_player_video_view);
         mSeekbarLeft = (SeekBar) findViewById(R.id.record_gif_seekbar_left);
         mSeekbarRight = (SeekBar) findViewById(R.id.record_gif_seekbar_right);
         mRecordStop = (ImageView) findViewById(R.id.record_gif_stop);
         mCancel = (TextView) findViewById(R.id.record_gif_cancel);
 
-        mGifView = (QMediaPlayerVideoView) findViewById(R.id.record_gif_player_gif_view);
+        mGifView = (MediaPlayerVideoView) findViewById(R.id.record_gif_player_gif_view);
         mShareButton = (ImageView) findViewById(R.id.record_gif_share);
 
         mCurrentPlayPos = (TextView) findViewById(R.id.record_gif_current_play_pos);
@@ -215,7 +215,7 @@ public class RecordGifActivity extends AppCompatActivity {
     private void convertGif(long startTime, long duration, String videoPath, int fps, int scaleWidth, int scaleHeight, String output) {
         String command = "ffmpeg -ss " + startTime + " -t " + duration + " -i " + videoPath + " -f gif -vf fps=" + fps + ",scale=" + scaleWidth + ":" + scaleHeight + ":flags=lanczos -y " + output;
         Log.d(TAG, "convertGif run command : " + command);
-        new FFmpegAndroid().run(command.split(" "));
+//        new FFmpegAndroid().run(command.split(" "));
     }
 
 

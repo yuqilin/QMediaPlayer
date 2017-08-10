@@ -3,22 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.github.yuqilin.qmediaplayer.QMediaPlayerVideoView
+    <com.github.yuqilin.mediaplayerlite.MediaPlayerVideoView
         android:id="@+id/record_gif_player_video_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="false">
 
-    </com.github.yuqilin.qmediaplayer.QMediaPlayerVideoView>
+    </com.github.yuqilin.mediaplayerlite.MediaPlayerVideoView>
 
-    <com.github.yuqilin.qmediaplayer.QMediaPlayerVideoView
+    <com.github.yuqilin.mediaplayerlite.MediaPlayerVideoView
         android:id="@+id/record_gif_player_gif_view"
         android:layout_width="400dp"
         android:layout_height="300dp"
         android:layout_centerInParent="true"
         android:visibility="gone">
 
-    </com.github.yuqilin.qmediaplayer.QMediaPlayerVideoView>
+    </com.github.yuqilin.mediaplayerlite.MediaPlayerVideoView>
 
     <ImageView
         android:id="@+id/record_gif_share"

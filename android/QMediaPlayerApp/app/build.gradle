@@ -15,7 +15,7 @@ android {
     buildToolsVersion '25.0.2'
     defaultConfig {
         applicationId "com.wenjoyai.videoplayer"
-        minSdkVersion 9
+        minSdkVersion 14
         targetSdkVersion 22
         versionCode 102
         versionName "1.0.2"
@@ -72,7 +72,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.0.0'
     compile 'com.android.support:recyclerview-v7:25.0.0'
     compile 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
-    compile project(path: ':qmediaplayer')
+//    compile project(path: ':qmediaplayer')
     compile project(path: ':k4l-video-trimmer')
+    compile project(path: ':media-player-lite')
     testCompile 'junit:junit:4.12'
 }

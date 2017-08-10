@@ -18,7 +18,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.github.yuqilin.qmediaplayer.FFmpegAndroid;
+//import com.github.yuqilin.qmediaplayer.FFmpegAndroid;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -235,6 +235,6 @@ public class TrimmerActivity extends AppCompatActivity implements OnTrimVideoLis
     private void cutVideo(String src, String dst, long startTime, long duration) {
         String command = "ffmpeg -i " + src + " -ss " + startTime + " -t " + duration + " -movflags faststart -vcodec copy -acodec copy -y " + dst;
         Log.d(TAG, "cutVideo command : " + command);
-        new FFmpegAndroid().run(command.split(" "));
+//        new FFmpegAndroid().run(command.split(" "));
     }
 }
