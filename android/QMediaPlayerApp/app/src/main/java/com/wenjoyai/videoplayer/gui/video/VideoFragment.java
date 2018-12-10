@@ -219,18 +219,19 @@ public class VideoFragment extends BaseFragment implements IEventsHandler {
     public void toggleMode() {
         Log.d(TAG, "toggleMode");
         mListMode = !mListMode;
-        List<MediaWrapper> videos = null;
-        if (mVideoAdapter != null) {
-            videos = mVideoAdapter.getVideos();
-        }
-        mVideoAdapter = new VideoListAdapter(this);
+//        List<MediaWrapper> videos = null;
+//        if (mVideoAdapter != null) {
+//            videos = mVideoAdapter.getVideos();
+//        }
+//        mVideoAdapter = new VideoListAdapter(this);
         updateViewMode();
-        mGridView.setAdapter(mVideoAdapter);
-        mGridView.requestLayout();
-        mGridView.invalidate();
-        if (videos != null && videos.size() > 0) {
-            mVideoAdapter.updateVideos(videos);
-        }
+        mVideoAdapter.notifyDataSetChanged();
+//        mGridView.setAdapter(mVideoAdapter);
+//        mGridView.requestLayout();
+//        mGridView.invalidate();
+//        if (videos != null && videos.size() > 0) {
+//            mVideoAdapter.updateVideos(videos);
+//        }
     }
 
     public void updateVideos(List<MediaWrapper> videos) {

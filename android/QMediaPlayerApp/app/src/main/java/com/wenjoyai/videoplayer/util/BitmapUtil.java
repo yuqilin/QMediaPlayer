@@ -6,9 +6,11 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import com.wenjoyai.videoplayer.QApplication;
 import com.wenjoyai.videoplayer.media.MediaWrapper;
@@ -101,6 +103,10 @@ public class BitmapUtil {
         options.inSampleSize = 1;
         Bitmap picture = MediaStore.Video.Thumbnails.getThumbnail(contentResolver,
                 media.getVideoId(), kind, options);
+        Log.d(TAG, "fetchPicture id:" + media.getVideoId() + " kind:" + kind +
+                " video path:" + media.getFilePath() +
+                " video size:" + media.getWidth() + "x" + media.getHeight() +
+                " thumbnail size:" + picture.getWidth() + "x" + picture.getHeight());
         return picture;
     }
 

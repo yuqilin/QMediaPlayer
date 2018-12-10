@@ -41,6 +41,10 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
 //    private VideoFragment mFragment;
     private IEventsHandler mEventsHandler;
 
+    private final static int VIEW_GRID = 0;
+    private final static int VIEW_LIST = 1;
+
+
 //    private VideoComparator mVideoComparator = new VideoComparator();
 //    private volatile SortedList<MediaWrapper> mVideos = new SortedList<>(MediaWrapper.class, mVideoComparator);
 //    private volatile ArrayList<MediaInfo> mVideos = new ArrayList<>();
@@ -183,12 +187,13 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
         notifyDataSetChanged();
     }
 
-//    @Override
-//    public int getItemViewType(int position) {
+    @Override
+    public int getItemViewType(int position) {
 //        int type = super.getItemViewType(position);
 //        Log.d(TAG, "getItemViewType position = " + position + ", type = " + type);
 //        return 1;
-//    }
+        return mListMode ? VIEW_LIST : VIEW_GRID;
+    }
 
     @Override
     public long getItemId(int position) {

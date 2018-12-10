@@ -8,8 +8,8 @@
                 android:width="3dp"
                 android:color="#7c4dff"/>
             <size
-                android:width="18dp"
-                android:height="18dp"/>
+                android:width="28dp"
+                android:height="28dp"/>
         </shape>
     </item>
 </layer-list>

@@ -11,7 +11,7 @@
         android:id="@+id/item_video_list_thumbnail"
         android:layout_width="42dp"
         android:layout_height="42dp"
-        android:scaleType="fitXY"
+        android:scaleType="fitCenter"
         android:src="@drawable/ic_play_arrow_24_px"
         android:background="@color/black"/>
 
